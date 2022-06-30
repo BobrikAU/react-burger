@@ -1,6 +1,6 @@
 .order{
   width: 600px;
-  height: 100%;
+  height: calc(100vh - 88px);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -51,6 +51,7 @@
 
 .otherIngredient{
   margin-top: 16px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   align-items: center;

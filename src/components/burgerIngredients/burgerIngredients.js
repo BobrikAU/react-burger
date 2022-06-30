@@ -10,16 +10,22 @@ export default function BurgerIngredients (props) {
   return(
     <div className={`pt-10 ${styles.ingredients}`}>
       <h1 className={`text text_type_main-large mb-5 ${styles.title}`}>Соберите бургер</h1>
-      <div className={`mb-10 ${styles.tabs}`}>
-        <Tab value="bun" active={current === 'bun'} onClick={setCurrent}>Булки</Tab>
-        <Tab value="sauce" active={current === 'sauce'} onClick={setCurrent}>Соусы</Tab>
-        <Tab value="main" active={current === 'main'} onClick={setCurrent}>Начинки</Tab>
-      </div>
-      <div className={styles.listsIngredients}>
-        <TypeIngredient data={data} type='bun' order={props.order}>Булки</TypeIngredient>
-        <TypeIngredient data={data} type='sauce' order={props.order}>Соусы</TypeIngredient>
-        <TypeIngredient data={data} type='main' order={props.order}>Начинки</TypeIngredient>
-      </div>
+      <nav className={`mb-10 ${styles.tabs}`}>
+        <a href="#buns" className={styles.links}>
+          <Tab value="bun" active={current === 'bun'} onClick={setCurrent}>Булки</Tab>
+        </a>
+        <a href="#sauces" className={styles.links}>
+          <Tab value="sauce" active={current === 'sauce'} onClick={setCurrent}>Соусы</Tab>
+        </a>
+        <a href="#mains" className={styles.links}>
+          <Tab value="main" active={current === 'main'} onClick={setCurrent}>Начинки</Tab>
+        </a>
+      </nav>
+      <ul className={styles.listsIngredients}>
+        <TypeIngredient data={data} type='bun' order={props.order} id='buns'>Булки</TypeIngredient>
+        <TypeIngredient data={data} type='sauce' order={props.order} id='sauces'>Соусы</TypeIngredient>
+        <TypeIngredient data={data} type='main' order={props.order} id='mains'>Начинки</TypeIngredient>
+      </ul>
     </div>
   )
 }

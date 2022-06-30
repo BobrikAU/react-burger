@@ -5,7 +5,7 @@ import Ingredient from "../Ingredient/ingredient";
 
 export default function TypeIngredient(props) {
   return (
-    <>
+    <li id={props.id}>
       <h2 className={`text text_type_main-medium ${styles.title}`}>{props.children}</h2>
       <ul className={`pl-4 pr-4 pt-6 pb-10 ${styles.list}`}>
         {props.data.map((item) => {
@@ -15,7 +15,7 @@ export default function TypeIngredient(props) {
           )
         })}
       </ul>
-    </>
+    </li>
   )
 }
 

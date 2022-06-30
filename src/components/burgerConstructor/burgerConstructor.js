@@ -20,8 +20,6 @@ export default function BurgerConstructor({order}) {
     return previousValue + item.price;
   }, 0);
 
-  console.log(price);
-
   return (
     <div className={`pl-4 pt-25 pb-3 ${styles.order}`}>
       <ul className={styles.orderStructure}>
@@ -30,7 +28,7 @@ export default function BurgerConstructor({order}) {
         </li>
         <ul className={`${othersIngredients.length !== 0 && "mt-4 mb-4 pr-4"} ${styles.othersIngredients}`}>
           {othersIngredients.map((item, index) => {
-            return (<li className={styles.otherIngredient} key={index}>
+            return (<li className={`pl-4 ${styles.otherIngredient}`} key={index}>
                       <DragIcon type="primary" />
                       <ConstructorElement text={item.name} thumbnail={item.image} price={item.price}/>
                     </li>)
