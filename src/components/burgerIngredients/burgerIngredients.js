@@ -8,7 +8,7 @@ import TypeIngredient from '../typeIngredient/typeIngredient';
 export default function BurgerIngredients (props) {
   const [current, setCurrent] = React.useState('bun');
   return(
-    <div className={`pt-10 ${styles.ingredients}`}>
+    <section className={`pt-10 ${styles.ingredients}`}>
       <h1 className={`text text_type_main-large mb-5 ${styles.title}`}>Соберите бургер</h1>
       <nav className={`mb-10 ${styles.tabs}`}>
         <a href="#buns" className={styles.links}>
@@ -26,7 +26,7 @@ export default function BurgerIngredients (props) {
         <TypeIngredient data={data} type='sauce' order={props.order} id='sauces'>Соусы</TypeIngredient>
         <TypeIngredient data={data} type='main' order={props.order} id='mains'>Начинки</TypeIngredient>
       </ul>
-    </div>
+    </section>
   )
 }
 

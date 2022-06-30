@@ -13,7 +13,7 @@ export default function Ingredient(props) {
 
   return (
     <li className={styles.ingreient} id={props.id}>
-      <img src={props.url} className={`mb-2 ${styles.image}`}/>
+      <img src={props.url} alt={`Иконка ${props.name}`} className={`mb-2 ${styles.image}`}/>
       {number !== 0 && (<Counter count={number} size="default"/>)}
       <div className={`mb-2 ${styles.prise}`}>
         <p className={`text text_type_digits-default mr-2 ${styles.priseText}`}>{props.price}</p>

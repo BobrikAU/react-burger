@@ -9,19 +9,20 @@ export default function BurgerConstructor({order}) {
   const bun = data.find(item => {
     return item._id === order.bun;
   });
-
+  const bunPrice = bun === undefined ? 0 : bun.price;
+  
   const othersIngredients = order.others.map((item) => {
     return data.find( meal => {
       return meal._id === item;
     });
   });
 
-  const price = bun.price * 2 + othersIngredients.reduce(function(previousValue, item) {
+  const price = bunPrice * 2 + othersIngredients.reduce(function(previousValue, item) {
     return previousValue + item.price;
   }, 0);
 
   return (
-    <div className={`pl-4 pt-25 pb-3 ${styles.order}`}>
+    <section className={`pl-4 pt-25 pb-3 ${styles.order}`}>
       <ul className={styles.orderStructure}>
         <li className={`${styles.bun} pr-4`}>
           {bun && (<ConstructorElement type="top" isLocked={true} text={`${bun.name} (верх)`} thumbnail={bun.image} price={bun.price}/>)}
@@ -45,7 +46,7 @@ export default function BurgerConstructor({order}) {
         </div>
         <Button type="primary" size="large">Оформить заказ</Button>
       </div>
-    </div>
+    </section>
   )
 }
 
