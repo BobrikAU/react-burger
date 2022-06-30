@@ -21,7 +21,7 @@ export default function BurgerConstructor({order}) {
   }, 0);
 
   return (
-    <div className={`pl-4 pt-25 pb-3 ${styles.order}`}>
+    <section className={`pl-4 pt-25 pb-3 ${styles.order}`}>
       <ul className={styles.orderStructure}>
         <li className={`${styles.bun} pr-4`}>
           {bun && (<ConstructorElement type="top" isLocked={true} text={`${bun.name} (верх)`} thumbnail={bun.image} price={bun.price}/>)}
@@ -45,7 +45,7 @@ export default function BurgerConstructor({order}) {
         </div>
         <Button type="primary" size="large">Оформить заказ</Button>
       </div>
-    </div>
+    </section>
   )
 }
 
