@@ -1,6 +1,6 @@
 .ingredients{
   width: 600px;
-  height: 100%;
+  height: calc(100vh - 128px);
   display: flex;
   flex-direction: column;
 }
@@ -17,7 +17,14 @@
   flex-shrink: 0;
 }
 
+.links{
+  text-decoration: none;
+}
+
 .listsIngredients {
+  margin: 0;
+  padding: 0;
+  list-style: none;
   flex-grow: 1;
   flex-shrink: 1;
   overflow-y: scroll;
