@@ -7,13 +7,15 @@ import BurgerConstructor from '../burgerConstructor/burgerConstructor';
 class App extends React.Component {
   state = {active: 'constructor',
            order: {
-            bun: "60666c42cc7b410027a1a9b1",
-            others: ["60666c42cc7b410027a1a9b9", 
-                     "60666c42cc7b410027a1a9b4",
-                     "60666c42cc7b410027a1a9bc",
-                     "60666c42cc7b410027a1a9bb",
-                     "60666c42cc7b410027a1a9bb"]
-           }}
+                    bun: "60666c42cc7b410027a1a9b1",
+                    others: ["60666c42cc7b410027a1a9b9", 
+                             "60666c42cc7b410027a1a9b4",
+                             "60666c42cc7b410027a1a9bc",
+                             "60666c42cc7b410027a1a9bb",
+                             "60666c42cc7b410027a1a9bb"
+                            ]
+                  }
+          }
 
   render() {
     return (

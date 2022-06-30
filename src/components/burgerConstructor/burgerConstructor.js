@@ -9,14 +9,15 @@ export default function BurgerConstructor({order}) {
   const bun = data.find(item => {
     return item._id === order.bun;
   });
-
+  const bunPrice = bun === undefined ? 0 : bun.price;
+  
   const othersIngredients = order.others.map((item) => {
     return data.find( meal => {
       return meal._id === item;
     });
   });
 
-  const price = bun.price * 2 + othersIngredients.reduce(function(previousValue, item) {
+  const price = bunPrice * 2 + othersIngredients.reduce(function(previousValue, item) {
     return previousValue + item.price;
   }, 0);
 
