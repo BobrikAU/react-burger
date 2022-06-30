@@ -4,10 +4,17 @@ import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-com
 import PropTypes from 'prop-types';
 
 export default function Ingredient(props) {
+
+  const number = props.id === props.order.bun ? 1 : props.order.others.reduce(
+    function(previousValue, item) {
+      return props.id === item ? previousValue += 1 : previousValue;
+    }, 0
+  )
+
   return (
-    <li className={styles.ingreient}>
+    <li className={styles.ingreient} id={props.id}>
       <img src={props.url} className={`mb-2 ${styles.image}`}/>
-      <Counter count={0} size="default"/>
+      {number !== 0 && (<Counter count={number} size="default"/>)}
       <div className={`mb-2 ${styles.prise}`}>
         <p className={`text text_type_digits-default mr-2 ${styles.priseText}`}>{props.price}</p>
         <CurrencyIcon type="primary"/>
@@ -21,4 +28,9 @@ Ingredient.propTypes = {
   url: PropTypes.string,
   price: PropTypes.number,
   name: PropTypes.string,
+  id: PropTypes.string,
+  order: PropTypes.shape({
+    bun: PropTypes.string,
+    others: PropTypes.arrayOf(PropTypes.string)
+  })
 }
