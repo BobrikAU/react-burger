@@ -1,9 +1,10 @@
 import React from "react";
 import styles from './appHeader.module.css';
-import { Logo, BurgerIcon, ListIcon, ProfileIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import LinkHeader from '../linkHeader/linkHeader';
+import PropTypes from 'prop-types';
 
-function AppHeader(props: {active: string}) {
+function AppHeader(props) {
   return (
     <header className={styles.header}>
       <nav className={styles.navigation}>
@@ -34,3 +35,7 @@ function AppHeader(props: {active: string}) {
 }
 
 export default AppHeader;
+
+AppHeader.propTypes = {
+  active: PropTypes.string,
+}
