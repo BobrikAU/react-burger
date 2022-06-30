@@ -19,3 +19,7 @@
 .inactive {
   color: #8585ad;
 }
+
+.link:hover .inactive{
+  color: #f2f2f3;
+}
