@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import styles from './typeIngredient.module.css';
-import Ingredient from "../Ingredient/ingredient";
+import Ingredient from "../ingredient/ingredient";
 
 export default function TypeIngredient(props) {
   return (
