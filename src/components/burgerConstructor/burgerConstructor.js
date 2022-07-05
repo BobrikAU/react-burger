@@ -1,18 +1,18 @@
 import React from "react";
 import styles from './burgerConstructor.module.css';
 import PropTypes from 'prop-types';
-import data from "../../utils/data";
 import { CurrencyIcon, Button, ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-function BurgerConstructor({order}) {
-
-  const bun = data.find(item => {
+function BurgerConstructor({order, ingredients}) {
+  
+  const bun = ingredients.find(item => {
     return item._id === order.bun;
   });
+
   const bunPrice = bun === undefined ? 0 : bun.price;
   
   const othersIngredients = order.others.map((item) => {
-    return data.find( meal => {
+    return ingredients.find( meal => {
       return meal._id === item;
     });
   });
@@ -54,7 +54,21 @@ BurgerConstructor.propTypes = {
   order: PropTypes.shape({
     bun: PropTypes.string,
     others: PropTypes.arrayOf(PropTypes.string)
-  })
+  }),
+  ingredients: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    type: PropTypes.string,
+    proteins: PropTypes.number,
+    fat: PropTypes.number,
+    carbohydrates: PropTypes.number,
+    calories: PropTypes.number,
+    price: PropTypes.number,
+    image: PropTypes.string,
+    image_mobile: PropTypes.string,
+    image_large: PropTypes.string,
+    __v: PropTypes.number
+  }))
 }
 
 export default BurgerConstructor;
