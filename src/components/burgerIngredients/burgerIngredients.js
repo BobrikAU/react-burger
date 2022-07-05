@@ -5,8 +5,10 @@ import PropTypes from 'prop-types';
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import TypeIngredient from '../typeIngredient/typeIngredient';
 
-export default function BurgerIngredients (props) {
+function BurgerIngredients ({order}) {
+
   const [current, setCurrent] = React.useState('bun');
+  
   return(
     <section className={`pt-10 ${styles.ingredients}`}>
       <h1 className={`text text_type_main-large mb-5 ${styles.title}`}>Соберите бургер</h1>
@@ -22,9 +24,9 @@ export default function BurgerIngredients (props) {
         </a>
       </nav>
       <ul className={styles.listsIngredients}>
-        <TypeIngredient data={data} type='bun' order={props.order} id='buns'>Булки</TypeIngredient>
-        <TypeIngredient data={data} type='sauce' order={props.order} id='sauces'>Соусы</TypeIngredient>
-        <TypeIngredient data={data} type='main' order={props.order} id='mains'>Начинки</TypeIngredient>
+        <TypeIngredient data={data} type='bun' order={order} id='buns'>Булки</TypeIngredient>
+        <TypeIngredient data={data} type='sauce' order={order} id='sauces'>Соусы</TypeIngredient>
+        <TypeIngredient data={data} type='main' order={order} id='mains'>Начинки</TypeIngredient>
       </ul>
     </section>
   )
@@ -36,3 +38,5 @@ BurgerIngredients.propTypes = {
     others: PropTypes.arrayOf(PropTypes.string)
   })
 }
+
+export default BurgerIngredients;
