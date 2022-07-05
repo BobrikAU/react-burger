@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import TypeIngredient from '../typeIngredient/typeIngredient';
 
-export default function BurgerIngredients (props) {
+function BurgerIngredients (props) {
   const [current, setCurrent] = React.useState('bun');
   return(
     <section className={`pt-10 ${styles.ingredients}`}>
@@ -36,3 +36,5 @@ BurgerIngredients.propTypes = {
     others: PropTypes.arrayOf(PropTypes.string)
   })
 }
+
+export default BurgerIngredients;

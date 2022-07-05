@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './typeIngredient.module.css';
 import Ingredient from "../ingredient/ingredient";
 
-export default function TypeIngredient(props) {
+function TypeIngredient(props) {
   return (
     <li id={props.id}>
       <h2 className={`text text_type_main-medium ${styles.title}`}>{props.children}</h2>
@@ -28,3 +28,5 @@ TypeIngredient.propTypes = {
     others: PropTypes.arrayOf(PropTypes.string)
   })
 }
+
+export default TypeIngredient;

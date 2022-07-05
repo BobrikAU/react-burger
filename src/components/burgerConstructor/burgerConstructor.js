@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import data from "../../utils/data";
 import { CurrencyIcon, Button, ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-export default function BurgerConstructor({order}) {
+function BurgerConstructor({order}) {
 
   const bun = data.find(item => {
     return item._id === order.bun;
@@ -56,3 +56,5 @@ BurgerConstructor.propTypes = {
     others: PropTypes.arrayOf(PropTypes.string)
   })
 }
+
+export default BurgerConstructor;

@@ -5,7 +5,7 @@ import BurgerIngredients from '../burgerIngredients/burgerIngredients';
 import BurgerConstructor from '../burgerConstructor/burgerConstructor';
 
 class App extends React.Component {
-  state = {active: 'constructor',
+  state = {activePage: 'constructor',
            order: {
                     bun: "60666c42cc7b410027a1a9b1",
                     others: ["60666c42cc7b410027a1a9b9", 
@@ -20,7 +20,7 @@ class App extends React.Component {
   render() {
     return (
       <div className={styles.app}>
-        <AppHeader active={this.state.active}/>
+        <AppHeader activePage={this.state.activePage}/>
         <main className={styles.main}>
           <BurgerIngredients order={this.state.order}/>
           <BurgerConstructor order={this.state.order}/>

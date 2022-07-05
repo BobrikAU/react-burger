@@ -3,7 +3,7 @@ import styles from './ingridient.module.css';
 import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
 
-export default function Ingredient(props) {
+function Ingredient(props) {
 
   const number = props.id === props.order.bun ? 1 : props.order.others.reduce(
     function(previousValue, item) {
@@ -34,3 +34,5 @@ Ingredient.propTypes = {
     others: PropTypes.arrayOf(PropTypes.string)
   })
 }
+
+export default Ingredient;

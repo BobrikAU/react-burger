@@ -12,14 +12,14 @@ function LinkHeader(props) {
   };
 
   return(
-    <a href="#" className={`pr-5 pl-5 ${styles.link}`} onMouseEnter={changeIsHover} onMouseLeave={changeIsHover}>
+    <a href="#" className={`pr-5 pl-5 ${styles.link}`} onMouseEnter={changeIsHover}
+    onMouseLeave={changeIsHover}>
       {props.icon}
-      <p className={`text text_type_main-default ml-2 ${props.textColor === 'active' ? styles.active : styles.inactive}`}>{props.children}</p>
+      <p className={`text text_type_main-default ml-2 ${props.textColor === 'active' ? 
+      styles.active : styles.inactive}`}>{props.children}</p>
     </a>
   )
 }
-
-export default LinkHeader;
 
 LinkHeader.propTypes = {
   children: PropTypes.string,
@@ -28,3 +28,5 @@ LinkHeader.propTypes = {
   state: PropTypes.object,
   changeIsHover: PropTypes.func,
 }
+
+export default LinkHeader;
