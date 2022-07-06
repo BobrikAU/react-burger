@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import TypeIngredient from '../typeIngredient/typeIngredient';
 
-function BurgerIngredients ({order, ingredients}) {
+function BurgerIngredients ({order, ingredients, openModal}) {
 
   const [current, setCurrent] = React.useState('bun');
   
@@ -25,9 +25,9 @@ function BurgerIngredients ({order, ingredients}) {
             </a>
           </nav>
           <ul className={styles.listsIngredients}>
-            <TypeIngredient data={ingredients} type='bun' order={order} id='buns'>Булки</TypeIngredient>
-            <TypeIngredient data={ingredients} type='sauce' order={order} id='sauces'>Соусы</TypeIngredient>
-            <TypeIngredient data={ingredients} type='main' order={order} id='mains'>Начинки</TypeIngredient>
+            <TypeIngredient data={ingredients} type='bun' order={order} id='buns' openModal={openModal}>Булки</TypeIngredient>
+            <TypeIngredient data={ingredients} type='sauce' order={order} id='sauces'openModal={openModal}>Соусы</TypeIngredient>
+            <TypeIngredient data={ingredients} type='main' order={order} id='mains'openModal={openModal}>Начинки</TypeIngredient>
           </ul>
         </>) :
         (<h1 className={`text text_type_main-large mb-5 ${styles.title}`}>Загружаем ингредиенты...</h1>)
@@ -54,7 +54,8 @@ BurgerIngredients.propTypes = {
     image_mobile: PropTypes.string,
     image_large: PropTypes.string,
     __v: PropTypes.number
-  }))
+  })),
+  openModal: PropTypes.func
 }
 
 export default BurgerIngredients;

@@ -11,7 +11,8 @@ function TypeIngredient(props) {
         {props.data.map((item) => {
           return item['type'] === props.type && (
             <Ingredient url={item['image']} price={item['price']} name={item['name']} 
-                        key={item['_id']} id={item['_id']} order={props.order}/>
+                        key={item['_id']} id={item['_id']} order={props.order} 
+                        openModal={props.openModal}/>
           )
         })}
       </ul>
@@ -26,7 +27,8 @@ TypeIngredient.propTypes = {
   order: PropTypes.shape({
     bun: PropTypes.string,
     others: PropTypes.arrayOf(PropTypes.string)
-  })
+  }),
+  openModal: PropTypes.func
 }
 
 export default TypeIngredient;

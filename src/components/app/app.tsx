@@ -4,6 +4,8 @@ import AppHeader from '../appHeader/appHeader';
 import BurgerIngredients from '../burgerIngredients/burgerIngredients';
 import BurgerConstructor from '../burgerConstructor/burgerConstructor';
 import {urlGetIngredients} from '../../utils/utils';
+import BaseModal from '../baseModal/baseModal';
+
 
 function App() {
   
@@ -18,9 +20,19 @@ function App() {
                                                ]
                                      });
   const [ingredients, setIngredients] = useState(null);
+  const [isModalActive, setIsModalActive] = useState(false);
+
+  const closeModal = () => {
+    setIsModalActive(false);
+  }
+
+  const openModal = () => {
+    setIsModalActive(true);
+  }
 
   useEffect( () => {
-    fetch(urlGetIngredients)
+    const getIngredients = () => {
+      fetch(urlGetIngredients)
       .then( res => {
         if (!res.ok) {
           return Promise.reject(` Запрос списка ингредиентов был неудачным. Код ошибки: ${res.status}.`);
@@ -32,16 +44,18 @@ function App() {
       })
       .catch((err) => {
         alert(`Произошла ошибка.${err} Перезагрузите страницу.`);
-      })
+      });}
+    getIngredients();
   } , [])
 
   return (
     <div className={styles.app}>
       <AppHeader activePage={activePage}/>
       <main className={styles.main}>
-        <BurgerIngredients order={order} ingredients={ingredients}/>
-        {ingredients && (<BurgerConstructor order={order} ingredients={ingredients}/>)}
+        <BurgerIngredients order={order} ingredients={ingredients} openModal={openModal}/>
+        {ingredients && (<BurgerConstructor order={order} ingredients={ingredients} openModal={openModal}/>)}
       </main>
+      {isModalActive && (<BaseModal closeModal={closeModal}/>)}
     </div>
   );
 }
