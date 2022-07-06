@@ -3,7 +3,7 @@ import styles from './burgerConstructor.module.css';
 import PropTypes from 'prop-types';
 import { CurrencyIcon, Button, ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-function BurgerConstructor({order, ingredients}) {
+function BurgerConstructor({order, ingredients, openModal}) {
   
   const bun = ingredients.find(item => {
     return item._id === order.bun;
@@ -44,7 +44,7 @@ function BurgerConstructor({order, ingredients}) {
           <p className="text text_type_digits-medium mr-2">{price}</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button type="primary" size="large">Оформить заказ</Button>
+        <Button type="primary" size="large" onClick={openModal}>Оформить заказ</Button>
       </div>
     </section>
   )
@@ -68,7 +68,8 @@ BurgerConstructor.propTypes = {
     image_mobile: PropTypes.string,
     image_large: PropTypes.string,
     __v: PropTypes.number
-  }))
+  })),
+  openModal: PropTypes.func
 }
 
 export default BurgerConstructor;

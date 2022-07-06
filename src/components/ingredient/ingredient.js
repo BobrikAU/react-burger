@@ -12,7 +12,7 @@ function Ingredient(props) {
   )
 
   return (
-    <li className={styles.ingreient} id={props.id}>
+    <li className={styles.ingreient} id={props.id} onClick={props.openModal}>
       <img src={props.url} alt={`Иконка ${props.name}`} className={`mb-2 ${styles.image}`}/>
       {number !== 0 && (<Counter count={number} size="default"/>)}
       <div className={`mb-2 ${styles.prise}`}>
@@ -32,7 +32,8 @@ Ingredient.propTypes = {
   order: PropTypes.shape({
     bun: PropTypes.string,
     others: PropTypes.arrayOf(PropTypes.string)
-  })
+  }),
+  openModal: PropTypes.func
 }
 
 export default Ingredient;
