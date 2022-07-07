@@ -22,3 +22,11 @@
   right: 39px;
   cursor: pointer;
 }
+
+.orderDetails{
+  height: 718px;
+}
+
+.ingredientDetails{
+  min-height: 538px;
+}

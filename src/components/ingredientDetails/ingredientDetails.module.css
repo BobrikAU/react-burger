@@ -19,3 +19,7 @@
 .component:first-child{
   width: 120px;
 }
+
+.image{
+  min-height: 240px;
+}

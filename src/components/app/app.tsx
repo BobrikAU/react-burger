@@ -75,7 +75,7 @@ function App() {
         {ingredients && (<BurgerConstructor bunOrder={order.bun} othersOrder={order.others} ingredients={ingredients} openModal={openModal}/>)}
       </main>
       {isModalActive.isModalActive && (
-        <Modal closeModal={closeModal}>
+        <Modal closeModal={closeModal} orderDetails={isModalActive.orderDetails} ingredientDetails={isModalActive.ingredientDetails}>
           {isModalActive.orderDetails && (<OrderDetails numberOrder={order.number} orderExecution={order.execution}/>)}
           {isModalActive.ingredientDetails && (<IngredientDetails ingerdient={isModalActive.shownIngredient}/>)}
         </Modal>
