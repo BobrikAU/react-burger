@@ -1,0 +1,12 @@
+.iconContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 120px;
+  background-image: url(../../image/vector2.svg),
+                    url(../../image/vector3.svg),
+                    url(../../image/vector1.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+}

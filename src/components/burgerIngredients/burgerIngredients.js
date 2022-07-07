@@ -6,6 +6,8 @@ import TypeIngredient from '../typeIngredient/typeIngredient';
 
 function BurgerIngredients ({order, ingredients, openModal}) {
 
+  const {number, execution, ...orderIngredients} = order;
+
   const [current, setCurrent] = React.useState('bun');
   
   return(
@@ -25,9 +27,9 @@ function BurgerIngredients ({order, ingredients, openModal}) {
             </a>
           </nav>
           <ul className={styles.listsIngredients}>
-            <TypeIngredient data={ingredients} type='bun' order={order} id='buns' openModal={openModal}>Булки</TypeIngredient>
-            <TypeIngredient data={ingredients} type='sauce' order={order} id='sauces'openModal={openModal}>Соусы</TypeIngredient>
-            <TypeIngredient data={ingredients} type='main' order={order} id='mains'openModal={openModal}>Начинки</TypeIngredient>
+            <TypeIngredient data={ingredients} type='bun' order={orderIngredients} id='buns' openModal={openModal}>Булки</TypeIngredient>
+            <TypeIngredient data={ingredients} type='sauce' order={orderIngredients} id='sauces' openModal={openModal}>Соусы</TypeIngredient>
+            <TypeIngredient data={ingredients} type='main' order={orderIngredients} id='mains' openModal={openModal}>Начинки</TypeIngredient>
           </ul>
         </>) :
         (<h1 className={`text text_type_main-large mb-5 ${styles.title}`}>Загружаем ингредиенты...</h1>)
@@ -38,6 +40,8 @@ function BurgerIngredients ({order, ingredients, openModal}) {
 
 BurgerIngredients.propTypes = {
   order: PropTypes.shape({
+    number: PropTypes.string,
+    execution: PropTypes.string,
     bun: PropTypes.string,
     others: PropTypes.arrayOf(PropTypes.string)
   }),
