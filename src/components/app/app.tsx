@@ -4,32 +4,33 @@ import AppHeader from '../appHeader/appHeader';
 import BurgerIngredients from '../burgerIngredients/burgerIngredients';
 import BurgerConstructor from '../burgerConstructor/burgerConstructor';
 import {urlGetIngredients} from '../../utils/utils';
-import withModal from '../hocs/withModal';
+import Modal from '../modal/modal';
 import OrderDetails from '../orderDetails/orderDetails';
-import PropTypes from 'prop-types';
 
 
 function App() {
   
   const [activePage, setActivePage] = useState('constructor');
   const [order, setOrder] = useState({
-                                       number: '034536',
-                                       execution: 'Ваш заказ начали готовить',
-                                       bun: "60d3b41abdacab0026a733c6",
-                                       others: ["60d3b41abdacab0026a733ce", 
-                                                "60d3b41abdacab0026a733c9",
-                                                "60d3b41abdacab0026a733d1",
-                                                "60d3b41abdacab0026a733d0",
-                                                "60d3b41abdacab0026a733d0"
-                                               ]
+                                      number: '034536',
+                                      execution: 'Ваш заказ начали готовить',
+                                      bun: "60d3b41abdacab0026a733c6",
+                                      others: ["60d3b41abdacab0026a733ce", 
+                                               "60d3b41abdacab0026a733c9",
+                                               "60d3b41abdacab0026a733d1",
+                                               "60d3b41abdacab0026a733d0",
+                                               "60d3b41abdacab0026a733d0"
+                                              ]
                                      });
   const [ingredients, setIngredients] = useState(null);
   const [isModalActive, setIsModalActive] = useState({
-                                                        orderDetails: false  
+                                                        isModalActive: false,
+                                                        orderDetails: false
                                                       });
 
   const closeModal = () => {
     setIsModalActive({
+                        isModalActive: false,
                         orderDetails: false
                       });
   }
@@ -37,11 +38,10 @@ function App() {
   const openModal = (modalWindow: string) => {
     setIsModalActive({
                         ...isModalActive,
+                        isModalActive: true,
                         [modalWindow]: true
                       });
   }
-
-  const WithModalOrderDetails = withModal(OrderDetails);
 
   useEffect( () => {
     const getIngredients = () => {
@@ -68,7 +68,11 @@ function App() {
         <BurgerIngredients order={order} ingredients={ingredients} openModal={openModal}/>
         {ingredients && (<BurgerConstructor bunOrder={order.bun} othersOrder={order.others} ingredients={ingredients} openModal={openModal}/>)}
       </main>
-      {isModalActive.orderDetails && (<WithModalOrderDetails closeModal={closeModal} numberOrder={order.number} orderExecution={order.execution}/>)}
+      {isModalActive.isModalActive && (
+        <Modal closeModal={closeModal}>
+          {isModalActive.orderDetails && (<OrderDetails numberOrder={order.number} orderExecution={order.execution}/>)}
+        </Modal>
+      )}
     </div>
   );
 }

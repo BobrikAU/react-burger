@@ -1,10 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import styles from './withModal.module.css';
+import styles from './modal.module.css';
+import ModalOverlay from '../modalOverlay/modalOverlay';
 import {CloseIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from "prop-types";
 
-const withModal = (WrappedComponent) => ({closeModal, numberOrder, orderExecution}) => {
+function Modal({closeModal, children}) {
   
   const closeModalClickOverlay = (e) => {
     if (e.target.id === 'overlay') {
@@ -27,20 +28,18 @@ const withModal = (WrappedComponent) => ({closeModal, numberOrder, orderExecutio
     },[]);
 
   return ReactDOM.createPortal(
-    ( <div className={styles.modalOverlay} onClick={closeModalClickOverlay} id={'overlay'}>
+    ( <ModalOverlay closeModalClickOverlay={closeModalClickOverlay}>
         <div className={`pl-10 pt-10 pr-10 pb-15 ${styles.modal}`}>
           <div className={styles.closeIcon}><CloseIcon type="primary" onClick={closeModal}/></div>
-          <WrappedComponent numberOrder={numberOrder} orderExecution={orderExecution}/>
+          {children}
         </div>
-      </div>),
+      </ModalOverlay>),
     document.getElementById('react-modals')
   );
 }
 
-withModal.propTypes = {
+Modal.propTypes = {
   closeModal: PropTypes.func,
-  numberOrder: PropTypes.string,
-  orderExecution: PropTypes.string
 }
 
-export default withModal;
+export default Modal;
