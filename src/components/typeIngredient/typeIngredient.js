@@ -12,7 +12,7 @@ function TypeIngredient(props) {
           return item['type'] === props.type && (
             <Ingredient url={item['image']} price={item['price']} name={item['name']} 
                         key={item['_id']} id={item['_id']} order={props.order} 
-                        openModal={props.openModal}/>
+                        openModal={props.openModal} ingredient={item}/>
           )
         })}
       </ul>

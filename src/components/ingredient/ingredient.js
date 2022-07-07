@@ -11,8 +11,12 @@ function Ingredient(props) {
     }, 0
   )
 
+  const openModalIngredientDetails = () => {
+    props.openModal('ingredientDetails', props.ingredient);
+  }
+
   return (
-    <li className={styles.ingreient} id={props.id} onClick={props.openModal}>
+    <li className={styles.ingreient} id={props.id} onClick={openModalIngredientDetails}>
       <img src={props.url} alt={`Иконка ${props.name}`} className={`mb-2 ${styles.image}`}/>
       {number !== 0 && (<Counter count={number} size="default"/>)}
       <div className={`mb-2 ${styles.prise}`}>
@@ -33,7 +37,21 @@ Ingredient.propTypes = {
     bun: PropTypes.string,
     others: PropTypes.arrayOf(PropTypes.string)
   }),
-  openModal: PropTypes.func
+  openModal: PropTypes.func,
+  ingreient: PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    type: PropTypes.string,
+    proteins: PropTypes.number,
+    fat: PropTypes.number,
+    carbohydrates: PropTypes.number,
+    calories: PropTypes.number,
+    price: PropTypes.number,
+    image: PropTypes.string,
+    image_mobile: PropTypes.string,
+    image_large: PropTypes.string,
+    __v: PropTypes.number
+  })
 }
 
 export default Ingredient;
