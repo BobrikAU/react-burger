@@ -55,8 +55,8 @@ function BurgerConstructor({bunOrder, othersOrder, ingredients, openModal}) {
 }
 
 BurgerConstructor.propTypes = {
-  bunOrder: PropTypes.string,
-  othersOrder: PropTypes.arrayOf(PropTypes.string),
+  bunOrder: PropTypes.string.isRequired,
+  othersOrder: PropTypes.arrayOf(PropTypes.string).isRequired,
   ingredients: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.string,
@@ -71,7 +71,7 @@ BurgerConstructor.propTypes = {
     image_large: PropTypes.string,
     __v: PropTypes.number
   })),
-  openModal: PropTypes.func
+  openModal: PropTypes.func.isRequired
 }
 
 export default BurgerConstructor;

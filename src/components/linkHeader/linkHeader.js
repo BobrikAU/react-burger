@@ -22,11 +22,11 @@ function LinkHeader(props) {
 }
 
 LinkHeader.propTypes = {
-  children: PropTypes.string,
-  textColor: PropTypes.string,
-  icon: PropTypes.element,
-  state: PropTypes.object,
-  changeIsHover: PropTypes.func,
+  children: PropTypes.string.isRequired,
+  textColor: PropTypes.string.isRequired,
+  icon: PropTypes.element.isRequired,
+  state: PropTypes.object.isRequired,
+  changeIsHover: PropTypes.func.isRequired,
 }
 
 export default LinkHeader;

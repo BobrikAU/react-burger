@@ -39,7 +39,10 @@ function Modal({closeModal, children, orderDetails, ingredientDetails}) {
 }
 
 Modal.propTypes = {
-  closeModal: PropTypes.func,
+  closeModal: PropTypes.func.isRequired,
+  children: PropTypes.node,
+  orderDetails: PropTypes.bool.isRequired,
+  ingredientDetails:  PropTypes.bool.isRequired
 }
 
 export default Modal;
