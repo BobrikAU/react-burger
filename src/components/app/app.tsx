@@ -6,6 +6,7 @@ import BurgerConstructor from '../burgerConstructor/burgerConstructor';
 import {urlGetIngredients} from '../../utils/utils';
 import Modal from '../modal/modal';
 import OrderDetails from '../orderDetails/orderDetails';
+import IngredientDetails from '../ingredientDetails/ingredientDetails';
 
 
 function App() {
@@ -25,21 +26,26 @@ function App() {
   const [ingredients, setIngredients] = useState(null);
   const [isModalActive, setIsModalActive] = useState({
                                                         isModalActive: false,
-                                                        orderDetails: false
+                                                        orderDetails: false,
+                                                        ingredientDetails: false,
+                                                        shownIngredient: {}
                                                       });
 
   const closeModal = () => {
     setIsModalActive({
-                        isModalActive: false,
-                        orderDetails: false
+                      isModalActive: false,
+                      orderDetails: false,
+                      ingredientDetails: false,
+                      shownIngredient: {}
                       });
   }
 
-  const openModal = (modalWindow: string) => {
+  const openModal = (modalWindow: string, shownIngredient = {}) => {
     setIsModalActive({
-                        ...isModalActive,
-                        isModalActive: true,
-                        [modalWindow]: true
+                      ...isModalActive,
+                      isModalActive: true,
+                      [modalWindow]: true,
+                      shownIngredient
                       });
   }
 
@@ -71,6 +77,7 @@ function App() {
       {isModalActive.isModalActive && (
         <Modal closeModal={closeModal}>
           {isModalActive.orderDetails && (<OrderDetails numberOrder={order.number} orderExecution={order.execution}/>)}
+          {isModalActive.ingredientDetails && (<IngredientDetails ingerdient={isModalActive.shownIngredient}/>)}
         </Modal>
       )}
     </div>

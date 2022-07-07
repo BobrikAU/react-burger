@@ -2,7 +2,6 @@
 .modal{
   width: 100%;
   max-width: 720px;
-  max-height: 718px;
   background-color: #1c1c21;
   box-sizing: border-box;
   border: 1px solid rgba(76, 76, 255, .2);
