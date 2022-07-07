@@ -5,7 +5,7 @@ import ModalOverlay from '../modalOverlay/modalOverlay';
 import {CloseIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from "prop-types";
 
-function Modal({closeModal}) {
+function Modal({closeModal, children}) {
   
   const closeModalClickOverlay = (e) => {
     if (e.target.id === 'overlay') {
@@ -31,7 +31,7 @@ function Modal({closeModal}) {
     ( <ModalOverlay closeModalClickOverlay={closeModalClickOverlay}>
         <div className={`pl-10 pt-10 pr-10 pb-15 ${styles.modal}`}>
           <div className={styles.closeIcon}><CloseIcon type="primary" onClick={closeModal}/></div>
-          
+          {children}
         </div>
       </ModalOverlay>),
     document.getElementById('react-modals')
