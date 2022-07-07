@@ -4,13 +4,17 @@ import AppHeader from '../appHeader/appHeader';
 import BurgerIngredients from '../burgerIngredients/burgerIngredients';
 import BurgerConstructor from '../burgerConstructor/burgerConstructor';
 import {urlGetIngredients} from '../../utils/utils';
-import BaseModal from '../baseModal/baseModal';
+import withModal from '../hocs/withModal';
+import OrderDetails from '../orderDetails/orderDetails';
+import PropTypes from 'prop-types';
 
 
 function App() {
   
   const [activePage, setActivePage] = useState('constructor');
   const [order, setOrder] = useState({
+                                       number: '034536',
+                                       execution: 'Ваш заказ начали готовить',
                                        bun: "60d3b41abdacab0026a733c6",
                                        others: ["60d3b41abdacab0026a733ce", 
                                                 "60d3b41abdacab0026a733c9",
@@ -20,31 +24,40 @@ function App() {
                                                ]
                                      });
   const [ingredients, setIngredients] = useState(null);
-  const [isModalActive, setIsModalActive] = useState(false);
+  const [isModalActive, setIsModalActive] = useState({
+                                                        orderDetails: false  
+                                                      });
 
   const closeModal = () => {
-    setIsModalActive(false);
+    setIsModalActive({
+                        orderDetails: false
+                      });
   }
 
-  const openModal = () => {
-    setIsModalActive(true);
+  const openModal = (modalWindow: string) => {
+    setIsModalActive({
+                        ...isModalActive,
+                        [modalWindow]: true
+                      });
   }
+
+  const WithModalOrderDetails = withModal(OrderDetails);
 
   useEffect( () => {
     const getIngredients = () => {
       fetch(urlGetIngredients)
-      .then( res => {
-        if (!res.ok) {
-          return Promise.reject(` Запрос списка ингредиентов был неудачным. Код ошибки: ${res.status}.`);
-        }
-        return res.json();
-      })
-      .then( data => {
-        setIngredients(data.data);
-      })
-      .catch((err) => {
-        alert(`Произошла ошибка.${err} Перезагрузите страницу.`);
-      });}
+        .then( res => {
+          if (!res.ok) {
+            return Promise.reject(` Запрос списка ингредиентов был неудачным. Код ошибки: ${res.status}.`);
+          }
+          return res.json();
+        })
+        .then( data => {
+          setIngredients(data.data);
+        })
+        .catch((err) => {
+          alert(`Произошла ошибка.${err} Перезагрузите страницу.`);
+        });};
     getIngredients();
   } , [])
 
@@ -53,9 +66,9 @@ function App() {
       <AppHeader activePage={activePage}/>
       <main className={styles.main}>
         <BurgerIngredients order={order} ingredients={ingredients} openModal={openModal}/>
-        {ingredients && (<BurgerConstructor order={order} ingredients={ingredients} openModal={openModal}/>)}
+        {ingredients && (<BurgerConstructor bunOrder={order.bun} othersOrder={order.others} ingredients={ingredients} openModal={openModal}/>)}
       </main>
-      {isModalActive && (<BaseModal closeModal={closeModal}/>)}
+      {isModalActive.orderDetails && (<WithModalOrderDetails closeModal={closeModal} numberOrder={order.number} orderExecution={order.execution}/>)}
     </div>
   );
 }

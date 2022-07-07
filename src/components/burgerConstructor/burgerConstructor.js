@@ -3,15 +3,19 @@ import styles from './burgerConstructor.module.css';
 import PropTypes from 'prop-types';
 import { CurrencyIcon, Button, ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-function BurgerConstructor({order, ingredients, openModal}) {
+function BurgerConstructor({bunOrder, othersOrder, ingredients, openModal}) {
   
+  const openModalOrderDetails = () => {
+    openModal('orderDetails');
+  }
+
   const bun = ingredients.find(item => {
-    return item._id === order.bun;
+    return item._id === bunOrder;
   });
 
   const bunPrice = bun === undefined ? 0 : bun.price;
   
-  const othersIngredients = order.others.map((item) => {
+  const othersIngredients = othersOrder.map((item) => {
     return ingredients.find( meal => {
       return meal._id === item;
     });
@@ -44,17 +48,15 @@ function BurgerConstructor({order, ingredients, openModal}) {
           <p className="text text_type_digits-medium mr-2">{price}</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button type="primary" size="large" onClick={openModal}>Оформить заказ</Button>
+        <Button type="primary" size="large" onClick={openModalOrderDetails}>Оформить заказ</Button>
       </div>
     </section>
   )
 }
 
 BurgerConstructor.propTypes = {
-  order: PropTypes.shape({
-    bun: PropTypes.string,
-    others: PropTypes.arrayOf(PropTypes.string)
-  }),
+  bunOrder: PropTypes.string,
+  othersOrder: PropTypes.arrayOf(PropTypes.string),
   ingredients: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.string,
