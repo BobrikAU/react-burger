@@ -4,9 +4,8 @@ import AppHeader from '../appHeader/appHeader';
 import BurgerIngredients from '../burgerIngredients/burgerIngredients';
 import BurgerConstructor from '../burgerConstructor/burgerConstructor';
 import {urlGetIngredients} from '../../utils/utils';
-import withModal from '../hocs/withModal';
+import Modal from '../modal/modal';
 import OrderDetails from '../orderDetails/orderDetails';
-import PropTypes from 'prop-types';
 
 
 function App() {
@@ -41,8 +40,6 @@ function App() {
                       });
   }
 
-  const WithModalOrderDetails = withModal(OrderDetails);
-
   useEffect( () => {
     const getIngredients = () => {
       fetch(urlGetIngredients)
@@ -68,7 +65,7 @@ function App() {
         <BurgerIngredients order={order} ingredients={ingredients} openModal={openModal}/>
         {ingredients && (<BurgerConstructor bunOrder={order.bun} othersOrder={order.others} ingredients={ingredients} openModal={openModal}/>)}
       </main>
-      {isModalActive.orderDetails && (<WithModalOrderDetails closeModal={closeModal} numberOrder={order.number} orderExecution={order.execution}/>)}
+      {isModalActive.orderDetails && (<Modal closeModal={closeModal}/>)}
     </div>
   );
 }
