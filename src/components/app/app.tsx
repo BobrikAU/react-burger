@@ -7,6 +7,7 @@ import {urlGetIngredients} from '../../utils/utils';
 import Modal from '../modal/modal';
 import OrderDetails from '../orderDetails/orderDetails';
 import IngredientDetails from '../ingredientDetails/ingredientDetails';
+import ErrorMessage from '../errorMassege/errorMassege';
 
 
 function App() {
@@ -28,7 +29,9 @@ function App() {
                                                         isModalActive: false,
                                                         orderDetails: false,
                                                         ingredientDetails: false,
-                                                        shownIngredient: {}
+                                                        shownIngredient: {},
+                                                        isError: false,
+                                                        errorMessage: ''
                                                       });
 
   const closeModal = () => {
@@ -36,7 +39,9 @@ function App() {
                       isModalActive: false,
                       orderDetails: false,
                       ingredientDetails: false,
-                      shownIngredient: {}
+                      shownIngredient: {},
+                      isError: false,
+                      errorMessage: ''
                       });
   }
 
@@ -62,7 +67,12 @@ function App() {
           setIngredients(data.data);
         })
         .catch((err) => {
-          alert(`Произошла ошибка.${err} Перезагрузите страницу.`);
+          setIsModalActive({
+            ...isModalActive,
+            isModalActive: true,
+            isError: true,
+            errorMessage: `Произошла ошибка.${err} Перезагрузите страницу.`
+          })
         });};
     getIngredients();
   } , [])
@@ -78,6 +88,7 @@ function App() {
         <Modal closeModal={closeModal} orderDetails={isModalActive.orderDetails} ingredientDetails={isModalActive.ingredientDetails}>
           {isModalActive.orderDetails && (<OrderDetails numberOrder={order.number} orderExecution={order.execution}/>)}
           {isModalActive.ingredientDetails && (<IngredientDetails ingerdient={isModalActive.shownIngredient}/>)}
+          {isModalActive.isError && (<ErrorMessage errorMessage={isModalActive.errorMessage}/>)}
         </Modal>
       )}
     </div>
