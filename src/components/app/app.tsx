@@ -10,7 +10,7 @@ import IngredientDetails from '../ingredientDetails/ingredientDetails';
 import ErrorMessage from '../errorMassege/errorMassege';
 
 
-function App() {
+const App = () => {
   
   const [activePage, setActivePage] = useState('constructor');
   const [order, setOrder] = useState({
@@ -75,7 +75,7 @@ function App() {
           })
         });};
     getIngredients();
-  } , [])
+  } , []);
 
   return (
     <div className={styles.app}>

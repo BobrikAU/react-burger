@@ -3,6 +3,11 @@ import styles from './burgerConstructor.module.css';
 import PropTypes from 'prop-types';
 import { CurrencyIcon, Button, ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
+let todoCounter = 0;
+function getNewTodo() {
+  todoCounter += 1;
+}
+
 function BurgerConstructor({bunOrder, othersOrder, ingredients, openModal}) {
   
   const openModalOrderDetails = () => {
@@ -33,7 +38,8 @@ function BurgerConstructor({bunOrder, othersOrder, ingredients, openModal}) {
         </li>
         <ul className={`${othersIngredients.length !== 0 && "mt-4 mb-4 pr-4"} ${styles.othersIngredients}`}>
           {othersIngredients.map((item, index) => {
-            return (<li className={`pl-4 ${styles.otherIngredient}`} key={index}>
+            getNewTodo();
+            return (<li className={`pl-4 ${styles.otherIngredient}`} key={todoCounter}>
                       <DragIcon type="primary" />
                       <ConstructorElement text={item.name} thumbnail={item.image} price={item.price}/>
                     </li>)
