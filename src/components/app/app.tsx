@@ -26,21 +26,15 @@ const App = () => {
                                      });
   const [ingredients, setIngredients] = useState(null);
   const [isModalActive, setIsModalActive] = useState({
-                                                        isModalActive: false,
-                                                        orderDetails: false,
-                                                        ingredientDetails: false,
+                                                        isModalActive: '',
                                                         shownIngredient: {},
-                                                        isError: false,
                                                         errorMessage: ''
                                                       });
 
   const closeModal = () => {
     setIsModalActive({
-                      isModalActive: false,
-                      orderDetails: false,
-                      ingredientDetails: false,
+                      isModalActive: '',
                       shownIngredient: {},
-                      isError: false,
                       errorMessage: ''
                       });
   }
@@ -48,8 +42,7 @@ const App = () => {
   const openModal = (modalWindow: string, shownIngredient = {}) => {
     setIsModalActive({
                       ...isModalActive,
-                      isModalActive: true,
-                      [modalWindow]: true,
+                      isModalActive: modalWindow,
                       shownIngredient
                       });
   }
@@ -69,8 +62,7 @@ const App = () => {
         .catch((err) => {
           setIsModalActive({
             ...isModalActive,
-            isModalActive: true,
-            isError: true,
+            isModalActive: 'error',
             errorMessage: `Произошла ошибка.${err} Перезагрузите страницу.`
           })
         });};
@@ -84,11 +76,11 @@ const App = () => {
         <BurgerIngredients order={order} ingredients={ingredients} openModal={openModal}/>
         {ingredients && (<BurgerConstructor bunOrder={order.bun} othersOrder={order.others} ingredients={ingredients} openModal={openModal}/>)}
       </main>
-      {isModalActive.isModalActive && (
-        <Modal closeModal={closeModal} orderDetails={isModalActive.orderDetails} ingredientDetails={isModalActive.ingredientDetails}>
-          {isModalActive.orderDetails && (<OrderDetails numberOrder={order.number} orderExecution={order.execution}/>)}
-          {isModalActive.ingredientDetails && (<IngredientDetails ingerdient={isModalActive.shownIngredient}/>)}
-          {isModalActive.isError && (<ErrorMessage errorMessage={isModalActive.errorMessage}/>)}
+      {isModalActive.isModalActive !== '' && (
+        <Modal closeModal={closeModal} activeModal={isModalActive.isModalActive}>
+          {isModalActive.isModalActive === 'orderDetails' && (<OrderDetails numberOrder={order.number} orderExecution={order.execution}/>)}
+          {isModalActive.isModalActive === 'ingredientDetails' && (<IngredientDetails ingerdient={isModalActive.shownIngredient}/>)}
+          {isModalActive.isModalActive === 'error' && (<ErrorMessage errorMessage={isModalActive.errorMessage}/>)}
         </Modal>
       )}
     </div>
