@@ -6,11 +6,11 @@ import {ingredientType} from '../../utils/types';
 
 function Ingredient({order, openModal, ingredient}) {
 
-  const number = ingredient.id === order.bun ? 1 : order.others.reduce(
+  const number = ingredient._id === order.bun ? 1 : order.others.reduce(
     function(previousValue, item) {
-      return ingredient.id === item ? previousValue += 1 : previousValue;
+      return ingredient._id === item ? previousValue += 1 : previousValue;
     }, 0
-  )
+  );
 
   const openModalIngredientDetails = () => {
     openModal('ingredientDetails', ingredient);

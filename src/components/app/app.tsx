@@ -8,6 +8,7 @@ import Modal from '../modal/modal';
 import OrderDetails from '../orderDetails/orderDetails';
 import IngredientDetails from '../ingredientDetails/ingredientDetails';
 import ErrorMessage from '../errorMassege/errorMassege';
+import {IngredientsContext, OrderContext} from '../../services/appContext';
 
 
 const App = () => {
@@ -52,7 +53,8 @@ const App = () => {
       fetch(urlGetIngredients)
         .then( res => {
           if (!res.ok) {
-            return Promise.reject(` Запрос списка ингредиентов был неудачным. Код ошибки: ${res.status}.`);
+            return Promise.reject(` Запрос списка ингредиентов был неудачным. 
+            Код ошибки: ${res.status}.`);
           }
           return res.json();
         })
@@ -73,14 +75,23 @@ const App = () => {
     <div className={styles.app}>
       <AppHeader activePage={activePage}/>
       <main className={styles.main}>
-        <BurgerIngredients order={order} ingredients={ingredients} openModal={openModal}/>
-        {ingredients && (<BurgerConstructor bunOrder={order.bun} othersOrder={order.others} ingredients={ingredients} openModal={openModal}/>)}
+        <IngredientsContext.Provider value={ingredients}>
+          <BurgerIngredients order={order} openModal={openModal}/>
+          {ingredients && (<BurgerConstructor bunOrder={order.bun} 
+          othersOrder={order.others} openModal={openModal}/>)}
+        </IngredientsContext.Provider>
       </main>
       {isModalActive.isModalActive !== '' && (
         <Modal closeModal={closeModal} activeModal={isModalActive.isModalActive}>
-          {isModalActive.isModalActive === 'orderDetails' && (<OrderDetails numberOrder={order.number} orderExecution={order.execution}/>)}
-          {isModalActive.isModalActive === 'ingredientDetails' && (<IngredientDetails ingerdient={isModalActive.shownIngredient}/>)}
-          {isModalActive.isModalActive === 'error' && (<ErrorMessage errorMessage={isModalActive.errorMessage}/>)}
+          {isModalActive.isModalActive === 'orderDetails' && (
+            <OrderContext.Provider value={order}>
+              <OrderDetails/>
+            </OrderContext.Provider>
+          )}
+          {isModalActive.isModalActive === 'ingredientDetails' && (<IngredientDetails 
+          ingerdient={isModalActive.shownIngredient}/>)}
+          {isModalActive.isModalActive === 'error' && (<ErrorMessage 
+          errorMessage={isModalActive.errorMessage}/>)}
         </Modal>
       )}
     </div>
