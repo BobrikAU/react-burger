@@ -4,7 +4,7 @@ import styles from './typeIngredient.module.css';
 import Ingredient from "../ingredient/ingredient";
 import { IngredientsContext } from "../../services/appContext";
 
-function TypeIngredient({type, order, id, openModal, children}) {
+function TypeIngredient({type, id, openModal, children}) {
 
   const ingredients = useContext(IngredientsContext);
 
@@ -14,7 +14,7 @@ function TypeIngredient({type, order, id, openModal, children}) {
       <ul className={`pl-4 pr-4 pt-6 pb-10 ${styles.list}`}>
         {ingredients.map((item) => {
           return item['type'] === type && (
-            <Ingredient key={item._id} order={order} openModal={openModal} 
+            <Ingredient key={item._id} openModal={openModal} 
             ingredient={item}/>
           )
         })}
@@ -26,10 +26,6 @@ function TypeIngredient({type, order, id, openModal, children}) {
 TypeIngredient.propTypes = {
   children: PropTypes.string,
   type: PropTypes.string,
-  order: PropTypes.shape({
-    bun: PropTypes.string,
-    others: PropTypes.arrayOf(PropTypes.string)
-  }),
   openModal: PropTypes.func,
   id: PropTypes.string
 }

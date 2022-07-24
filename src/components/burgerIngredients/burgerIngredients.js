@@ -5,11 +5,9 @@ import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import TypeIngredient from '../typeIngredient/typeIngredient';
 import { IngredientsContext } from "../../services/appContext";
 
-function BurgerIngredients ({order, openModal}) {
+function BurgerIngredients ({openModal}) {
 
   const ingredients = useContext(IngredientsContext);
-
-  const {number, execution, ...orderIngredients} = order;
 
   const [current, setCurrent] = React.useState('bun');
   
@@ -38,16 +36,13 @@ function BurgerIngredients ({order, openModal}) {
             </a>
           </nav>
           <ul className={styles.listsIngredients}>
-            <TypeIngredient type='bun' order={orderIngredients} id='buns' 
-            openModal={openModal}>
+            <TypeIngredient type='bun' id='buns' openModal={openModal}>
               Булки
             </TypeIngredient>
-            <TypeIngredient type='sauce' order={orderIngredients} id='sauces' 
-            openModal={openModal}>
+            <TypeIngredient type='sauce' id='sauces' openModal={openModal}>
               Соусы
             </TypeIngredient>
-            <TypeIngredient type='main' order={orderIngredients} id='mains' 
-            openModal={openModal}>
+            <TypeIngredient type='main' id='mains' openModal={openModal}>
               Начинки
             </TypeIngredient>
           </ul>
@@ -61,12 +56,6 @@ function BurgerIngredients ({order, openModal}) {
 }
 
 BurgerIngredients.propTypes = {
-  order: PropTypes.shape({
-    number: PropTypes.string,
-    execution: PropTypes.string,
-    bun: PropTypes.string,
-    others: PropTypes.arrayOf(PropTypes.string)
-  }).isRequired,
   openModal: PropTypes.func.isRequired
 }
 
