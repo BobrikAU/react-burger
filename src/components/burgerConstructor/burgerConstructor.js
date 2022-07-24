@@ -1,38 +1,46 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import styles from './burgerConstructor.module.css';
 import PropTypes from 'prop-types';
 import { CurrencyIcon, Button, ConstructorElement, DragIcon } from 
 '@ya.praktikum/react-developer-burger-ui-components';
-import {IngredientsContext} from '../../services/appContext';
+import {IngredientsContext, OrderContext} from '../../services/appContext';
 
 let todoCounter = 0;
 function getNewTodo() {
   todoCounter += 1;
 }
 
-function BurgerConstructor({bunOrder, othersOrder, openModal}) {
+function BurgerConstructor({openModal}) {
   
   const ingredients = useContext(IngredientsContext);
+
+  const [stateOrder, dispatchOrder] = useContext(OrderContext);
 
   const openModalOrderDetails = () => {
     openModal('orderDetails');
   }
 
-  const bun = ingredients.find(item => {
-    return item._id === bunOrder;
-  });
-
-  const bunPrice = bun === undefined ? 0 : bun.price;
-  
-  const othersIngredients = othersOrder.map((item) => {
-    return ingredients.find( meal => {
-      return meal._id === item;
+  const bun = React.useMemo( () => {
+    return ingredients.find(item => {
+      return item._id === stateOrder.bun;
     });
-  });
-
-  const price = bunPrice * 2 + othersIngredients.reduce( (previousValue, item) => {
-    return previousValue + item.price;
-  }, 0);
+  },[stateOrder.bun]);
+  
+  const othersIngredients = React.useMemo( () => {
+    return stateOrder.others.map((item) => {
+      return ingredients.find( meal => {
+        return meal._id === item;
+      });
+    });
+  }, [stateOrder.others]);
+  
+  useEffect(() => {
+      dispatchOrder({
+      type: "countPrice",
+      bun,
+      othersIngredients
+    })
+  }, [bun, othersIngredients])
 
   return (
     <section className={`pl-4 pt-25 pb-3 ${styles.order}`}>
@@ -59,7 +67,7 @@ function BurgerConstructor({bunOrder, othersOrder, openModal}) {
       </ul>
       <div className={`mt-10 mb-10 ${styles.finishOrder} pr-4`}>
         <div className={`mr-10 ${styles.price}`}>
-          <p className="text text_type_digits-medium mr-2">{price}</p>
+          <p className="text text_type_digits-medium mr-2">{stateOrder.price}</p>
           <CurrencyIcon type="primary" />
         </div>
         <Button type="primary" size="large" onClick={openModalOrderDetails}>
@@ -71,8 +79,6 @@ function BurgerConstructor({bunOrder, othersOrder, openModal}) {
 }
 
 BurgerConstructor.propTypes = {
-  bunOrder: PropTypes.string.isRequired,
-  othersOrder: PropTypes.arrayOf(PropTypes.string).isRequired,
   openModal: PropTypes.func.isRequired
 }
 
