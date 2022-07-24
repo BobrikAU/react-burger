@@ -15,7 +15,7 @@ const App = () => {
   
   const [activePage, setActivePage] = useState('constructor');
   const [order, setOrder] = useState({
-                                      number: '034536',
+                                      number: '',
                                       execution: 'Ваш заказ начали готовить',
                                       bun: "60d3b41abdacab0026a733c6",
                                       others: ["60d3b41abdacab0026a733ce", 
@@ -84,7 +84,7 @@ const App = () => {
       {isModalActive.isModalActive !== '' && (
         <Modal closeModal={closeModal} activeModal={isModalActive.isModalActive}>
           {isModalActive.isModalActive === 'orderDetails' && (
-            <OrderContext.Provider value={order}>
+            <OrderContext.Provider value={[order, setOrder]}>
               <OrderDetails/>
             </OrderContext.Provider>
           )}

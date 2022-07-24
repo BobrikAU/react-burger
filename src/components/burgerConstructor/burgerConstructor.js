@@ -8,7 +8,6 @@ import {IngredientsContext} from '../../services/appContext';
 let todoCounter = 0;
 function getNewTodo() {
   todoCounter += 1;
-  console.log(todoCounter);
 }
 
 function BurgerConstructor({bunOrder, othersOrder, openModal}) {
