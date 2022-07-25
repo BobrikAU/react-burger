@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import styles from './orderDetails.module.css';
 import {CheckMarkIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderContext } from '../../services/appContext';
-import { urlSendOrder } from '../../utils/utils';
+import { baseUrl } from '../../utils/utils';
 
 function OrderDetails() {
 
@@ -22,7 +22,7 @@ function OrderDetails() {
       const listIngredients = [...stateOrder.others];
       listIngredients.unshift(stateOrder.bun);
       listIngredients.push(stateOrder.bun);
-      fetch(urlSendOrder, {
+      fetch(`${baseUrl}orders`, {
           method: 'POST',
           headers: {
             "Content-Type": "application/json"

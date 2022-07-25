@@ -3,7 +3,7 @@ import styles from './app.module.css';
 import AppHeader from '../appHeader/appHeader';
 import BurgerIngredients from '../burgerIngredients/burgerIngredients';
 import BurgerConstructor from '../burgerConstructor/burgerConstructor';
-import {urlGetIngredients} from '../../utils/utils';
+import { baseUrl } from '../../utils/utils';
 import Modal from '../modal/modal';
 import OrderDetails from '../orderDetails/orderDetails';
 import IngredientDetails from '../ingredientDetails/ingredientDetails';
@@ -80,7 +80,7 @@ const App = () => {
                                       
   useEffect( () => {
     const getIngredients = () => {
-      fetch(urlGetIngredients)
+      fetch(`${baseUrl}ingredients`)
         .then( res => {
           if (!res.ok) {
             return Promise.reject(` Запрос списка ингредиентов был неудачным. 
