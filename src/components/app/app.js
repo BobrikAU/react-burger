@@ -77,17 +77,18 @@ const App = () => {
     }
   };
   const [stateOrder, dispatchOrder] = useReducer(reducerOrder, initialOrder, initOrder);
-                                      
+  
+  function checkResponse (res) {
+    if (!res.ok) {
+      return Promise.reject(` Неудачное обращение к серверу. Код ошибки: ${res.status}.`);
+    }
+    return res.json();
+  }
+
   useEffect( () => {
     const getIngredients = () => {
       fetch(`${baseUrl}ingredients`)
-        .then( res => {
-          if (!res.ok) {
-            return Promise.reject(` Запрос списка ингредиентов был неудачным. 
-            Код ошибки: ${res.status}.`);
-          }
-          return res.json();
-        })
+        .then(checkResponse)
         .then( data => {
           setIngredients(data.data);
         })
@@ -114,7 +115,7 @@ const App = () => {
         {isModalActive.isModalActive !== '' && (
           <Modal closeModal={closeModal} activeModal={isModalActive.isModalActive}>
             {isModalActive.isModalActive === 'orderDetails' && (
-              <OrderDetails/>
+              <OrderDetails checkResponse={checkResponse}/>
             )}
             {isModalActive.isModalActive === 'ingredientDetails' && (<IngredientDetails 
             ingerdient={isModalActive.shownIngredient}/>)}

@@ -3,8 +3,9 @@ import styles from './orderDetails.module.css';
 import {CheckMarkIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderContext } from '../../services/appContext';
 import { baseUrl } from '../../utils/utils';
+import PropTypes from 'prop-types';
 
-function OrderDetails() {
+function OrderDetails({checkResponse}) {
 
   const [stateOrder, dispatchOrder] = useContext(OrderContext);
 
@@ -31,12 +32,7 @@ function OrderDetails() {
             "ingredients": listIngredients
           })
         })
-        .then((res) => {
-          if (!res.ok) {
-            return Promise.reject(`Код ошибки: ${res.status}`);
-          }
-          return res.json();
-        })
+        .then(checkResponse)
         .then((data) => {
           dispatchOrder({
                            type: 'saveNumberOrder',
@@ -50,7 +46,7 @@ function OrderDetails() {
         .catch((err) => {
           setRequest({
                         ...request,
-                        message: `Оправка заказа была неудачной. ${err}. Закройте окно
+                        message: `Оправка заказа была неудачной.${err} Закройте окно
                                   и отправте заказ заново.`
                       });
         })
@@ -78,6 +74,10 @@ function OrderDetails() {
       </>)
     
   )
+}
+
+OrderDetails.propTypes = {
+  checkResponse: PropTypes.func.isRequired,
 }
 
 export default OrderDetails;
