@@ -3,7 +3,7 @@ import styles from './app.module.css';
 import AppHeader from '../appHeader/appHeader';
 import BurgerIngredients from '../burgerIngredients/burgerIngredients';
 import BurgerConstructor from '../burgerConstructor/burgerConstructor';
-import { baseUrl } from '../../utils/utils';
+import { baseUrl, checkResponse } from '../../utils/utils';
 import Modal from '../modal/modal';
 import OrderDetails from '../orderDetails/orderDetails';
 import IngredientDetails from '../ingredientDetails/ingredientDetails';
@@ -78,13 +78,6 @@ const App = () => {
   };
   const [stateOrder, dispatchOrder] = useReducer(reducerOrder, initialOrder, initOrder);
   
-  function checkResponse (res) {
-    if (!res.ok) {
-      return Promise.reject(` Неудачное обращение к серверу. Код ошибки: ${res.status}.`);
-    }
-    return res.json();
-  }
-
   useEffect( () => {
     const getIngredients = () => {
       fetch(`${baseUrl}ingredients`)
@@ -115,7 +108,7 @@ const App = () => {
         {isModalActive.isModalActive !== '' && (
           <Modal closeModal={closeModal} activeModal={isModalActive.isModalActive}>
             {isModalActive.isModalActive === 'orderDetails' && (
-              <OrderDetails checkResponse={checkResponse}/>
+              <OrderDetails/>
             )}
             {isModalActive.isModalActive === 'ingredientDetails' && (<IngredientDetails 
             ingerdient={isModalActive.shownIngredient}/>)}

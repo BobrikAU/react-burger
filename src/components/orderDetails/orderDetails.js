@@ -2,10 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import styles from './orderDetails.module.css';
 import {CheckMarkIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderContext } from '../../services/appContext';
-import { baseUrl } from '../../utils/utils';
-import PropTypes from 'prop-types';
+import { baseUrl, checkResponse } from '../../utils/utils';
 
-function OrderDetails({checkResponse}) {
+function OrderDetails() {
 
   const [stateOrder, dispatchOrder] = useContext(OrderContext);
 
@@ -74,10 +73,6 @@ function OrderDetails({checkResponse}) {
       </>)
     
   )
-}
-
-OrderDetails.propTypes = {
-  checkResponse: PropTypes.func.isRequired,
 }
 
 export default OrderDetails;
