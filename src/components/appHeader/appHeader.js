@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import styles from './appHeader.module.css';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import LinkHeader from '../linkHeader/linkHeader';
-import PropTypes from 'prop-types';
 
-function AppHeader({activePage}) {
+function AppHeader() {
+
+  const activePage = useSelector((state) => state.app.activePage)
 
   const [isLinkHover, setIsLinkHover] = useState({
                                                    'Конструктор': false,
@@ -51,10 +53,6 @@ function AppHeader({activePage}) {
       </nav>
     </header>
   );
-}
-
-AppHeader.propTypes = {
-  activePage: PropTypes.string.isRequired,
 }
 
 export default AppHeader;

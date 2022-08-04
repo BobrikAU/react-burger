@@ -1,20 +1,29 @@
 import React, { useState, useEffect, useReducer } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from './app.module.css';
 import AppHeader from '../appHeader/appHeader';
 import BurgerIngredients from '../burgerIngredients/burgerIngredients';
 import BurgerConstructor from '../burgerConstructor/burgerConstructor';
-import { baseUrl, checkResponse } from '../../utils/utils';
 import Modal from '../modal/modal';
 import OrderDetails from '../orderDetails/orderDetails';
 import IngredientDetails from '../ingredientDetails/ingredientDetails';
 import ErrorMessage from '../errorMassege/errorMassege';
-import {IngredientsContext, OrderContext} from '../../services/appContext';
+import { OrderContext } from '../../services/appContext';
+import { getIngredients } from '../../services/actions/burgerIngredients';
 
 
 const App = () => {
   
-  const [activePage, setActivePage] = useState('constructor');
-  const [ingredients, setIngredients] = useState(null);
+  const dispatch = useDispatch();
+
+  const ingredients = useSelector( state => state.burgerIngredients)
+
+
+
+
+
+
+
   const [isModalActive, setIsModalActive] = useState({
                                                         isModalActive: '',
                                                         shownIngredient: {},
@@ -79,31 +88,16 @@ const App = () => {
   const [stateOrder, dispatchOrder] = useReducer(reducerOrder, initialOrder, initOrder);
   
   useEffect( () => {
-    const getIngredients = () => {
-      fetch(`${baseUrl}ingredients`)
-        .then(checkResponse)
-        .then( data => {
-          setIngredients(data.data);
-        })
-        .catch((err) => {
-          setIsModalActive({
-            ...isModalActive,
-            isModalActive: 'error',
-            errorMessage: `Произошла ошибка.${err} Перезагрузите страницу.`
-          })
-        });};
-    getIngredients();
+    dispatch(getIngredients())
   } , []);
 
   return (
     <div className={styles.app}>
-      <AppHeader activePage={activePage}/>
+      <AppHeader/>
       <OrderContext.Provider value={[stateOrder, dispatchOrder]}>
         <main className={styles.main}>
-          <IngredientsContext.Provider value={ingredients}>
-            <BurgerIngredients openModal={openModal}/>
-            {ingredients && (<BurgerConstructor openModal={openModal}/>)}
-          </IngredientsContext.Provider>
+          <BurgerIngredients openModal={openModal}/>
+          {ingredients && (<BurgerConstructor openModal={openModal}/>)}
         </main>
         {isModalActive.isModalActive !== '' && (
           <Modal closeModal={closeModal} activeModal={isModalActive.isModalActive}>

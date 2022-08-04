@@ -1,12 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 import PropTypes from 'prop-types';
 import styles from './typeIngredient.module.css';
 import Ingredient from "../ingredient/ingredient";
-import { IngredientsContext } from "../../services/appContext";
 
 function TypeIngredient({type, id, openModal, children}) {
 
-  const ingredients = useContext(IngredientsContext);
+  const ingredients = useSelector( state => state.burgerIngredients);
 
   return (
     <li id={id}>

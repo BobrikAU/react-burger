@@ -1,13 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 import styles from './burgerIngredients.module.css';
 import PropTypes from 'prop-types';
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import TypeIngredient from '../typeIngredient/typeIngredient';
-import { IngredientsContext } from "../../services/appContext";
 
 function BurgerIngredients ({openModal}) {
 
-  const ingredients = useContext(IngredientsContext);
+  const ingredients = useSelector(state => state.burgerIngredients);
 
   const [current, setCurrent] = React.useState('bun');
   

@@ -1,9 +1,10 @@
 import React, { useContext, useEffect } from "react";
+import { useSelector } from "react-redux";
 import styles from './burgerConstructor.module.css';
 import PropTypes from 'prop-types';
 import { CurrencyIcon, Button, ConstructorElement, DragIcon } from 
 '@ya.praktikum/react-developer-burger-ui-components';
-import {IngredientsContext, OrderContext} from '../../services/appContext';
+import { OrderContext } from '../../services/appContext';
 
 let todoCounter = 0;
 function getNewTodo() {
@@ -12,14 +13,14 @@ function getNewTodo() {
 
 function BurgerConstructor({openModal}) {
   
-  const ingredients = useContext(IngredientsContext);
+  const ingredients = useSelector(state => state.burgerIngredients);
 
   const [stateOrder, dispatchOrder] = useContext(OrderContext);
 
   const openModalOrderDetails = () => {
     openModal('orderDetails');
   }
-
+  
   const bun = React.useMemo( () => {
     return ingredients.find(item => {
       return item._id === stateOrder.bun;
