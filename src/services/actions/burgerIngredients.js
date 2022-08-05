@@ -14,7 +14,7 @@ export function getIngredients() {
       });
     })
     .catch((err) => {
-      schowError(dispatch, err);
+      schowError(dispatch, `Произошла ошибка.${err} Перезагрузите страницу.`);
     });
   }
 }

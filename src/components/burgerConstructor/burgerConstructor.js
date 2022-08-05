@@ -8,13 +8,14 @@ import { CurrencyIcon, Button, ConstructorElement, DragIcon } from
 import { OrderContext } from '../../services/appContext';
 import { ADD_FIRST_LISTE } from '../../services/actions/burgerConstructor';
 import { COUNT_PRICE_BURGER } from '../../services/actions/orderDetails';
+import { OPEN_MODAL } from '../../services/actions/app';
 
 let todoCounter = 0;
 function getNewTodo() {
   todoCounter += 1;
 }
 
-function BurgerConstructor({openModal}) {
+function BurgerConstructor() {
   
   const {ingredients, burgerPrice} = useSelector(state => ({
     ingredients: state.burgerIngredients,
@@ -38,7 +39,10 @@ function BurgerConstructor({openModal}) {
   //const [stateOrder, dispatchOrder] = useContext(OrderContext);
 
   const openModalOrderDetails = () => {
-    openModal('orderDetails');
+    dispatch({
+      type: OPEN_MODAL,
+      isModalActive: 'orderDetails',
+    });
   }
   
   const bun = React.useMemo( () => {
@@ -100,10 +104,6 @@ function BurgerConstructor({openModal}) {
       </div>
     </section>
   )
-}
-
-BurgerConstructor.propTypes = {
-  openModal: PropTypes.func.isRequired
 }
 
 export default BurgerConstructor;

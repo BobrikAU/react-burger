@@ -1,4 +1,4 @@
-import { COUNT_PRICE_BURGER } from '../actions/orderDetails';
+import { COUNT_PRICE_BURGER, SAVE_ORDER_DATA } from '../actions/orderDetails';
 
 const initialState = {
   number: '',
@@ -8,6 +8,12 @@ const initialState = {
 
 export const orderDetailsReducer = (state = initialState, action) => {
   switch (action.type) {
+    case SAVE_ORDER_DATA:
+      return {
+        ...state,
+        number: action.number,
+        execution: action.execution,
+      };
     case COUNT_PRICE_BURGER:
       return {
         ...state,
