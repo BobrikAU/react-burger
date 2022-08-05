@@ -1,5 +1,5 @@
 import { baseUrl, checkResponse } from '../../utils/utils';
-import { openModal } from './app';
+import { schowError } from './app';
 
 export const UPDATE_INGREDIENTS = 'UPDATE_INGREDIENTS';
 
@@ -14,8 +14,7 @@ export function getIngredients() {
       });
     })
     .catch((err) => {
-      console.log('ошибка');
-      openModal(dispatch, err);
+      schowError(dispatch, err);
     });
   }
 }

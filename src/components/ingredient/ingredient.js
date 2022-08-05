@@ -1,11 +1,16 @@
 import React, { useContext } from "react";
+import { useDispatch } from "react-redux";
 import styles from './ingridient.module.css';
 import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
 import {ingredientType} from '../../utils/types';
 import { OrderContext } from "../../services/appContext";
+import { OPEN_MODAL } from '../../services/actions/app';
+import { ADD_INGREDIENT_DETAILS } from '../../services/actions/ingredientDetails';
 
 function Ingredient({openModal, ingredient}) {
+
+  const dispatch = useDispatch();
 
   const [stateOrder] = useContext(OrderContext);
 
@@ -16,7 +21,14 @@ function Ingredient({openModal, ingredient}) {
   );
 
   const openModalIngredientDetails = () => {
-    openModal('ingredientDetails', ingredient);
+    dispatch ({
+      type: ADD_INGREDIENT_DETAILS,
+      ingredient
+    })
+    dispatch({
+      type: OPEN_MODAL,
+      isModalActive: 'ingredientDetails',
+    });
   }
 
   return (

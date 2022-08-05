@@ -1,10 +1,12 @@
 import React, { useContext, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import styles from './burgerConstructor.module.css';
 import PropTypes from 'prop-types';
 import { CurrencyIcon, Button, ConstructorElement, DragIcon } from 
 '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderContext } from '../../services/appContext';
+import { ADD_FIRST_LISTE } from '../../services/actions/burgerConstructor';
 
 let todoCounter = 0;
 function getNewTodo() {
@@ -14,6 +16,20 @@ function getNewTodo() {
 function BurgerConstructor({openModal}) {
   
   const ingredients = useSelector(state => state.burgerIngredients);
+  const dispatch = useDispatch();
+  useEffect ( () => {
+    dispatch({
+      type: ADD_FIRST_LISTE
+    });
+  }, [])
+  const {bun111, others111} = useSelector( state => ({
+    bun111: state.burgerConstructor.bun,
+    others111: state.burgerConstructor.others,
+  }));
+
+
+
+
 
   const [stateOrder, dispatchOrder] = useContext(OrderContext);
 
@@ -23,17 +39,17 @@ function BurgerConstructor({openModal}) {
   
   const bun = React.useMemo( () => {
     return ingredients.find(item => {
-      return item._id === stateOrder.bun;
+      return item._id === bun111;
     });
-  },[stateOrder.bun]);
+  },[bun111]);
   
   const othersIngredients = React.useMemo( () => {
-    return stateOrder.others.map((item) => {
+    return others111.map((item) => {
       return ingredients.find( meal => {
         return meal._id === item;
       });
     });
-  }, [stateOrder.others]);
+  }, [others111]);
   
   useEffect(() => {
       dispatchOrder({

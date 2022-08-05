@@ -16,7 +16,11 @@ const App = () => {
   
   const dispatch = useDispatch();
 
-  const ingredients = useSelector( state => state.burgerIngredients)
+  const { ingredients, isModalActive111, errorMessage } = useSelector( state => ({
+    ingredients: state.burgerIngredients,
+    isModalActive111: state.app.isModalActive.isModalActive,
+    errorMessage: state.app.isModalActive.errorMessage,
+  }));
 
 
 
@@ -24,7 +28,7 @@ const App = () => {
 
 
 
-  const [isModalActive, setIsModalActive] = useState({
+/*  const [isModalActive, setIsModalActive] = useState({
                                                         isModalActive: '',
                                                         shownIngredient: {},
                                                         errorMessage: ''
@@ -44,7 +48,7 @@ const App = () => {
                       isModalActive: modalWindow,
                       shownIngredient
                       });
-  }
+  }*/
 
   const initialOrder = {
                           number: '',
@@ -87,27 +91,31 @@ const App = () => {
   };
   const [stateOrder, dispatchOrder] = useReducer(reducerOrder, initialOrder, initOrder);
   
+
+
+
+
   useEffect( () => {
     dispatch(getIngredients())
   } , []);
+
+
+
+  
 
   return (
     <div className={styles.app}>
       <AppHeader/>
       <OrderContext.Provider value={[stateOrder, dispatchOrder]}>
         <main className={styles.main}>
-          <BurgerIngredients openModal={openModal}/>
-          {ingredients && (<BurgerConstructor openModal={openModal}/>)}
+          <BurgerIngredients /*openModal={openModal}*//>
+          {ingredients && (<BurgerConstructor /*openModal={openModal}*//>)}
         </main>
-        {isModalActive.isModalActive !== '' && (
-          <Modal closeModal={closeModal} activeModal={isModalActive.isModalActive}>
-            {isModalActive.isModalActive === 'orderDetails' && (
-              <OrderDetails/>
-            )}
-            {isModalActive.isModalActive === 'ingredientDetails' && (<IngredientDetails 
-            ingerdient={isModalActive.shownIngredient}/>)}
-            {isModalActive.isModalActive === 'error' && (<ErrorMessage 
-            errorMessage={isModalActive.errorMessage}/>)}
+        {isModalActive111 !== '' && (
+          <Modal activeModal={isModalActive111}>
+            {isModalActive111 === 'orderDetails' && ( <OrderDetails/> )}
+            {isModalActive111 === 'ingredientDetails' && (<IngredientDetails/>)}
+            {isModalActive111 === 'error' && (<ErrorMessage errorMessage={errorMessage}/>)}
           </Modal>
         )}
       </OrderContext.Provider>
