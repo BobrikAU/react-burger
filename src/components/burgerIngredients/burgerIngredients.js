@@ -1,11 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import styles from './burgerIngredients.module.css';
-import PropTypes from 'prop-types';
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import TypeIngredient from '../typeIngredient/typeIngredient';
 
-function BurgerIngredients ({openModal}) {
+function BurgerIngredients () {
 
   const ingredients = useSelector(state => state.burgerIngredients);
 
@@ -36,13 +35,13 @@ function BurgerIngredients ({openModal}) {
             </a>
           </nav>
           <ul className={styles.listsIngredients}>
-            <TypeIngredient type='bun' id='buns' openModal={openModal}>
+            <TypeIngredient type='bun' id='buns'>
               Булки
             </TypeIngredient>
-            <TypeIngredient type='sauce' id='sauces' openModal={openModal}>
+            <TypeIngredient type='sauce' id='sauces'>
               Соусы
             </TypeIngredient>
-            <TypeIngredient type='main' id='mains' openModal={openModal}>
+            <TypeIngredient type='main' id='mains'>
               Начинки
             </TypeIngredient>
           </ul>
@@ -53,10 +52,6 @@ function BurgerIngredients ({openModal}) {
       }
     </section>
   )
-}
-
-BurgerIngredients.propTypes = {
-  openModal: PropTypes.func.isRequired
 }
 
 export default BurgerIngredients;

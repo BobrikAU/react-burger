@@ -48,7 +48,7 @@ const App = () => {
                       isModalActive: modalWindow,
                       shownIngredient
                       });
-  }*/
+  }
 
   const initialOrder = {
                           number: '',
@@ -89,7 +89,7 @@ const App = () => {
       default:
     }
   };
-  const [stateOrder, dispatchOrder] = useReducer(reducerOrder, initialOrder, initOrder);
+  const [stateOrder, dispatchOrder] = useReducer(reducerOrder, initialOrder, initOrder);*/
   
 
 
@@ -106,9 +106,9 @@ const App = () => {
   return (
     <div className={styles.app}>
       <AppHeader/>
-      <OrderContext.Provider value={[stateOrder, dispatchOrder]}>
+      {/*<OrderContext.Provider value={[stateOrder, dispatchOrder]}>*/}
         <main className={styles.main}>
-          <BurgerIngredients /*openModal={openModal}*//>
+          <BurgerIngredients/>
           {ingredients && (<BurgerConstructor /*openModal={openModal}*//>)}
         </main>
         {isModalActive111 !== '' && (
@@ -118,7 +118,7 @@ const App = () => {
             {isModalActive111 === 'error' && (<ErrorMessage errorMessage={errorMessage}/>)}
           </Modal>
         )}
-      </OrderContext.Provider>
+      {/*</OrderContext.Provider>*/}
     </div>
   );
 }

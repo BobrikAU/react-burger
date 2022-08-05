@@ -1,0 +1,1 @@
+export const COUNT_PRICE_BURGER = 'COUNT_PRICE_BURGER';

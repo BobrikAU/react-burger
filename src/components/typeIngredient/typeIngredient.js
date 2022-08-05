@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styles from './typeIngredient.module.css';
 import Ingredient from "../ingredient/ingredient";
 
-function TypeIngredient({type, id, openModal, children}) {
+function TypeIngredient({type, id, children}) {
 
   const ingredients = useSelector( state => state.burgerIngredients);
 
@@ -14,8 +14,7 @@ function TypeIngredient({type, id, openModal, children}) {
       <ul className={`pl-4 pr-4 pt-6 pb-10 ${styles.list}`}>
         {ingredients.map((item) => {
           return item['type'] === type && (
-            <Ingredient key={item._id} openModal={openModal} 
-            ingredient={item}/>
+            <Ingredient key={item._id} ingredient={item}/>
           )
         })}
       </ul>
@@ -26,7 +25,6 @@ function TypeIngredient({type, id, openModal, children}) {
 TypeIngredient.propTypes = {
   children: PropTypes.string,
   type: PropTypes.string,
-  openModal: PropTypes.func,
   id: PropTypes.string
 }
 

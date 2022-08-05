@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styles from './ingridient.module.css';
 import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
@@ -8,13 +8,14 @@ import { OrderContext } from "../../services/appContext";
 import { OPEN_MODAL } from '../../services/actions/app';
 import { ADD_INGREDIENT_DETAILS } from '../../services/actions/ingredientDetails';
 
-function Ingredient({openModal, ingredient}) {
+function Ingredient({ingredient}) {
 
   const dispatch = useDispatch();
 
-  const [stateOrder] = useContext(OrderContext);
+  const burgerConstructor = useSelector( state => state.burgerConstructor)
+  //const [stateOrder] = useContext(OrderContext);
 
-  const number = ingredient._id === stateOrder.bun ? 1 : stateOrder.others.reduce(
+  const number = ingredient._id === burgerConstructor.bun ? 1 : burgerConstructor.others.reduce(
     function(previousValue, item) {
       return ingredient._id === item ? previousValue += 1 : previousValue;
     }, 0
@@ -45,7 +46,6 @@ function Ingredient({openModal, ingredient}) {
 }
 
 Ingredient.propTypes = {
-  openModal: PropTypes.func,
   ingreient: ingredientType
 }
 

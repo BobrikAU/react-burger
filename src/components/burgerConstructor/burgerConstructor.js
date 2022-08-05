@@ -7,6 +7,7 @@ import { CurrencyIcon, Button, ConstructorElement, DragIcon } from
 '@ya.praktikum/react-developer-burger-ui-components';
 import { OrderContext } from '../../services/appContext';
 import { ADD_FIRST_LISTE } from '../../services/actions/burgerConstructor';
+import { COUNT_PRICE_BURGER } from '../../services/actions/orderDetails';
 
 let todoCounter = 0;
 function getNewTodo() {
@@ -15,23 +16,26 @@ function getNewTodo() {
 
 function BurgerConstructor({openModal}) {
   
-  const ingredients = useSelector(state => state.burgerIngredients);
+  const {ingredients, burgerPrice} = useSelector(state => ({
+    ingredients: state.burgerIngredients,
+    burgerPrice: state.orderDetails.price,
+  }));
   const dispatch = useDispatch();
   useEffect ( () => {
     dispatch({
       type: ADD_FIRST_LISTE
     });
   }, [])
-  const {bun111, others111} = useSelector( state => ({
-    bun111: state.burgerConstructor.bun,
-    others111: state.burgerConstructor.others,
+  const {bunId, othersId} = useSelector( state => ({
+    bunId: state.burgerConstructor.bun,
+    othersId: state.burgerConstructor.others,
   }));
 
 
 
 
 
-  const [stateOrder, dispatchOrder] = useContext(OrderContext);
+  //const [stateOrder, dispatchOrder] = useContext(OrderContext);
 
   const openModalOrderDetails = () => {
     openModal('orderDetails');
@@ -39,23 +43,26 @@ function BurgerConstructor({openModal}) {
   
   const bun = React.useMemo( () => {
     return ingredients.find(item => {
-      return item._id === bun111;
+      return item._id === bunId;
     });
-  },[bun111]);
+  },[bunId]);
   
   const othersIngredients = React.useMemo( () => {
-    return others111.map((item) => {
+    return othersId.map((item) => {
       return ingredients.find( meal => {
         return meal._id === item;
       });
     });
-  }, [others111]);
+  }, [othersId]);
   
   useEffect(() => {
-      dispatchOrder({
-      type: "countPrice",
-      bun,
-      othersIngredients
+    const bunPrice = bun === undefined ? 0 : bun.price;
+    const burgerPrice = bunPrice * 2 + othersIngredients.reduce( (previousValue, item) => {
+        return previousValue + item.price;
+      }, 0);
+    dispatch({
+      type: COUNT_PRICE_BURGER,
+      price: burgerPrice,
     })
   }, [bun, othersIngredients])
 
@@ -84,7 +91,7 @@ function BurgerConstructor({openModal}) {
       </ul>
       <div className={`mt-10 mb-10 ${styles.finishOrder} pr-4`}>
         <div className={`mr-10 ${styles.price}`}>
-          <p className="text text_type_digits-medium mr-2">{stateOrder.price}</p>
+          <p className="text text_type_digits-medium mr-2">{burgerPrice}</p>
           <CurrencyIcon type="primary" />
         </div>
         <Button type="primary" size="large" onClick={openModalOrderDetails}>
