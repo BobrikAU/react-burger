@@ -1,11 +1,9 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import styles from './burgerConstructor.module.css';
-import PropTypes from 'prop-types';
 import { CurrencyIcon, Button, ConstructorElement, DragIcon } from 
-'@ya.praktikum/react-developer-burger-ui-components';
-import { OrderContext } from '../../services/appContext';
+  '@ya.praktikum/react-developer-burger-ui-components';
 import { ADD_FIRST_LISTE } from '../../services/actions/burgerConstructor';
 import { COUNT_PRICE_BURGER } from '../../services/actions/orderDetails';
 import { OPEN_MODAL } from '../../services/actions/app';
@@ -22,21 +20,17 @@ function BurgerConstructor() {
     burgerPrice: state.orderDetails.price,
   }));
   const dispatch = useDispatch();
+
   useEffect ( () => {
     dispatch({
       type: ADD_FIRST_LISTE
     });
-  }, [])
+  }, [dispatch])
+
   const {bunId, othersId} = useSelector( state => ({
     bunId: state.burgerConstructor.bun,
     othersId: state.burgerConstructor.others,
   }));
-
-
-
-
-
-  //const [stateOrder, dispatchOrder] = useContext(OrderContext);
 
   const openModalOrderDetails = () => {
     dispatch({
@@ -49,7 +43,7 @@ function BurgerConstructor() {
     return ingredients.find(item => {
       return item._id === bunId;
     });
-  },[bunId]);
+  },[bunId, ingredients]);
   
   const othersIngredients = React.useMemo( () => {
     return othersId.map((item) => {
@@ -57,18 +51,19 @@ function BurgerConstructor() {
         return meal._id === item;
       });
     });
-  }, [othersId]);
+  }, [othersId, ingredients]);
   
   useEffect(() => {
     const bunPrice = bun === undefined ? 0 : bun.price;
-    const burgerPrice = bunPrice * 2 + othersIngredients.reduce( (previousValue, item) => {
+    const burgerPrice = bunPrice * 2 + othersIngredients.reduce( 
+      (previousValue, item) => {
         return previousValue + item.price;
       }, 0);
     dispatch({
       type: COUNT_PRICE_BURGER,
       price: burgerPrice,
     })
-  }, [bun, othersIngredients])
+  }, [bun, othersIngredients, dispatch])
 
   return (
     <section className={`pl-4 pt-25 pb-3 ${styles.order}`}>

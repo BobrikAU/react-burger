@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import styles from './appHeader.module.css';
-import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Logo, BurgerIcon, ListIcon, ProfileIcon } from 
+  '@ya.praktikum/react-developer-burger-ui-components';
 import LinkHeader from '../linkHeader/linkHeader';
 
 function AppHeader() {
@@ -24,16 +25,22 @@ function AppHeader() {
     <header className={styles.header}>
       <nav className={styles.navigation}>
         <LinkHeader 
-          textColor={activePage === 'constructor' ? 'active' : 'inactive'}
-          icon={<BurgerIcon type={activePage === 'constructor' || isLinkHover['Конструктор'] ? "primary" : "secondary"}/>}
+          textColor={activePage === 'constructor' || isLinkHover['Конструктор'] ? 
+            'active' : 'inactive'}
+          icon= {<BurgerIcon 
+                    type={activePage === 'constructor' || isLinkHover['Конструктор'] ? 
+                      "primary" : "secondary"}
+                 />}
           state={isLinkHover}
           changeIsHover={toggleIsHover}
           >
           Конструктор
         </LinkHeader>
         <LinkHeader 
-          textColor={activePage === 'orders' ? 'active' : 'inactive'}
-          icon={<ListIcon type={activePage === 'orders' || isLinkHover['Лента заказов'] ? "primary" : "secondary"}/>} 
+          textColor={activePage === 'orders' || isLinkHover['Лента заказов'] ? 
+            'active' : 'inactive'}
+          icon={<ListIcon type={activePage === 'orders' || isLinkHover['Лента заказов'] ? 
+            "primary" : "secondary"}/>} 
           state={isLinkHover}
           changeIsHover={toggleIsHover}
           >
@@ -43,8 +50,10 @@ function AppHeader() {
       <Logo />
       <nav className={styles.accountLink}>
         <LinkHeader 
-          textColor={activePage === 'account' ? 'active' : 'inactive'}
-          icon={<ProfileIcon type={activePage === 'account' || isLinkHover['Личный кабинет'] ? "primary" : "secondary"}/>}
+          textColor={activePage === 'account' || isLinkHover['Личный кабинет'] ? 
+            'active' : 'inactive'}
+          icon={<ProfileIcon type={activePage === 'account' || 
+            isLinkHover['Личный кабинет'] ? "primary" : "secondary"}/>}
           state={isLinkHover}
           changeIsHover={toggleIsHover}
           >

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './app.module.css';
 import AppHeader from '../appHeader/appHeader';
@@ -8,7 +8,6 @@ import Modal from '../modal/modal';
 import OrderDetails from '../orderDetails/orderDetails';
 import IngredientDetails from '../ingredientDetails/ingredientDetails';
 import ErrorMessage from '../errorMassege/errorMassege';
-import { OrderContext } from '../../services/appContext';
 import { getIngredients } from '../../services/actions/burgerIngredients';
 
 
@@ -16,109 +15,30 @@ const App = () => {
   
   const dispatch = useDispatch();
 
-  const { ingredients, isModalActive111, errorMessage } = useSelector( state => ({
+  const { ingredients, isModalActive, errorMessage } = useSelector( state => ({
     ingredients: state.burgerIngredients,
-    isModalActive111: state.app.isModalActive.isModalActive,
+    isModalActive: state.app.isModalActive.isModalActive,
     errorMessage: state.app.isModalActive.errorMessage,
   }));
 
-
-
-
-
-
-
-/*  const [isModalActive, setIsModalActive] = useState({
-                                                        isModalActive: '',
-                                                        shownIngredient: {},
-                                                        errorMessage: ''
-                                                      });
-
-  const closeModal = () => {
-    setIsModalActive({
-                      isModalActive: '',
-                      shownIngredient: {},
-                      errorMessage: ''
-                      });
-  }
-
-  const openModal = (modalWindow, shownIngredient = {}) => {
-    setIsModalActive({
-                      ...isModalActive,
-                      isModalActive: modalWindow,
-                      shownIngredient
-                      });
-  }
-
-  const initialOrder = {
-                          number: '',
-                          execution: '',
-                          bun: '',
-                          others:[],
-                          price: 0
-                        };
-  const initOrder = (initialOrder) => {return {
-                                                ...initialOrder,
-                                                execution: 'Ваш заказ начали готовить',
-                                                bun: "60d3b41abdacab0026a733c6",
-                                                others: ["60d3b41abdacab0026a733ce", 
-                                                         "60d3b41abdacab0026a733c9",
-                                                         "60d3b41abdacab0026a733d1",
-                                                         "60d3b41abdacab0026a733d0",
-                                                         "60d3b41abdacab0026a733d0"
-                                                       ]
-                                              }};
-  const reducerOrder = (stateOrder, actionOrder) => {
-    function countPrice({bun, othersIngredients}) {
-      const bunPrice = bun === undefined ? 0 : bun.price;
-      return bunPrice * 2 + othersIngredients.reduce( (previousValue, item) => {
-          return previousValue + item.price;
-        }, 0);
-    }
-    switch (actionOrder.type) {
-      case "countPrice":
-        return {
-                 ...stateOrder,
-                 price: countPrice(actionOrder)
-               };
-      case 'saveNumberOrder':
-        return {
-                 ...stateOrder,
-                 number: actionOrder.number
-               };
-      default:
-    }
-  };
-  const [stateOrder, dispatchOrder] = useReducer(reducerOrder, initialOrder, initOrder);*/
-  
-
-
-
-
   useEffect( () => {
     dispatch(getIngredients())
-  } , []);
-
-
-
-  
+  } , [dispatch]);
 
   return (
     <div className={styles.app}>
       <AppHeader/>
-      {/*<OrderContext.Provider value={[stateOrder, dispatchOrder]}>*/}
-        <main className={styles.main}>
-          <BurgerIngredients/>
-          {ingredients && (<BurgerConstructor /*openModal={openModal}*//>)}
-        </main>
-        {isModalActive111 !== '' && (
-          <Modal activeModal={isModalActive111}>
-            {isModalActive111 === 'orderDetails' && ( <OrderDetails/> )}
-            {isModalActive111 === 'ingredientDetails' && (<IngredientDetails/>)}
-            {isModalActive111 === 'error' && (<ErrorMessage errorMessage={errorMessage}/>)}
-          </Modal>
-        )}
-      {/*</OrderContext.Provider>*/}
+      <main className={styles.main}>
+        <BurgerIngredients/>
+        {ingredients && (<BurgerConstructor/>)}
+      </main>
+      {isModalActive !== '' && (
+        <Modal activeModal={isModalActive}>
+          {isModalActive === 'orderDetails' && ( <OrderDetails/> )}
+          {isModalActive === 'ingredientDetails' && (<IngredientDetails/>)}
+          {isModalActive === 'error' && (<ErrorMessage errorMessage={errorMessage}/>)}
+        </Modal>
+      )}
     </div>
   );
 }

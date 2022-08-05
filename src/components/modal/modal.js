@@ -11,9 +11,6 @@ function Modal({children, activeModal}) {
   
   const dispatch = useDispatch();
   const stateIngredientDetails = useSelector(state => state.ingredientDetails)
-  /*const closeModal111 = dispatch({
-    type: CLOSE_MODAL,
-  });*/
 
   const closeModalClickOverlay = (e) => {
     if (e.target.id === 'overlay') {
@@ -39,7 +36,10 @@ function Modal({children, activeModal}) {
     ( <ModalOverlay closeModalClickOverlay={closeModalClickOverlay}>
         <div className={`pl-10 pt-10 pr-10 pb-15 ${styles.modal} ${styles[activeModal]}`}>
           <div className={styles.closeIcon}>
-            <CloseIcon type="primary" onClick={() => dispatch(closeModal(stateIngredientDetails))}/>
+            <CloseIcon 
+              type="primary" 
+              onClick={() => dispatch(closeModal(stateIngredientDetails))}
+            />
           </div>
           {children}
         </div>
