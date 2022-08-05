@@ -1,46 +1,69 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import styles from './burgerConstructor.module.css';
-import PropTypes from 'prop-types';
 import { CurrencyIcon, Button, ConstructorElement, DragIcon } from 
-'@ya.praktikum/react-developer-burger-ui-components';
-import {IngredientsContext, OrderContext} from '../../services/appContext';
+  '@ya.praktikum/react-developer-burger-ui-components';
+import { ADD_FIRST_LISTE } from '../../services/actions/burgerConstructor';
+import { COUNT_PRICE_BURGER } from '../../services/actions/orderDetails';
+import { OPEN_MODAL } from '../../services/actions/app';
 
 let todoCounter = 0;
 function getNewTodo() {
   todoCounter += 1;
 }
 
-function BurgerConstructor({openModal}) {
+function BurgerConstructor() {
   
-  const ingredients = useContext(IngredientsContext);
+  const {ingredients, burgerPrice} = useSelector(state => ({
+    ingredients: state.burgerIngredients,
+    burgerPrice: state.orderDetails.price,
+  }));
+  const dispatch = useDispatch();
 
-  const [stateOrder, dispatchOrder] = useContext(OrderContext);
+  useEffect ( () => {
+    dispatch({
+      type: ADD_FIRST_LISTE
+    });
+  }, [dispatch])
+
+  const {bunId, othersId} = useSelector( state => ({
+    bunId: state.burgerConstructor.bun,
+    othersId: state.burgerConstructor.others,
+  }));
 
   const openModalOrderDetails = () => {
-    openModal('orderDetails');
+    dispatch({
+      type: OPEN_MODAL,
+      isModalActive: 'orderDetails',
+    });
   }
-
+  
   const bun = React.useMemo( () => {
     return ingredients.find(item => {
-      return item._id === stateOrder.bun;
+      return item._id === bunId;
     });
-  },[stateOrder.bun]);
+  },[bunId, ingredients]);
   
   const othersIngredients = React.useMemo( () => {
-    return stateOrder.others.map((item) => {
+    return othersId.map((item) => {
       return ingredients.find( meal => {
         return meal._id === item;
       });
     });
-  }, [stateOrder.others]);
+  }, [othersId, ingredients]);
   
   useEffect(() => {
-      dispatchOrder({
-      type: "countPrice",
-      bun,
-      othersIngredients
+    const bunPrice = bun === undefined ? 0 : bun.price;
+    const burgerPrice = bunPrice * 2 + othersIngredients.reduce( 
+      (previousValue, item) => {
+        return previousValue + item.price;
+      }, 0);
+    dispatch({
+      type: COUNT_PRICE_BURGER,
+      price: burgerPrice,
     })
-  }, [bun, othersIngredients])
+  }, [bun, othersIngredients, dispatch])
 
   return (
     <section className={`pl-4 pt-25 pb-3 ${styles.order}`}>
@@ -67,7 +90,7 @@ function BurgerConstructor({openModal}) {
       </ul>
       <div className={`mt-10 mb-10 ${styles.finishOrder} pr-4`}>
         <div className={`mr-10 ${styles.price}`}>
-          <p className="text text_type_digits-medium mr-2">{stateOrder.price}</p>
+          <p className="text text_type_digits-medium mr-2">{burgerPrice}</p>
           <CurrencyIcon type="primary" />
         </div>
         <Button type="primary" size="large" onClick={openModalOrderDetails}>
@@ -76,10 +99,6 @@ function BurgerConstructor({openModal}) {
       </div>
     </section>
   )
-}
-
-BurgerConstructor.propTypes = {
-  openModal: PropTypes.func.isRequired
 }
 
 export default BurgerConstructor;
