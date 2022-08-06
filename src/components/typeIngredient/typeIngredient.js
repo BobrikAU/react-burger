@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import styles from './typeIngredient.module.css';
 import Ingredient from "../ingredient/ingredient";
 
-function TypeIngredient({type, id, children}) {
+const TypeIngredient = React.forwardRef( ({type, id, children}, ref) => {
 
   const ingredients = useSelector( state => state.burgerIngredients);
 
   return (
-    <li id={id}>
+    <li id={id} ref={ref}>
       <h2 className={`text text_type_main-medium ${styles.title}`}>{children}</h2>
       <ul className={`pl-4 pr-4 pt-6 pb-10 ${styles.list}`}>
         {ingredients.map((item) => {
@@ -20,7 +20,7 @@ function TypeIngredient({type, id, children}) {
       </ul>
     </li>
   )
-}
+});
 
 TypeIngredient.propTypes = {
   children: PropTypes.string,
