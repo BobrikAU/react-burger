@@ -2,14 +2,17 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import styles from './burgerConstructor.module.css';
-import { CurrencyIcon, Button, ConstructorElement, DragIcon } from 
+import { CurrencyIcon, Button, ConstructorElement } from 
   '@ya.praktikum/react-developer-burger-ui-components';
-import { ADD_BUN, ADD_OTHER_INGREDIENT, DELETE_OTHER_INGREDIENT } from 
-  '../../services/actions/burgerConstructor';
+import { ADD_BUN, 
+         ADD_OTHER_INGREDIENT,
+         DELETE_OTHER_INGREDIENT, 
+         MOVING_INGREDIENT } from '../../services/actions/burgerConstructor';
 import { COUNT_PRICE_BURGER } from '../../services/actions/orderDetails';
-import { OPEN_MODAL } from '../../services/actions/app';
-import { schowError } from '../../services/actions/app';
+import { OPEN_MODAL, schowError } from '../../services/actions/app';
 import { useDrop } from "react-dnd";
+import OtherIngredientConstructor from 
+  '../otherIngredientConstructor/otherIngredientConstructor';
 
 let todoCounter = 0;
 function getNewTodo() {
@@ -17,7 +20,8 @@ function getNewTodo() {
 }
 
 function BurgerConstructor() {
-  
+
+  //получение необходимых данных из Redux
   const {ingredients, burgerPrice, bunId, othersId} = useSelector(state => ({
     ingredients: state.burgerIngredients,
     burgerPrice: state.orderDetails.price,
@@ -26,7 +30,8 @@ function BurgerConstructor() {
   }));
   const dispatch = useDispatch();
 
-  const [{canAccept}, DropTargetRef] = useDrop({
+  //прием переносимых ингредиентов
+  const [{canAcceptIngredient}, ingredientDropTargetRef] = useDrop({
     accept: 'ingredient',
     drop: (item) => {
       if (!bunId && item._type !== 'bun') {
@@ -39,17 +44,27 @@ function BurgerConstructor() {
       }
     },
     collect: (monitor) => ({
-        canAccept: monitor.canDrop(),
+        canAcceptIngredient: monitor.canDrop(),
       })
   }, [bunId]);
 
+  //проверка и отправка заказа, открытие окна с информацией о заказе и номером заказа
   const openModalOrderDetails = () => {
+    if (!bunId) {
+      schowError(dispatch, 'В Вашем заказе нет ни одного ингредиента. Составте, пожалуйста, бургер и мы с радостью примем Ваш заказ.');
+      return
+    }
+    if (!othersId.length) {
+      schowError(dispatch, 'Ну какой же это бургер, если в нем только булки. Добавте другие ингредиенты.');
+      return
+    }
     dispatch({
       type: OPEN_MODAL,
       isModalActive: 'orderDetails',
     });
   }
-  
+
+  //подбор перечня ингредиентов с их данными по id
   const bun = React.useMemo( () => {
     return ingredients.find(item => {
       return item._id === bunId;
@@ -62,6 +77,8 @@ function BurgerConstructor() {
       });
     });
   }, [othersId, ingredients]);
+
+  //подсчет стоимости бургера
   useEffect(() => {
     const bunPrice = bun === undefined ? 0 : bun.price;
     const burgerPrice = bunPrice * 2 + othersIngredients.reduce( 
@@ -74,6 +91,7 @@ function BurgerConstructor() {
     })
   }, [bun, othersIngredients, dispatch]);
 
+  //удаление ингредиента из конструктора
   const removeIngredient = (e) => {
     dispatch({
       type: DELETE_OTHER_INGREDIENT,
@@ -81,10 +99,19 @@ function BurgerConstructor() {
     });
   };
 
+  //перемещение ингредиента в конструкторе
+  const moveIngredient = (indexOfMoved, indexOfRecipient) => {
+    dispatch({
+      type: MOVING_INGREDIENT,
+      indexOfMoved,
+      indexOfRecipient,
+    })
+  };
+
   return (
     <section className={`pl-4 pt-25 pb-3 ${styles.order}`}>
-      <ul className={`${styles.orderStructure} ${canAccept && styles.canAccept}`} 
-        ref={DropTargetRef}>
+      <ul className={`${styles.orderStructure} ${canAcceptIngredient && styles.canAccept}`} 
+        ref={ingredientDropTargetRef}>
         <li className={`${styles.bun} pr-4`}>
           {bun && (<ConstructorElement type="top" isLocked={true} text={`${bun.name} 
           (верх)`} thumbnail={bun.image} price={bun.price}/>)}
@@ -93,12 +120,9 @@ function BurgerConstructor() {
         ${styles.othersIngredients}`}>
           {othersIngredients.map((item, index) => {
             getNewTodo();
-            return (<li className={`pl-4 ${styles.otherIngredient}`} key={todoCounter} 
-                      index={index}>
-                      <DragIcon type="primary" />
-                      <ConstructorElement text={item.name} thumbnail={item.image} 
-                      price={item.price} handleClose={removeIngredient}/>
-                    </li>)
+            return (<OtherIngredientConstructor item={item} index={index} 
+              removeIngredient={removeIngredient} moveIngredient={moveIngredient} 
+              key={todoCounter}/>)
           })}
         </ul>
         <li className={`${styles.bun} pr-4`}>
