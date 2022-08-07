@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import styles from './app.module.css';
 import AppHeader from '../appHeader/appHeader';
 import BurgerIngredients from '../burgerIngredients/burgerIngredients';
@@ -28,10 +30,12 @@ const App = () => {
   return (
     <div className={styles.app}>
       <AppHeader/>
-      <main className={styles.main}>
-        <BurgerIngredients/>
-        {ingredients && (<BurgerConstructor/>)}
-      </main>
+      <DndProvider backend={HTML5Backend}>
+        <main className={styles.main}>
+          <BurgerIngredients/>
+          {ingredients && (<BurgerConstructor/>)}
+        </main>
+      </DndProvider>
       {isModalActive !== '' && (
         <Modal activeModal={isModalActive}>
           {isModalActive === 'orderDetails' && ( <OrderDetails/> )}

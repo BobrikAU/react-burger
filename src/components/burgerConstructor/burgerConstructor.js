@@ -4,9 +4,12 @@ import { useSelector } from "react-redux";
 import styles from './burgerConstructor.module.css';
 import { CurrencyIcon, Button, ConstructorElement, DragIcon } from 
   '@ya.praktikum/react-developer-burger-ui-components';
-import { ADD_FIRST_LISTE } from '../../services/actions/burgerConstructor';
+import { ADD_BUN, ADD_OTHER_INGREDIENT, DELETE_OTHER_INGREDIENT } from 
+  '../../services/actions/burgerConstructor';
 import { COUNT_PRICE_BURGER } from '../../services/actions/orderDetails';
 import { OPEN_MODAL } from '../../services/actions/app';
+import { schowError } from '../../services/actions/app';
+import { useDrop } from "react-dnd";
 
 let todoCounter = 0;
 function getNewTodo() {
@@ -15,22 +18,30 @@ function getNewTodo() {
 
 function BurgerConstructor() {
   
-  const {ingredients, burgerPrice} = useSelector(state => ({
+  const {ingredients, burgerPrice, bunId, othersId} = useSelector(state => ({
     ingredients: state.burgerIngredients,
     burgerPrice: state.orderDetails.price,
-  }));
-  const dispatch = useDispatch();
-
-  useEffect ( () => {
-    dispatch({
-      type: ADD_FIRST_LISTE
-    });
-  }, [dispatch])
-
-  const {bunId, othersId} = useSelector( state => ({
     bunId: state.burgerConstructor.bun,
     othersId: state.burgerConstructor.others,
   }));
+  const dispatch = useDispatch();
+
+  const [{canAccept}, DropTargetRef] = useDrop({
+    accept: 'ingredient',
+    drop: (item) => {
+      if (!bunId && item._type !== 'bun') {
+        schowError(dispatch, 'Пожалуйста, выберите сначала булку.')
+      } else {
+        dispatch({
+          type: item._type === 'bun' ? ADD_BUN : ADD_OTHER_INGREDIENT,
+          id: item._id,
+        });
+      }
+    },
+    collect: (monitor) => ({
+        canAccept: monitor.canDrop(),
+      })
+  }, [bunId]);
 
   const openModalOrderDetails = () => {
     dispatch({
@@ -44,7 +55,6 @@ function BurgerConstructor() {
       return item._id === bunId;
     });
   },[bunId, ingredients]);
-  
   const othersIngredients = React.useMemo( () => {
     return othersId.map((item) => {
       return ingredients.find( meal => {
@@ -52,7 +62,6 @@ function BurgerConstructor() {
       });
     });
   }, [othersId, ingredients]);
-  
   useEffect(() => {
     const bunPrice = bun === undefined ? 0 : bun.price;
     const burgerPrice = bunPrice * 2 + othersIngredients.reduce( 
@@ -63,23 +72,32 @@ function BurgerConstructor() {
       type: COUNT_PRICE_BURGER,
       price: burgerPrice,
     })
-  }, [bun, othersIngredients, dispatch])
+  }, [bun, othersIngredients, dispatch]);
+
+  const removeIngredient = (e) => {
+    dispatch({
+      type: DELETE_OTHER_INGREDIENT,
+      index: e.target.closest('li').getAttribute('index'),
+    });
+  };
 
   return (
     <section className={`pl-4 pt-25 pb-3 ${styles.order}`}>
-      <ul className={styles.orderStructure}>
+      <ul className={`${styles.orderStructure} ${canAccept && styles.canAccept}`} 
+        ref={DropTargetRef}>
         <li className={`${styles.bun} pr-4`}>
           {bun && (<ConstructorElement type="top" isLocked={true} text={`${bun.name} 
           (верх)`} thumbnail={bun.image} price={bun.price}/>)}
         </li>
         <ul className={`${othersIngredients.length !== 0 && "mt-4 mb-4 pr-4"} 
         ${styles.othersIngredients}`}>
-          {othersIngredients.map((item) => {
+          {othersIngredients.map((item, index) => {
             getNewTodo();
-            return (<li className={`pl-4 ${styles.otherIngredient}`} key={todoCounter}>
+            return (<li className={`pl-4 ${styles.otherIngredient}`} key={todoCounter} 
+                      index={index}>
                       <DragIcon type="primary" />
                       <ConstructorElement text={item.name} thumbnail={item.image} 
-                      price={item.price}/>
+                      price={item.price} handleClose={removeIngredient}/>
                     </li>)
           })}
         </ul>
