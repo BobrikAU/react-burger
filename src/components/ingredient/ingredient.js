@@ -6,11 +6,11 @@ import PropTypes from 'prop-types';
 import {ingredientType} from '../../utils/types';
 import { OPEN_MODAL } from '../../services/actions/app';
 import { ADD_INGREDIENT_DETAILS } from '../../services/actions/ingredientDetails';
+import { useDrag } from "react-dnd";
 
 function Ingredient({ingredient}) {
 
   const dispatch = useDispatch();
-
   const ingredientsConstructor = useSelector( state => state.burgerConstructor)
 
   const number = ingredient._id === ingredientsConstructor.bun ? 1 : 
@@ -20,6 +20,14 @@ function Ingredient({ingredient}) {
       }, 0
     );
 
+  const [, dragRef, dragPreviewRef] = useDrag({
+    type: 'ingredient',
+    item: {
+      _id: ingredient._id,
+      _type: ingredient.type,
+    }
+  }, [ingredient._id, ingredient.type]);
+  
   const openModalIngredientDetails = () => {
     dispatch ({
       type: ADD_INGREDIENT_DETAILS,
@@ -36,11 +44,13 @@ function Ingredient({ingredient}) {
       className={styles.ingreient} 
       id={ingredient.id} 
       onClick={openModalIngredientDetails}
+      ref={dragRef}
     >
       <img 
         src={ingredient.image} 
         alt={`Иконка ${ingredient.name}`} 
         className={`mb-2 ${styles.image}`}
+        ref={dragPreviewRef}
       />
       {number !== 0 && (<Counter count={number} size="default"/>)}
       <div className={`mb-2 ${styles.prise}`}>
