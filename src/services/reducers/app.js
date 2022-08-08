@@ -4,7 +4,7 @@ const initialState = {
   activePage: 'constructor',
   isModalActive: {
     isModalActive: '',
-    errorMessage: ''
+    message: ''
   }
 };
 
@@ -15,7 +15,7 @@ export const appReducer = (state = initialState, action) => {
         ...state,
         isModalActive: {
           isModalActive: '',
-          errorMessage: ''
+          message: ''
         }
       };
     case OPEN_MODAL:
@@ -23,7 +23,7 @@ export const appReducer = (state = initialState, action) => {
         ...state,
         isModalActive: {
           isModalActive: action.isModalActive,
-          errorMessage: action.errorMessage ? action.errorMessage : '',
+          message: action.message ? action.message : '',
         }
       };
     default:

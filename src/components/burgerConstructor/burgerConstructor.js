@@ -9,7 +9,8 @@ import { ADD_BUN,
          DELETE_OTHER_INGREDIENT, 
          MOVING_INGREDIENT } from '../../services/actions/burgerConstructor';
 import { COUNT_PRICE_BURGER } from '../../services/actions/orderDetails';
-import { OPEN_MODAL, schowError } from '../../services/actions/app';
+import { openModalActionCreator } from 
+  '../../services/actions/app';
 import { useDrop } from "react-dnd";
 import OtherIngredientConstructor from 
   '../otherIngredientConstructor/otherIngredientConstructor';
@@ -35,7 +36,7 @@ function BurgerConstructor() {
     accept: 'ingredient',
     drop: (item) => {
       if (!bunId && item._type !== 'bun') {
-        schowError(dispatch, 'Пожалуйста, выберите сначала булку.')
+        dispatch(openModalActionCreator('error','Пожалуйста, выберите сначала булку.'));
       } else {
         dispatch({
           type: item._type === 'bun' ? ADD_BUN : ADD_OTHER_INGREDIENT,
@@ -51,17 +52,18 @@ function BurgerConstructor() {
   //проверка и отправка заказа, открытие окна с информацией о заказе и номером заказа
   const openModalOrderDetails = () => {
     if (!bunId) {
-      schowError(dispatch, 'В Вашем заказе нет ни одного ингредиента. Составте, пожалуйста, бургер и мы с радостью примем Ваш заказ.');
+      const message = `В Вашем заказе нет ни одного ингредиента. 
+        Составте, пожалуйста, бургер и мы с радостью примем Ваш заказ.`;
+      dispatch(openModalActionCreator('error', message));
       return
     }
     if (!othersId.length) {
-      schowError(dispatch, 'Ну какой же это бургер, если в нем только булки. Добавте другие ингредиенты.');
+      const message = `Ну какой же это бургер, если в нем только булки. 
+        Добавте другие ингредиенты.`;
+      dispatch(openModalActionCreator('error', message));
       return
     }
-    dispatch({
-      type: OPEN_MODAL,
-      isModalActive: 'orderDetails',
-    });
+    dispatch(openModalActionCreator('orderDetails'));
   }
 
   //подбор перечня ингредиентов с их данными по id

@@ -1,5 +1,5 @@
 import { baseUrl, checkResponse } from '../../utils/utils';
-import { closeModal, schowError } from '../actions/app';
+import { closeModal, openModalActionCreator } from '../actions/app';
 
 export const COUNT_PRICE_BURGER = 'COUNT_PRICE_BURGER';
 export const SAVE_ORDER_DATA = 'SAVE_ORDER_DATA';
@@ -34,7 +34,7 @@ export function sendOrder(setRequest, constructorIngredients) {
         const message = `Оправка заказа была неудачной.${err} 
           Закройте окно и отправте заказ заново.`;
         closeModal();
-        schowError(dispatch, message);
+        dispatch(openModalActionCreator('error', message));
       })
       .finally(() => {
         setRequest({

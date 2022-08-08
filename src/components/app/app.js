@@ -17,10 +17,10 @@ const App = () => {
   
   const dispatch = useDispatch();
 
-  const { ingredients, isModalActive, errorMessage } = useSelector( state => ({
+  const { ingredients, isModalActive, message } = useSelector( state => ({
     ingredients: state.burgerIngredients,
     isModalActive: state.app.isModalActive.isModalActive,
-    errorMessage: state.app.isModalActive.errorMessage,
+    message: state.app.isModalActive.message,
   }));
 
   useEffect( () => {
@@ -40,7 +40,7 @@ const App = () => {
         <Modal activeModal={isModalActive}>
           {isModalActive === 'orderDetails' && ( <OrderDetails/> )}
           {isModalActive === 'ingredientDetails' && (<IngredientDetails/>)}
-          {isModalActive === 'error' && (<ErrorMessage errorMessage={errorMessage}/>)}
+          {isModalActive === 'error' && (<ErrorMessage message={message}/>)}
         </Modal>
       )}
     </div>

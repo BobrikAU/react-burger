@@ -1,5 +1,5 @@
 import { baseUrl, checkResponse } from '../../utils/utils';
-import { schowError } from './app';
+import { openModalActionCreator } from './app';
 
 export const UPDATE_INGREDIENTS = 'UPDATE_INGREDIENTS';
 
@@ -14,7 +14,8 @@ export function getIngredients() {
       });
     })
     .catch((err) => {
-      schowError(dispatch, `Произошла ошибка.${err} Перезагрузите страницу.`);
+      const message = `Произошла ошибка.${err} Перезагрузите страницу.`;
+      dispatch(openModalActionCreator('error', message));
     });
   }
 }

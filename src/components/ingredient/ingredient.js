@@ -4,7 +4,7 @@ import styles from './ingridient.module.css';
 import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
 import {ingredientType} from '../../utils/types';
-import { OPEN_MODAL } from '../../services/actions/app';
+import { openModalActionCreator } from '../../services/actions/app';
 import { ADD_INGREDIENT_DETAILS } from '../../services/actions/ingredientDetails';
 import { useDrag } from "react-dnd";
 
@@ -33,10 +33,7 @@ function Ingredient({ingredient}) {
       type: ADD_INGREDIENT_DETAILS,
       ingredient
     })
-    dispatch({
-      type: OPEN_MODAL,
-      isModalActive: 'ingredientDetails',
-    });
+    dispatch(openModalActionCreator('ingredientDetails'));
   }
 
   return (
