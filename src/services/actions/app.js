@@ -11,11 +11,13 @@ export function openModalActionCreator(typeModal, message = '') {
   }
 }
 
-export function closeModal(stateIngredientDetails = null) {
+export function closeModal(isModalActive) {
   return function(dispatch) {
     dispatch({
       type: CLOSE_MODAL,
     });
-    dispatch(deleteIngrdientDetails(stateIngredientDetails));
+    if (isModalActive === 'ingredientDetails') {
+      dispatch(deleteIngrdientDetails());
+    }
   }
 }

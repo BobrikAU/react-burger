@@ -11,7 +11,7 @@ import OrderDetails from '../orderDetails/orderDetails';
 import IngredientDetails from '../ingredientDetails/ingredientDetails';
 import ErrorMessage from '../errorMassege/errorMassege';
 import { getIngredients } from '../../services/actions/burgerIngredients';
-
+import { closeModal } from '../../services/actions/app';
 
 const App = () => {
   
@@ -27,6 +27,8 @@ const App = () => {
     dispatch(getIngredients())
   } , [dispatch]);
 
+  const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
+
   return (
     <div className={styles.app}>
       <AppHeader/>
@@ -37,7 +39,7 @@ const App = () => {
         </main>
       </DndProvider>
       {isModalActive !== '' && (
-        <Modal activeModal={isModalActive}>
+        <Modal closeModalWithDispatch={closeModalWithDispatch} activeModal={isModalActive}>
           {isModalActive === 'orderDetails' && ( <OrderDetails/> )}
           {isModalActive === 'ingredientDetails' && (<IngredientDetails/>)}
           {isModalActive === 'error' && (<ErrorMessage message={message}/>)}
