@@ -25,7 +25,7 @@ export function sendOrder(setRequest, constructorIngredients) {
       .then(checkResponse)
       .then((data) => {
         dispatch({
-                    type: 'SAVE_ORDER_DATA',
+                    type: SAVE_ORDER_DATA,
                     number: String(data.order.number),
                     execution: 'Ваш заказ начали готовить',
                   });
