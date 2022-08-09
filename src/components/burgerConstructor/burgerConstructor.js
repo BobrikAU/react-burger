@@ -15,11 +15,6 @@ import { useDrop } from "react-dnd";
 import OtherIngredientConstructor from 
   '../otherIngredientConstructor/otherIngredientConstructor';
 
-let todoCounter = 0;
-function getNewTodo() {
-  todoCounter += 1;
-}
-
 function BurgerConstructor() {
 
   //получение необходимых данных из Redux
@@ -74,9 +69,11 @@ function BurgerConstructor() {
   },[bunId, ingredients]);
   const othersIngredients = React.useMemo( () => {
     return othersId.map((item) => {
-      return ingredients.find( meal => {
-        return meal._id === item;
-      });
+      const ingredient = {...ingredients.find( meal => {
+        return meal._id === item.id;
+      })};
+      ingredient.uuid = item.uuid;
+      return ingredient;
     });
   }, [othersId, ingredients]);
 
@@ -121,10 +118,9 @@ function BurgerConstructor() {
         <ul className={`${othersIngredients.length !== 0 && "mt-4 mb-4 pr-4"} 
         ${styles.othersIngredients}`}>
           {othersIngredients.map((item, index) => {
-            getNewTodo();
             return (<OtherIngredientConstructor item={item} index={index} 
               removeIngredient={removeIngredient} moveIngredient={moveIngredient} 
-              key={todoCounter}/>)
+              key={item.uuid}/>)
           })}
         </ul>
         <li className={`${styles.bun} pr-4`}>

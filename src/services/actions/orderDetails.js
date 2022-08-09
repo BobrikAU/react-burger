@@ -10,7 +10,7 @@ export function sendOrder(setRequest, constructorIngredients) {
       isActive: true,
       message: 'Отправляем заказ...'
     });
-    const listIngredients = [...constructorIngredients.others];
+    const listIngredients = constructorIngredients.others.map((item) => item.id);
     listIngredients.unshift(constructorIngredients.bun);
     listIngredients.push(constructorIngredients.bun);
     fetch(`${baseUrl}orders`, {

@@ -16,7 +16,7 @@ function Ingredient({ingredient}) {
   const number = ingredient._id === ingredientsConstructor.bun ? 1 : 
     ingredientsConstructor.others.reduce(
       function(previousValue, item) {
-        return ingredient._id === item ? previousValue += 1 : previousValue;
+        return ingredient._id === item.id ? previousValue += 1 : previousValue;
       }, 0
     );
 
