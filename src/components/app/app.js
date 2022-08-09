@@ -11,21 +11,23 @@ import OrderDetails from '../orderDetails/orderDetails';
 import IngredientDetails from '../ingredientDetails/ingredientDetails';
 import ErrorMessage from '../errorMassege/errorMassege';
 import { getIngredients } from '../../services/actions/burgerIngredients';
-
+import { closeModal } from '../../services/actions/app';
 
 const App = () => {
   
   const dispatch = useDispatch();
 
-  const { ingredients, isModalActive, errorMessage } = useSelector( state => ({
+  const { ingredients, isModalActive, message } = useSelector( state => ({
     ingredients: state.burgerIngredients,
     isModalActive: state.app.isModalActive.isModalActive,
-    errorMessage: state.app.isModalActive.errorMessage,
+    message: state.app.isModalActive.message,
   }));
 
   useEffect( () => {
     dispatch(getIngredients())
   } , [dispatch]);
+
+  const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
 
   return (
     <div className={styles.app}>
@@ -37,10 +39,10 @@ const App = () => {
         </main>
       </DndProvider>
       {isModalActive !== '' && (
-        <Modal activeModal={isModalActive}>
+        <Modal closeModalWithDispatch={closeModalWithDispatch} activeModal={isModalActive}>
           {isModalActive === 'orderDetails' && ( <OrderDetails/> )}
           {isModalActive === 'ingredientDetails' && (<IngredientDetails/>)}
-          {isModalActive === 'error' && (<ErrorMessage errorMessage={errorMessage}/>)}
+          {isModalActive === 'error' && (<ErrorMessage message={message}/>)}
         </Modal>
       )}
     </div>

@@ -14,7 +14,7 @@ const TypeIngredient = React.forwardRef( ({type, id, children}, ref) => {
       <ul className={`pl-4 pr-4 pt-6 pb-10 ${styles.list}`}>
         {ingredients.map((item) => {
           return item['type'] === type && (
-            <Ingredient key={item._id} ingredient={item}/>
+            <Ingredient key={item.uuid} ingredient={item}/>
           )
         })}
       </ul>

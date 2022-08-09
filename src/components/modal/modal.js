@@ -1,26 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { useDispatch, useSelector } from "react-redux";
 import styles from './modal.module.css';
 import ModalOverlay from '../modalOverlay/modalOverlay';
 import {CloseIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from "prop-types";
-import { closeModal } from '../../services/actions/app';
 
-function Modal({children, activeModal}) {
-  
-  const dispatch = useDispatch();
-  const stateIngredientDetails = useSelector(state => state.ingredientDetails)
+function Modal({children, activeModal, closeModalWithDispatch}) {
 
   const closeModalClickOverlay = (e) => {
     if (e.target.id === 'overlay') {
-      dispatch(closeModal(stateIngredientDetails));
+      closeModalWithDispatch();
     };
   }
 
   const closeModalEsc = (e) => {
     if (e.key === 'Escape') {
-      dispatch(closeModal(stateIngredientDetails));
+      closeModalWithDispatch();
     };
   }
 
@@ -38,7 +33,7 @@ function Modal({children, activeModal}) {
           <div className={styles.closeIcon}>
             <CloseIcon 
               type="primary" 
-              onClick={() => dispatch(closeModal(stateIngredientDetails))}
+              onClick={() => closeModalWithDispatch()}
             />
           </div>
           {children}
@@ -50,7 +45,8 @@ function Modal({children, activeModal}) {
 
 Modal.propTypes = {
   children: PropTypes.node,
-  activeModal: PropTypes.string.isRequired
+  activeModal: PropTypes.string.isRequired,
+  closeModalWithDispatch: PropTypes.func.isRequired,
 }
 
 export default Modal;
