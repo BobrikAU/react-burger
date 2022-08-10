@@ -4,10 +4,9 @@ import { useSelector } from "react-redux";
 import styles from './burgerConstructor.module.css';
 import { CurrencyIcon, Button, ConstructorElement } from 
   '@ya.praktikum/react-developer-burger-ui-components';
-import { ADD_BUN, 
-         ADD_OTHER_INGREDIENT,
-         DELETE_OTHER_INGREDIENT, 
-         MOVING_INGREDIENT } from '../../services/actions/burgerConstructor';
+import { DELETE_OTHER_INGREDIENT, 
+         MOVING_INGREDIENT,
+         addIngredientActionCreator } from '../../services/actions/burgerConstructor';
 import { COUNT_PRICE_BURGER } from '../../services/actions/orderDetails';
 import { openModalActionCreator } from 
   '../../services/actions/app';
@@ -33,10 +32,11 @@ function BurgerConstructor() {
       if (!bunId && item._type !== 'bun') {
         dispatch(openModalActionCreator('error','Пожалуйста, выберите сначала булку.'));
       } else {
-        dispatch({
+        dispatch(addIngredientActionCreator(item)
+          /*{
           type: item._type === 'bun' ? ADD_BUN : ADD_OTHER_INGREDIENT,
           id: item._id,
-        });
+        }*/);
       }
     },
     collect: (monitor) => ({
