@@ -4,6 +4,13 @@ export const ADD_BUN = 'ADD_BUN';
 export const ADD_OTHER_INGREDIENT = 'ADD_OTHER_INGREDIENT';
 export const DELETE_OTHER_INGREDIENT = 'DELETE_OTHER_INGREDIENT';
 export const MOVING_INGREDIENT = 'MOVING_INGREDIENT';
+export const RESET_CONSTRUCTOR = 'RESET_CONSTRUCTOR';
+
+export const resetConstructorActionCreator = () => {
+  return {
+    type: RESET_CONSTRUCTOR,
+  }
+};
 
 export const addIngredientActionCreator = (item) => {
   if (item._type === 'bun') {
