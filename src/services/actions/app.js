@@ -1,4 +1,5 @@
 import { deleteIngrdientDetails } from './ingredientDetails';
+import { resetConstructorActionCreator } from './burgerConstructor';
 
 export const OPEN_MODAL = 'OPEN_MODAL';
 export const CLOSE_MODAL = 'CLOSE_MODAL';
@@ -16,8 +17,15 @@ export function closeModal(isModalActive) {
     dispatch({
       type: CLOSE_MODAL,
     });
-    if (isModalActive === 'ingredientDetails') {
-      dispatch(deleteIngrdientDetails());
+    switch (isModalActive){
+      case 'ingredientDetails':
+        dispatch(deleteIngrdientDetails());
+        break;
+      case 'orderDetails':
+        dispatch(resetConstructorActionCreator());
+        break;
+      default:
+        return;
     }
   }
-}
+};
