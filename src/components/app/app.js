@@ -1,122 +1,50 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import styles from './app.module.css';
 import AppHeader from '../appHeader/appHeader';
 import BurgerIngredients from '../burgerIngredients/burgerIngredients';
 import BurgerConstructor from '../burgerConstructor/burgerConstructor';
-import { baseUrl, checkResponse } from '../../utils/utils';
 import Modal from '../modal/modal';
 import OrderDetails from '../orderDetails/orderDetails';
 import IngredientDetails from '../ingredientDetails/ingredientDetails';
 import ErrorMessage from '../errorMassege/errorMassege';
-import {IngredientsContext, OrderContext} from '../../services/appContext';
-
+import { getIngredients } from '../../services/actions/burgerIngredients';
+import { closeModal } from '../../services/actions/app';
 
 const App = () => {
   
-  const [activePage, setActivePage] = useState('constructor');
-  const [ingredients, setIngredients] = useState(null);
-  const [isModalActive, setIsModalActive] = useState({
-                                                        isModalActive: '',
-                                                        shownIngredient: {},
-                                                        errorMessage: ''
-                                                      });
+  const dispatch = useDispatch();
 
-  const closeModal = () => {
-    setIsModalActive({
-                      isModalActive: '',
-                      shownIngredient: {},
-                      errorMessage: ''
-                      });
-  }
+  const { ingredients, isModalActive, message } = useSelector( state => ({
+    ingredients: state.burgerIngredients,
+    isModalActive: state.app.isModalActive.isModalActive,
+    message: state.app.isModalActive.message,
+  }));
 
-  const openModal = (modalWindow, shownIngredient = {}) => {
-    setIsModalActive({
-                      ...isModalActive,
-                      isModalActive: modalWindow,
-                      shownIngredient
-                      });
-  }
-
-  const initialOrder = {
-                          number: '',
-                          execution: '',
-                          bun: '',
-                          others:[],
-                          price: 0
-                        };
-  const initOrder = (initialOrder) => {return {
-                                                ...initialOrder,
-                                                execution: 'Ваш заказ начали готовить',
-                                                bun: "60d3b41abdacab0026a733c6",
-                                                others: ["60d3b41abdacab0026a733ce", 
-                                                         "60d3b41abdacab0026a733c9",
-                                                         "60d3b41abdacab0026a733d1",
-                                                         "60d3b41abdacab0026a733d0",
-                                                         "60d3b41abdacab0026a733d0"
-                                                       ]
-                                              }};
-  const reducerOrder = (stateOrder, actionOrder) => {
-    function countPrice({bun, othersIngredients}) {
-      const bunPrice = bun === undefined ? 0 : bun.price;
-      return bunPrice * 2 + othersIngredients.reduce( (previousValue, item) => {
-          return previousValue + item.price;
-        }, 0);
-    }
-    switch (actionOrder.type) {
-      case "countPrice":
-        return {
-                 ...stateOrder,
-                 price: countPrice(actionOrder)
-               };
-      case 'saveNumberOrder':
-        return {
-                 ...stateOrder,
-                 number: actionOrder.number
-               };
-      default:
-    }
-  };
-  const [stateOrder, dispatchOrder] = useReducer(reducerOrder, initialOrder, initOrder);
-  
   useEffect( () => {
-    const getIngredients = () => {
-      fetch(`${baseUrl}ingredients`)
-        .then(checkResponse)
-        .then( data => {
-          setIngredients(data.data);
-        })
-        .catch((err) => {
-          setIsModalActive({
-            ...isModalActive,
-            isModalActive: 'error',
-            errorMessage: `Произошла ошибка.${err} Перезагрузите страницу.`
-          })
-        });};
-    getIngredients();
-  } , []);
+    dispatch(getIngredients())
+  } , [dispatch]);
+
+  const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
 
   return (
     <div className={styles.app}>
-      <AppHeader activePage={activePage}/>
-      <OrderContext.Provider value={[stateOrder, dispatchOrder]}>
+      <AppHeader/>
+      <DndProvider backend={HTML5Backend}>
         <main className={styles.main}>
-          <IngredientsContext.Provider value={ingredients}>
-            <BurgerIngredients openModal={openModal}/>
-            {ingredients && (<BurgerConstructor openModal={openModal}/>)}
-          </IngredientsContext.Provider>
+          <BurgerIngredients/>
+          {ingredients && (<BurgerConstructor/>)}
         </main>
-        {isModalActive.isModalActive !== '' && (
-          <Modal closeModal={closeModal} activeModal={isModalActive.isModalActive}>
-            {isModalActive.isModalActive === 'orderDetails' && (
-              <OrderDetails/>
-            )}
-            {isModalActive.isModalActive === 'ingredientDetails' && (<IngredientDetails 
-            ingerdient={isModalActive.shownIngredient}/>)}
-            {isModalActive.isModalActive === 'error' && (<ErrorMessage 
-            errorMessage={isModalActive.errorMessage}/>)}
-          </Modal>
-        )}
-      </OrderContext.Provider>
+      </DndProvider>
+      {isModalActive !== '' && (
+        <Modal closeModalWithDispatch={closeModalWithDispatch} activeModal={isModalActive}>
+          {isModalActive === 'orderDetails' && ( <OrderDetails/> )}
+          {isModalActive === 'ingredientDetails' && (<IngredientDetails/>)}
+          {isModalActive === 'error' && (<ErrorMessage message={message}/>)}
+        </Modal>
+      )}
     </div>
   );
 }
