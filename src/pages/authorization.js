@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { EmailInput, 
          PasswordInput, 
          Button } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -20,11 +20,20 @@ function Authorization() {
   const submit = (e) => {
     e.preventDefault();
   };
+
+  const [isErrorInForm, setIsErrorInForm ] = useState({ disabled: true });
+  useEffect(() => {
+    if (emailValue && passwordValue) {
+      setIsErrorInForm({});
+    } else {
+      setIsErrorInForm({ disabled: true })
+    }
+  }, [emailValue, passwordValue])
   
   return(
     <main className={styles.main}>
       <h1 className={`text text_type_main-medium mb-6`}>Вход</h1>
-      <form id='form' className={`mb-20 ${styles.form}`}>
+      <form name='authorization' id='form' className={`mb-20 ${styles.form}`}>
         <EmailInput
           name='email' 
           value={emailValue}
@@ -40,7 +49,8 @@ function Authorization() {
           size='medium' 
           id='buttonRegister' 
           onClick={submit} 
-          name='button'>
+          name='button'
+          {...isErrorInForm}>
           Войти
         </Button> 
       </form>

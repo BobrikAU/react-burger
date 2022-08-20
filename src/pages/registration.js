@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Input, 
          EmailInput, 
          PasswordInput, 
@@ -10,10 +10,22 @@ import './globalSelectorsForms.css';
 function Registration() {
 
   const [ nameValue, setNameValue ] = useState('');
+  const [ errorName, setErrorName ] = useState(false);
   const refName = useRef();
   const onChangeName = (e) => {
-    setNameValue(e.target.value);
+    const text = e.target.value;
+    setNameValue(text);
   };
+  const onBlurName = () => {
+    if (nameValue.length === 1) {
+      setErrorName(true);
+    } else {
+      setErrorName(false);
+    }
+  };
+  const onFocusName = () => {
+    setErrorName(false);
+  }
 
   const [ emailValue, setEmailValue ] = useState('');
   const onChangeEmail = (e) => {
@@ -25,16 +37,23 @@ function Registration() {
     setPasswordValue(e.target.value);
   };
 
+  const [isErrorInForm, setIsErrorInForm ] = useState({ disabled: true });
+  useEffect(() => {
+    if (nameValue && !errorName && emailValue && passwordValue) {
+      setIsErrorInForm({});
+    } else {
+      setIsErrorInForm({ disabled: true })
+    }
+  }, [nameValue, errorName, emailValue, passwordValue])
+
   const submit = (e) => {
     e.preventDefault();
   };
 
-  
-
   return(
     <main className={styles.main}>
       <h1 className={`text text_type_main-medium mb-6`}>Регистрация</h1>
-      <form id='form' className={`mb-20 ${styles.form}`}>
+      <form name='registration' id='form' className={`mb-20 ${styles.form}`}>
         <Input 
           type='text' 
           placeholder='Имя' 
@@ -43,6 +62,10 @@ function Registration() {
           name='name' 
           ref={refName} 
           onChange={onChangeName}
+          onBlur={onBlurName} 
+          onFocus={onFocusName} 
+          error={errorName}
+          errorText='В имени должно быть больше одного символа'
         />
         <EmailInput
           name='email' 
@@ -59,7 +82,8 @@ function Registration() {
           size='medium' 
           id='buttonRegister' 
           onClick={submit} 
-          name='button'>
+          name='button'          
+          {...isErrorInForm}>
           Зарегистрироваться
         </Button> 
       </form>
