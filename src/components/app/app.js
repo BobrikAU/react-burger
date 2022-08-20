@@ -1,19 +1,23 @@
 import React from 'react';
 import styles from './app.module.css';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import AppHeader from '../appHeader/appHeader';
 import Constructor from '../../pages/constructor';
 import NotFound404 from '../../pages/notFound404';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Registration from '../../pages/registration';
 
 const App = () => {
 
   return (
-    <div className={styles.app}>
+    <div className={`${styles.app} ${styles.variables}`}>
       <AppHeader/>
       <BrowserRouter>
         <Switch>
           <Route path='/' exact={true}>
             <Constructor/>
+          </Route>
+          <Route path='/register'>
+            <Registration/>
           </Route>
           <Route>
             <NotFound404 />
