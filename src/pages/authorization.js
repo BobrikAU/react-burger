@@ -1,20 +1,12 @@
-import { useState, useRef } from 'react';
-import { Input, 
-         EmailInput, 
+import { useState } from 'react';
+import { EmailInput, 
          PasswordInput, 
          Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-router-dom';
-import styles from './registration.module.css';
+import styles from './authorization.module.css';
 import './globalSelectorsForms.css';
 
-function Registration() {
-
-  const [ nameValue, setNameValue ] = useState('');
-  const refName = useRef();
-  const onChangeName = (e) => {
-    setNameValue(e.target.value);
-  };
-
+function Authorization() {
   const [ emailValue, setEmailValue ] = useState('');
   const onChangeEmail = (e) => {
     setEmailValue(e.target.value);
@@ -28,22 +20,11 @@ function Registration() {
   const submit = (e) => {
     e.preventDefault();
   };
-
   
-
   return(
     <main className={styles.main}>
-      <h1 className={`text text_type_main-medium mb-6`}>Регистрация</h1>
+      <h1 className={`text text_type_main-medium mb-6`}>Вход</h1>
       <form id='form' className={`mb-20 ${styles.form}`}>
-        <Input 
-          type='text' 
-          placeholder='Имя' 
-          size='default' 
-          value={nameValue} 
-          name='name' 
-          ref={refName} 
-          onChange={onChangeName}
-        />
         <EmailInput
           name='email' 
           value={emailValue}
@@ -60,19 +41,31 @@ function Registration() {
           id='buttonRegister' 
           onClick={submit} 
           name='button'>
-          Зарегистрироваться
+          Войти
         </Button> 
       </form>
+      <div className={`mb-4 ${styles.underForm}`}>
+        <p className='text text_type_main-default text_color_inactive'>
+          Вы — новый пользователь?
+        </p>
+        <Link 
+          to='/register' 
+          className={`text text_type_main-default ml-2 ${styles.link}`}>
+          Зарегистрироваться
+        </Link>
+      </div>
       <div className={styles.underForm}>
         <p className='text text_type_main-default text_color_inactive'>
-          Уже зарегистрированы?
+          Забыли пароль?
         </p>
-        <Link to='/login' className={`text text_type_main-default ml-2 ${styles.link}`}>
-          Войти
+        <Link 
+          to='/forgot-password' 
+          className={`text text_type_main-default ml-2 ${styles.link}`}>
+          Восстановить пароль
         </Link>
       </div>
     </main>
   )
 }
 
-export default Registration;
+export default Authorization;

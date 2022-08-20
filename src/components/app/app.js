@@ -5,6 +5,7 @@ import AppHeader from '../appHeader/appHeader';
 import Constructor from '../../pages/constructor';
 import NotFound404 from '../../pages/notFound404';
 import Registration from '../../pages/registration';
+import Authorization from '../../pages/authorization';
 
 const App = () => {
 
@@ -15,6 +16,9 @@ const App = () => {
         <Switch>
           <Route path='/' exact={true}>
             <Constructor/>
+          </Route>
+          <Route path='/login'>
+            <Authorization/>
           </Route>
           <Route path='/register'>
             <Registration/>
