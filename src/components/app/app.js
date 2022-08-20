@@ -1,50 +1,33 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import React from 'react';
 import styles from './app.module.css';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import AppHeader from '../appHeader/appHeader';
-import BurgerIngredients from '../burgerIngredients/burgerIngredients';
-import BurgerConstructor from '../burgerConstructor/burgerConstructor';
-import Modal from '../modal/modal';
-import OrderDetails from '../orderDetails/orderDetails';
-import IngredientDetails from '../ingredientDetails/ingredientDetails';
-import ErrorMessage from '../errorMassege/errorMassege';
-import { getIngredients } from '../../services/actions/burgerIngredients';
-import { closeModal } from '../../services/actions/app';
+import Constructor from '../../pages/constructor';
+import NotFound404 from '../../pages/notFound404';
+import Registration from '../../pages/registration';
+import Authorization from '../../pages/authorization';
 
 const App = () => {
-  
-  const dispatch = useDispatch();
-
-  const { ingredients, isModalActive, message } = useSelector( state => ({
-    ingredients: state.burgerIngredients,
-    isModalActive: state.app.isModalActive.isModalActive,
-    message: state.app.isModalActive.message,
-  }));
-
-  useEffect( () => {
-    dispatch(getIngredients())
-  } , [dispatch]);
-
-  const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
 
   return (
-    <div className={styles.app}>
+    <div className={`${styles.app} ${styles.variables}`}>
       <AppHeader/>
-      <DndProvider backend={HTML5Backend}>
-        <main className={styles.main}>
-          <BurgerIngredients/>
-          {ingredients && (<BurgerConstructor/>)}
-        </main>
-      </DndProvider>
-      {isModalActive !== '' && (
-        <Modal closeModalWithDispatch={closeModalWithDispatch} activeModal={isModalActive}>
-          {isModalActive === 'orderDetails' && ( <OrderDetails/> )}
-          {isModalActive === 'ingredientDetails' && (<IngredientDetails/>)}
-          {isModalActive === 'error' && (<ErrorMessage message={message}/>)}
-        </Modal>
-      )}
+      <BrowserRouter>
+        <Switch>
+          <Route path='/' exact={true}>
+            <Constructor/>
+          </Route>
+          <Route path='/login'>
+            <Authorization/>
+          </Route>
+          <Route path='/register'>
+            <Registration/>
+          </Route>
+          <Route>
+            <NotFound404 />
+          </Route>
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 }
