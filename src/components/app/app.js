@@ -8,6 +8,7 @@ import Registration from '../../pages/registration';
 import Authorization from '../../pages/authorization';
 import Recovery from '../../pages/recovery';
 import ResetPassword from '../../pages/resetPassword';
+import Profile from '../../pages/profile';
 
 const App = () => {
 
@@ -19,17 +20,20 @@ const App = () => {
           <Route path='/' exact={true}>
             <Constructor/>
           </Route>
-          <Route path='/login'>
+          <Route path='/login' exact={true}>
             <Authorization/>
           </Route>
-          <Route path='/register'>
+          <Route path='/register' exact={true}>
             <Registration/>
           </Route>
-          <Route path='/forgot-password'>
+          <Route path='/forgot-password' exact={true}>
             <Recovery/>
           </Route>
-          <Route path='/reset-password'>
+          <Route path='/reset-password' exact={true}>
             <ResetPassword />
+          </Route>
+          <Route path='/profile'>
+            <Profile />
           </Route>
           <Route>
             <NotFound404 />
