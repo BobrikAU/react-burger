@@ -7,6 +7,7 @@ import NotFound404 from '../../pages/notFound404';
 import Registration from '../../pages/registration';
 import Authorization from '../../pages/authorization';
 import Recovery from '../../pages/recovery';
+import ResetPassword from '../../pages/resetPassword';
 
 const App = () => {
 
@@ -26,6 +27,9 @@ const App = () => {
           </Route>
           <Route path='/forgot-password'>
             <Recovery/>
+          </Route>
+          <Route path='/reset-password'>
+            <ResetPassword />
           </Route>
           <Route>
             <NotFound404 />
