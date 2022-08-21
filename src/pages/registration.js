@@ -9,6 +9,7 @@ import './globalSelectorsForms.css';
 
 function Registration() {
 
+  //функциональность поля name
   const [ nameValue, setNameValue ] = useState('');
   const [ errorName, setErrorName ] = useState(false);
   const refName = useRef();
@@ -27,28 +28,75 @@ function Registration() {
     setErrorName(false);
   }
 
+  //функциональность поля email
   const [ emailValue, setEmailValue ] = useState('');
+  const [ errorEmailValue, setErrorEmailValue ] = useState(false);
   const onChangeEmail = (e) => {
     setEmailValue(e.target.value);
   };
+  const isErrorEmailValue = (divEmail) => {
+    setTimeout( () => {
+      if (divEmail.classList.contains("input_status_error")) {
+        setErrorEmailValue(true);
+      } else {
+        setErrorEmailValue(false);
+      }
+    }, 100);
+  }
 
+  //функциональность поля password
   const [ passwordValue, setPasswordValue ] = useState('');
+  const [ errorPasswordValue, setErrorPasswordValue ] = useState(false);
   const onChangePassword = (e) => {
     setPasswordValue(e.target.value);
   };
+  const isErrorPasswordValue = (divPassword) => {
+    setTimeout( () => {
+      if (divPassword.classList.contains("input_status_error")) {
+        setErrorPasswordValue(true);
+      } else {
+        setErrorPasswordValue(false);
+      }
+    }, 100);
+  };
 
+  //блокировка кнопки отправки формы при некорректности заполнения полей формы
   const [isErrorInForm, setIsErrorInForm ] = useState({ disabled: true });
   useEffect(() => {
-    if (nameValue && !errorName && emailValue && passwordValue) {
+    if (nameValue && !errorName && emailValue && !errorEmailValue && 
+      passwordValue && !errorPasswordValue) {
       setIsErrorInForm({});
     } else {
       setIsErrorInForm({ disabled: true })
     }
-  }, [nameValue, errorName, emailValue, passwordValue])
+  }, [nameValue, errorName, emailValue, passwordValue, errorEmailValue, 
+      errorPasswordValue]
+  );
 
+  //отправка формы
   const submit = (e) => {
     e.preventDefault();
   };
+
+  useEffect(() => {
+    const form = document.forms.registration;
+    const inputEmail = form.elements.email;
+    const inputPassword = form.elements.password;
+    const divEmail = form.querySelector('.input_type_email');
+    const divPassword = form.querySelector('.input_type_password');
+    inputEmail.addEventListener('blur', (() => {isErrorEmailValue(divEmail)}));
+    inputEmail.addEventListener('focus', (() => {setErrorEmailValue(false)}));
+    inputPassword.addEventListener('blur', (() => {isErrorPasswordValue(divPassword)}));
+    inputPassword.addEventListener('focus', (() => {setErrorPasswordValue(false)}));
+    return () => {
+      inputEmail.removeEventListener('blur', 
+        (() => {isErrorEmailValue(divEmail)}));
+      inputEmail.removeEventListener('focus', (() => {setErrorEmailValue(false)}));
+      inputPassword.removeEventListener('blur', 
+        (() => {isErrorPasswordValue(divPassword)}));
+      inputPassword.removeEventListener('focus', (() => {setErrorPasswordValue(false)}));
+    }
+  }, []);
 
   return(
     <main className={styles.main}>
