@@ -3,6 +3,14 @@ import { resetConstructorActionCreator } from './burgerConstructor';
 
 export const OPEN_MODAL = 'OPEN_MODAL';
 export const CLOSE_MODAL = 'CLOSE_MODAL';
+export const CHANGE_ACTIVE_PAGE = 'CHANGE_ACTIVE_PAGE';
+
+export function changeActivePageActionCreator(page) {
+  return {
+    type: CHANGE_ACTIVE_PAGE,
+    activePage: page
+  }
+}
 
 export function openModalActionCreator(typeModal, message = '') {
   return {

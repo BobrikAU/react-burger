@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import styles from './linkHeader.module.css';
 import PropTypes from 'prop-types';
 
@@ -19,7 +20,8 @@ function LinkHeader(props) {
   };
 
   return(
-    <a 
+    <Link 
+      to={props.to}
       href="#" 
       className={`pr-5 pl-5 ${styles.link}`} 
       onMouseEnter={changeIsHoverTrue}
@@ -30,7 +32,7 @@ function LinkHeader(props) {
         styles.active : styles.inactive}`}>
         {props.children}
       </p>
-    </a>
+    </Link>
   )
 }
 
@@ -40,6 +42,7 @@ LinkHeader.propTypes = {
   icon: PropTypes.element.isRequired,
   state: PropTypes.object.isRequired,
   changeIsHover: PropTypes.func.isRequired,
+  to: PropTypes.string.isRequired,
 }
 
 export default LinkHeader;

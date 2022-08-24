@@ -1,10 +1,17 @@
 import { Route, Switch, Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useDispatch } from "react-redux";
+import { useEffect, useState } from 'react';
 import styles from './profile.module.css';
 import EditProfile from '../components/editProfile/editProfile';
 import OrdersHistory from './ordersHistory';
+import { changeActivePageActionCreator } from '../services/actions/app';
 
 function Profile () {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(changeActivePageActionCreator('account'));
+  }, [dispatch]);
+
   const [ isActive, setIsActive ] = useState('profile');
   const onClickProfile = () => {
     setIsActive('profile');
