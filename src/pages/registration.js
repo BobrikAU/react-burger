@@ -4,10 +4,10 @@ import { Input,
          EmailInput, 
          PasswordInput, 
          Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import styles from './registration.module.css';
 import './globalSelectorsForms.css';
-import { registerNewUser } from '../services/actions/user';
+import { requestAboutUser } from '../services/actions/user';
 import Modal from '../components/modal/modal';
 import { openModalActionCreator, closeModal } from '../services/actions/app';
 import ErrorMessage from '../components/errorMassege/errorMassege';
@@ -18,6 +18,7 @@ function Registration() {
     isModalActive: state.app.isModalActive.isModalActive,
     message: state.app.isModalActive.message,
   }));
+  const history = useHistory();
 
   const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
 
@@ -93,17 +94,23 @@ function Registration() {
   const submit = (e) => {
     e.preventDefault();
     dispatch(openModalActionCreator('error', 'Осуществляется регистрация...'));
-    dispatch(registerNewUser(nameValue, emailValue, passwordValue, 
+    dispatch(requestAboutUser(
+      {"name": nameValue, 
+       "email": emailValue, 
+       "password": passwordValue,
+      },
+      'auth/register',
       setIsRequestSuccessful));
   };
   useEffect(() => {
     if (isRequestSuccessful.value) {
       closeModalWithDispatch();
+      history.replace({pathname: '/'});
     }
     if (isRequestSuccessful.value === false) {
       dispatch(openModalActionCreator('error', isRequestSuccessful.message));
     }
-  }, [isRequestSuccessful, closeModalWithDispatch, dispatch]);
+  }, [isRequestSuccessful]);
 
   useEffect(() => {
     const form = document.forms.registration;

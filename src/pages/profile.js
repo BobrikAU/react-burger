@@ -1,6 +1,6 @@
-import { Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch, NavLink, useRouteMatch } from 'react-router-dom';
 import { useDispatch } from "react-redux";
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import styles from './profile.module.css';
 import EditProfile from '../components/editProfile/editProfile';
 import OrdersHistory from './ordersHistory';
@@ -12,32 +12,28 @@ function Profile () {
     dispatch(changeActivePageActionCreator('account'));
   }, [dispatch]);
 
-  const [ isActive, setIsActive ] = useState('profile');
-  const onClickProfile = () => {
-    setIsActive('profile');
-  };
-  const onClickOrders = () => {
-    setIsActive('orders');
-  };
+  const {path} = useRouteMatch();
 
   return(
     <main className={styles.main}>
       <aside className={`mt-30 ${styles.aside}`}>
         <menu className={styles.menu}>
-          <Link 
+          <NavLink 
+            exact to={path} 
             className={`text text_type_main-medium text_color_inactive pt-5 pb-3 
-              ${styles.link} ${ isActive === 'profile' && styles.linkActive}`} 
-            to='/profile' 
-            onClick={onClickProfile}>
+              ${styles.link}`} 
+            activeClassName={`text text_type_main-medium pt-5 pb-3 
+            ${styles.link} ${styles.linkActive}`}>
             Профиль
-          </Link>
-          <Link 
+          </NavLink>
+          <NavLink  
+            to={`${path}/orders`} 
             className={`text text_type_main-medium text_color_inactive pt-5 pb-3 
-              ${styles.link} ${ isActive === 'orders' && styles.linkActive}`} 
-            to='/profile/orders' 
-            onClick={onClickOrders}>
+              ${styles.link}`} 
+            activeClassName={`text text_type_main-medium pt-5 pb-3 
+            ${styles.link} ${styles.linkActive}`}>
             История заказов
-          </Link>
+          </NavLink>
           <button className={`text text_type_main-medium text_color_inactive pt-6 pb-3
             ${styles.button}`}>
             Выход
@@ -49,10 +45,10 @@ function Profile () {
       </aside>
       <section className={`pt-30 ml-15 ${styles.content}`}>
           <Switch>
-            <Route path='/profile' exact={true}>
+            <Route path={path} exact={true}>
               <EditProfile/>
             </Route>
-            <Route path='/profile/orders' exact={true}>
+            <Route path={`${path}/orders`} exact={true}>
               <OrdersHistory/>
             </Route>
           </Switch>

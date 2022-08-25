@@ -22,7 +22,6 @@ function LinkHeader(props) {
   return(
     <Link 
       to={props.to}
-      href="#" 
       className={`pr-5 pl-5 ${styles.link}`} 
       onMouseEnter={changeIsHoverTrue}
       onMouseLeave={changeIsHoverFalse}

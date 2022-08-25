@@ -1,8 +1,24 @@
 export const baseUrl = 'https://norma.nomoreparties.space/api/';
 
-export function checkResponse (res) {
+export async function checkResponse (res) {
     if (!res.ok) {
-      return Promise.reject(` Неудачное обращение к серверу. Код ошибки: ${res.status}.`);
+      /*async function detectionError() {
+        const data = await res.json();
+        const message = data.message ? 
+          `Код ошибки: ${res.status}. Ответ сервера: ${data.message}.` :
+          ` Неудачное обращение к серверу. Код ошибки: ${res.status}.`;
+      }*/
+      let message;
+      try {
+        const data = await res.json();
+        message = data.message ? 
+          `Код ошибки: ${res.status}. Ответ сервера: ${data.message}.` :
+          ` Неудачное обращение к серверу. Код ошибки: ${res.status}.`;
+      } catch (err) {
+        message = ` Неудачное обращение к серверу. Код ошибки: ${res.status}. 
+          Ошибка: ${err}`;
+      }
+      return Promise.reject(message);
     }
     return res.json();
   }
