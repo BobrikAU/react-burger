@@ -1,13 +1,26 @@
 import { useState, useRef, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Input, 
          EmailInput, 
          PasswordInput, 
          Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import styles from './registration.module.css';
 import './globalSelectorsForms.css';
+import { requestAboutUser } from '../services/actions/user';
+import Modal from '../components/modal/modal';
+import { openModalActionCreator, closeModal } from '../services/actions/app';
+import ErrorMessage from '../components/errorMassege/errorMassege';
 
 function Registration() {
+  const dispatch = useDispatch();
+  const { isModalActive, message } = useSelector (state => ({
+    isModalActive: state.app.isModalActive.isModalActive,
+    message: state.app.isModalActive.message,
+  }));
+  const history = useHistory();
+
+  const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
 
   //функциональность поля name
   const [ nameValue, setNameValue ] = useState('');
@@ -61,22 +74,43 @@ function Registration() {
   };
 
   //блокировка кнопки отправки формы при некорректности заполнения полей формы
-  const [isErrorInForm, setIsErrorInForm ] = useState({ disabled: true });
+  const [isButtonDisabled, setIsButtonDisabled ] = useState({ disabled: true });
   useEffect(() => {
     if (nameValue && !errorName && emailValue && !errorEmailValue && 
       passwordValue && !errorPasswordValue) {
-      setIsErrorInForm({});
+      setIsButtonDisabled({});
     } else {
-      setIsErrorInForm({ disabled: true })
+      setIsButtonDisabled({ disabled: true })
     }
   }, [nameValue, errorName, emailValue, passwordValue, errorEmailValue, 
       errorPasswordValue]
   );
 
   //отправка формы
+  const [ isRequestSuccessful, setIsRequestSuccessful ] = useState({
+                                                                      value: undefined,
+                                                                      message: '',
+                                                                    });
   const submit = (e) => {
     e.preventDefault();
+    dispatch(openModalActionCreator('error', 'Осуществляется регистрация...'));
+    dispatch(requestAboutUser(
+      {"name": nameValue, 
+       "email": emailValue, 
+       "password": passwordValue,
+      },
+      'auth/register',
+      setIsRequestSuccessful));
   };
+  useEffect(() => {
+    if (isRequestSuccessful.value) {
+      closeModalWithDispatch();
+      history.replace({pathname: '/'});
+    }
+    if (isRequestSuccessful.value === false) {
+      dispatch(openModalActionCreator('error', isRequestSuccessful.message));
+    }
+  }, [isRequestSuccessful]);
 
   useEffect(() => {
     const form = document.forms.registration;
@@ -131,7 +165,7 @@ function Registration() {
           id='buttonRegister' 
           onClick={submit} 
           name='button'          
-          {...isErrorInForm}>
+          {...isButtonDisabled}>
           Зарегистрироваться
         </Button> 
       </form>
@@ -143,6 +177,12 @@ function Registration() {
           Войти
         </Link>
       </div>
+      {isModalActive !== '' && (
+        <Modal closeModalWithDispatch={closeModalWithDispatch} 
+          activeModal={isModalActive}>
+          {isModalActive === 'error' && (<ErrorMessage message={message}/>)}
+        </Modal>
+      )}
     </main>
   )
 }

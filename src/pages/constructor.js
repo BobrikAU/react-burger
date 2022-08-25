@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import BurgerIngredients from '../components/burgerIngredients/burgerIngredients';
 import BurgerConstructor from '../components/burgerConstructor/burgerConstructor';
 import Modal from '../components/modal/modal';
-import { closeModal } from '../services/actions/app';
+import { closeModal,changeActivePageActionCreator } from '../services/actions/app';
 import OrderDetails from '../components/orderDetails/orderDetails';
 import IngredientDetails from '../components/ingredientDetails/ingredientDetails';
 import ErrorMessage from '../components/errorMassege/errorMassege';
@@ -16,7 +16,8 @@ export default function Constructor() {
   const dispatch = useDispatch();
 
   useEffect( () => {
-    dispatch(getIngredients())
+    dispatch(getIngredients());
+    dispatch(changeActivePageActionCreator('constructor'));
   } , [dispatch]);
 
   const { ingredients, isModalActive, message } = useSelector(state => ({

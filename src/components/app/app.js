@@ -14,8 +14,8 @@ const App = () => {
 
   return (
     <div className={`${styles.app} ${styles.variables}`}>
-      <AppHeader/>
       <BrowserRouter>
+        <AppHeader/>
         <Switch>
           <Route path='/' exact={true}>
             <Constructor/>
