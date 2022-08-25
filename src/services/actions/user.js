@@ -9,10 +9,8 @@ function saveTokens({accessToken, refreshToken}) {
   localStorage.setItem('refreshToken', refreshToken);
 }
 
-export const requestAboutUser = ( bodyRequest, 
-                                  endpointUrl, 
-                                  setIsRequestSuccessful) => {
-  return function(dispatch) {
+function sendRequest(bodyRequest, endpointUrl) {
+  const request = new Promise(function(resolve, reject) {
     fetch(`${baseUrl}${endpointUrl}`, {
       method: 'POST',
       headers: {
@@ -20,6 +18,19 @@ export const requestAboutUser = ( bodyRequest,
       },
       body: JSON.stringify(bodyRequest),
     })
+    .then((res) => {
+      return resolve(res);
+    })
+    .catch(err => reject(err))
+  });
+  return request;
+}
+
+export const requestAboutUser = ( bodyRequest, 
+                                  endpointUrl, 
+                                  setIsRequestSuccessful) => {
+  return function(dispatch) {
+    sendRequest(bodyRequest, endpointUrl)
     .then(checkResponse)
     .then(data => {
       dispatch({
@@ -55,8 +66,28 @@ export const updateToken = () => {
         saveTokens(data);
       })
       .catch(() => {
-        
+        alert('Ошибка при сохранении токенов');
       })
     })
   }
 };
+
+export const restoreAccount = ( bodyRequest, 
+                                endpointUrl, 
+                                setIsRequestSuccessful) => {
+  return function(dispatch) {
+    sendRequest(bodyRequest, endpointUrl)
+    .then(checkResponse)
+    .then(data => {
+      if (data.success) {
+        setIsRequestSuccessful({value: true, message: ''});
+      }
+    })
+    .catch((err) => {
+      setIsRequestSuccessful({
+        value: false, 
+        message: `${err}. Закоройте настоящее окно и попробуйте снова.`
+      });
+    })
+  }
+}
