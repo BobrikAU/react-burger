@@ -3,7 +3,7 @@ import { setCookie } from '../../utils/utils';
 
 export const SAVE_USER = 'SAVE_USER';
 
-function saveTokens({accessToken, refreshToken}) {
+/*function saveTokens({accessToken, refreshToken}) {
   const accessTokenWithoutText = accessToken.split('Bearer ')[1];
   setCookie('accessToken', accessTokenWithoutText);
   localStorage.setItem('refreshToken', refreshToken);
@@ -24,21 +24,34 @@ function sendRequest(bodyRequest, endpointUrl) {
     .catch(err => reject(err))
   });
   return request;
-}
+}*/
 
 export const requestAboutUser = ( bodyRequest, 
                                   endpointUrl, 
                                   setIsRequestSuccessful) => {
   return function(dispatch) {
-    sendRequest(bodyRequest, endpointUrl)
+    fetch(`${baseUrl}${endpointUrl}`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bodyRequest),
+    })
     .then(checkResponse)
     .then(data => {
-      dispatch({
-        type: SAVE_USER,
-        email: data.user.email,
-        name: data.user.name,
-      });
-      saveTokens(data);
+      if (data.user) {
+        dispatch({
+          type: SAVE_USER,
+          email: data.user.email,
+          name: data.user.name,
+        });
+      }
+      if (data.accessToken && data.refreshToken) {
+        const accessTokenWithoutText = data.accessToken.split('Bearer ')[1];
+        setCookie('accessToken', accessTokenWithoutText);
+        localStorage.setItem('refreshToken', data.refreshToken);
+      }
+      //saveTokens(data);
       setIsRequestSuccessful({value: true, message: ''});
     })
     .catch((err) => {
@@ -50,7 +63,7 @@ export const requestAboutUser = ( bodyRequest,
   }
 };
 
-export const updateToken = () => {
+/*export const updateToken = () => {
   return function() {
     const refreshToken = localStorage.getItem('refreshToken')
     fetch(`${baseUrl}auth/token`, {
@@ -90,4 +103,4 @@ export const restoreAccount = ( bodyRequest,
       });
     })
   }
-}
+}*/

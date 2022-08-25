@@ -8,7 +8,7 @@ import './globalSelectorsForms.css';
 import { closeModal, openModalActionCreator } from '../services/actions/app';
 import Modal from '../components/modal/modal';
 import ErrorMessage from '../components/errorMassege/errorMassege';
-import { restoreAccount } from '../services/actions/user';
+import { requestAboutUser } from '../services/actions/user';
 
 function Recovery() {
   const dispatch = useDispatch();
@@ -55,7 +55,7 @@ function Recovery() {
     e.preventDefault();
     dispatch(openModalActionCreator('error', `Отправляем запрос на восстановление доступа 
     к аккаунту...`));
-    dispatch(restoreAccount(
+    dispatch(requestAboutUser(
       {
         "email": emailValue, 
       },
