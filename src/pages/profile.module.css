@@ -19,7 +19,7 @@
 
 .link{
   text-decoration: none;
-  transition: .3s;
+  transition: var(--common-transition);
 }
 
 .linkActive{
@@ -27,18 +27,6 @@
 }
 
 .link:hover{
-  color: var(--text-primary-color);
-}
-
-.button{
-  border: 0;
-  width: fit-content;
-  background-color: inherit;
-  transition: .3s;
-}
-
-.button:hover{
-  cursor: pointer;
   color: var(--text-primary-color);
 }
 

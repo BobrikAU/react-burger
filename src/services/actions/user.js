@@ -26,6 +26,12 @@ function sendRequest(bodyRequest, endpointUrl) {
   return request;
 }*/
 
+export const eraseUserActionCreator = {
+  type: SAVE_USER,
+  email: '',
+  name: '',
+};
+
 export const requestAboutUser = ( bodyRequest, 
                                   endpointUrl, 
                                   setIsRequestSuccessful) => {
