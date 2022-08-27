@@ -2,18 +2,29 @@ import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { Input, 
          PasswordInput, 
          Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+         import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 import styles from './resetPassword.module.css';
 import './globalSelectorsForms.css';
+import { closeModal, openModalActionCreator } from '../services/actions/app';
+import { requestAboutUser } from '../services/actions/user';
 
 function ResetPassword() {
+  const dispatch = useDispatch();
+  const { isModalActive, message } = useSelector (state => ({
+    isModalActive: state.app.isModalActive.isModalActive,
+    message: state.app.isModalActive.message,
+  }));
+  const history = useHistory();
+  
+  const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
 
-  //функциональность поля name
-  const [ nameValue, setNameValue ] = useState('');
-  const refName = useRef();
-  const onChangeName = (e) => {
+  //функциональность поля code
+  const [ codeValue, setCodeValue ] = useState('');
+  const refCode = useRef();
+  const onChangeCode = (e) => {
     const text = e.target.value;
-    setNameValue(text);
+    setCodeValue(text);
   };
 
   //функциональность поля password
@@ -35,18 +46,39 @@ function ResetPassword() {
   //блокировка кнопки отправки формы при некорректности заполнения полей формы
   const [isErrorInForm, setIsErrorInForm ] = useState({ disabled: true });
   useEffect(() => {
-    if (nameValue && passwordValue && !errorPasswordValue) {
+    if (codeValue && passwordValue && !errorPasswordValue) {
       setIsErrorInForm({});
     } else {
       setIsErrorInForm({ disabled: true })
     }
-  }, [nameValue, passwordValue, errorPasswordValue]
+  }, [codeValue, passwordValue, errorPasswordValue]
   );
 
   //отправка формы
+  const [ isRequestSuccessful, setIsRequestSuccessful ] = useState({
+                                                                      value: undefined,
+                                                                      message: '',
+                                                                    });
   const submit = (e) => {
     e.preventDefault();
+    dispatch(openModalActionCreator('error', 'Осуществляется замена пароля...'));
+    dispatch(requestAboutUser(
+      {
+       "password": passwordValue,
+       "token": codeValue
+      },
+      'password-reset/reset',
+      setIsRequestSuccessful));
   };
+  useEffect(() => {
+    if (isRequestSuccessful.value) {
+      closeModalWithDispatch();
+      history.replace({pathname: '/login'});
+    }
+    if (isRequestSuccessful.value === false) {
+      dispatch(openModalActionCreator('error', isRequestSuccessful.message));
+    }
+  }, [isRequestSuccessful]);
 
   useLayoutEffect(() => {
     const form = document.forms.registration;
@@ -76,10 +108,10 @@ function ResetPassword() {
           type='text' 
           placeholder='Введите код из письма' 
           size='default' 
-          value={nameValue} 
-          name='name' 
-          ref={refName} 
-          onChange={onChangeName}
+          value={codeValue} 
+          name='code' 
+          ref={refCode} 
+          onChange={onChangeCode}
         />
         <Button 
           type='primary' 

@@ -1,11 +1,24 @@
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { EmailInput,
          Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import styles from './recovery.module.css';
 import './globalSelectorsForms.css';
+import { closeModal, openModalActionCreator } from '../services/actions/app';
+import Modal from '../components/modal/modal';
+import ErrorMessage from '../components/errorMassege/errorMassege';
+import { requestAboutUser } from '../services/actions/user';
 
 function Recovery() {
+  const dispatch = useDispatch();
+  const { isModalActive, message } = useSelector (state => ({
+    isModalActive: state.app.isModalActive.isModalActive,
+    message: state.app.isModalActive.message,
+  }));
+  const history = useHistory();
+
+  const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
 
   //функциональность поля email
   const [ emailValue, setEmailValue ] = useState('');
@@ -34,9 +47,30 @@ function Recovery() {
   }, [emailValue, errorEmailValue])
 
   //отправка формы
+  const [ isRequestSuccessful, setIsRequestSuccessful ] = useState({
+                                                                      value: undefined,
+                                                                      message: '',
+                                                                    });
   const submit = (e) => {
     e.preventDefault();
+    dispatch(openModalActionCreator('error', `Отправляем запрос на восстановление доступа 
+    к аккаунту...`));
+    dispatch(requestAboutUser(
+      {
+        "email": emailValue, 
+      },
+      'password-reset',
+      setIsRequestSuccessful));
   };
+  useEffect(() => {
+    if (isRequestSuccessful.value) {
+      closeModalWithDispatch();
+      history.replace({pathname: '/reset-password'});
+    }
+    if (isRequestSuccessful.value === false) {
+      dispatch(openModalActionCreator('error', isRequestSuccessful.message));
+    }
+  }, [isRequestSuccessful]);
 
   useEffect(() => {
     const form = document.forms.recovery;
@@ -80,6 +114,12 @@ function Recovery() {
           Войти
         </Link>
       </div>
+      {isModalActive !== '' && (
+        <Modal closeModalWithDispatch={closeModalWithDispatch} 
+          activeModal={isModalActive}>
+          {isModalActive === 'error' && (<ErrorMessage message={message}/>)}
+        </Modal>
+      )}
     </main>
   )
 }
