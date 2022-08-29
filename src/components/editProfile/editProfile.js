@@ -80,6 +80,7 @@ function EditProfile () {
     await setIsInputPasswordActive({});
     passwordRef.current.focus();
     setValuePassword('');
+    setIsErrorInPassword(true);
   };
   const onBlurPassword = () => {
     setIsInputPasswordActive({disabled: true});
@@ -101,7 +102,15 @@ function EditProfile () {
     if (valueEmail !== userEmail || valuePassword !== '123456' || nameValue !== userName) {
       setIsProfileEdit(true);
     }
-  }, [valueEmail, valuePassword, nameValue])
+  }, [valueEmail, valuePassword, nameValue]);
+
+  const clickСancel = (e) => {
+    e.preventDefault();
+    setValuePassword('123456');
+    setNameValue(userName);
+    setValueEmail(userEmail);
+    setIsProfileEdit(false);
+  }
   
   return(
     <>
@@ -138,7 +147,8 @@ function EditProfile () {
           errorText='Должно быть не менее 6 символов' />
         {isProfileEdit && (<div className={styles.buttonsContainer}>
           <Button type='secondary' 
-                  size='medium'>
+                  size='medium'
+                  onClick={clickСancel}>
             Отмена
           </Button>
           <Button type='primary' 
