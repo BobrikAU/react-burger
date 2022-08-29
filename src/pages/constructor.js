@@ -15,16 +15,18 @@ import styles from './constructor.module.css';
 export default function Constructor() {
   const dispatch = useDispatch();
 
-  useEffect( () => {
-    dispatch(getIngredients());
-    dispatch(changeActivePageActionCreator('constructor'));
-  } , [dispatch]);
-
   const { ingredients, isModalActive, message } = useSelector(state => ({
     ingredients: state.burgerIngredients,
     isModalActive: state.app.isModalActive.isModalActive,
     message: state.app.isModalActive.message,
   }));
+
+  useEffect( () => {
+    if (!ingredients) {
+      dispatch(getIngredients());
+    }
+    dispatch(changeActivePageActionCreator('constructor'));
+  } , [dispatch]);
 
   const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
   

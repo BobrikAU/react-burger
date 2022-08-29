@@ -26,15 +26,22 @@ function sendRequest(bodyRequest, endpointUrl) {
   return request;
 }*/
 
-export const eraseUserActionCreator = {
+export const eraseUserActionCreator = () => ({
   type: SAVE_USER,
   email: '',
   name: '',
-};
+});
+
+const saveUserActionCreator = (data) => ({
+  type: SAVE_USER,
+  email: data.user.email,
+  name: data.user.name,
+});
 
 export const requestAboutUser = ( bodyRequest, 
                                   endpointUrl, 
-                                  setIsRequestSuccessful) => {
+                                  setIsRequestSuccessful,
+                                  options) => {
   return function(dispatch) {
     fetch(`${baseUrl}${endpointUrl}`, {
       method: 'POST',
@@ -46,11 +53,7 @@ export const requestAboutUser = ( bodyRequest,
     .then(checkResponse)
     .then(data => {
       if (data.user) {
-        dispatch({
-          type: SAVE_USER,
-          email: data.user.email,
-          name: data.user.name,
-        });
+        dispatch(saveUserActionCreator(data));
       }
       if (data.accessToken && data.refreshToken) {
         const accessTokenWithoutText = data.accessToken.split('Bearer ')[1];
@@ -58,13 +61,21 @@ export const requestAboutUser = ( bodyRequest,
         localStorage.setItem('refreshToken', data.refreshToken);
       }
       //saveTokens(data);
-      setIsRequestSuccessful({value: true, message: ''});
+      if (setIsRequestSuccessful) {
+        setIsRequestSuccessful({value: true, message: ''});
+      } else {
+        options.resolve(data.accessToken);
+      }
     })
     .catch((err) => {
-      setIsRequestSuccessful({
-        value: false, 
-        message: `${err}. Закоройте настоящее окно и попробуйте снова.`
-      });
+      if (setIsRequestSuccessful) {
+        setIsRequestSuccessful({
+          value: false, 
+          message: `${err}. Закоройте настоящее окно и попробуйте снова.`
+        });
+      } else {
+        options.reject();
+      }
     })
   }
 };
@@ -109,4 +120,57 @@ export const restoreAccount = ( bodyRequest,
       });
     })
   }
+
+
+  return function(dispatch) {
+    fetch(`${baseUrl}${endpointUrl}`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bodyRequest),
+    })
 }*/
+
+function requestUserData(accessToken) {
+  return function(dispatch) {
+    const request = new Promise ((resolve, reject) => {
+      fetch(`${baseUrl}auth/user`, {
+        headers: {
+          "authorization": accessToken
+        }
+      })
+      .then(checkResponse)
+      .then(data => {
+        dispatch(saveUserActionCreator(data));
+        resolve();
+      })
+      .catch(() => {
+        reject();
+      });
+    });
+    return request;  
+  }
+}
+
+
+export const getUser = (dispatch, accessToken, refreshToken, options) => {
+    dispatch(requestUserData(accessToken))
+      .catch( () => {
+        new Promise((resolve, reject) => {
+        dispatch(requestAboutUser(
+          {
+            'token': refreshToken
+          },
+          'auth/token',
+          '',
+          {resolve, reject}
+        ))})
+        .then((newAccessToken) => {
+            dispatch(requestUserData(newAccessToken));
+          }
+        )
+        .catch(() => options.reject());
+      })
+  };
+

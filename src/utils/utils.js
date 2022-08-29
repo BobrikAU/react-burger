@@ -2,12 +2,6 @@ export const baseUrl = 'https://norma.nomoreparties.space/api/';
 
 export async function checkResponse (res) {
     if (!res.ok) {
-      /*async function detectionError() {
-        const data = await res.json();
-        const message = data.message ? 
-          `Код ошибки: ${res.status}. Ответ сервера: ${data.message}.` :
-          ` Неудачное обращение к серверу. Код ошибки: ${res.status}.`;
-      }*/
       let message;
       try {
         const data = await res.json();
@@ -44,4 +38,16 @@ export function setCookie(name, value, props) {
     }
   }
   document.cookie = updatedCookie;
+}
+
+function getCookie(name) {
+  let matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+export function getAccessTokenOutCookie() {
+  const token = 'Bearer ' + getCookie('accessToken');
+  return token;
 }

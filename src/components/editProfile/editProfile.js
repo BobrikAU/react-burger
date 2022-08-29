@@ -1,13 +1,18 @@
 import styles from './editProfile.module.css';
 import './editProfile.css';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Input, EmailInput, Button } from 
   '@ya.praktikum/react-developer-burger-ui-components';
 
 function EditProfile () {
-  
+  const { userName, userEmail } = useSelector(state => ({
+    userName: state.user.userName,
+    userEmail: state.user.email,
+  }));
+
   //поле input name
-  const [ nameValue, setNameValue] = useState('Марк');
+  const [ nameValue, setNameValue] = useState(userName);
   const [ isInputNameActive, setIsInputNameActive ] = useState({disabled: true});
   const [ isErrorInName, setIsErrorInName ] = useState(false);
   const nameRef = useRef();
@@ -30,13 +35,34 @@ function EditProfile () {
   };
 
   //поле input email
-  const [valueEmail, setValueEmail] = useState('mail@stellar.burgers');
+  const [valueEmail, setValueEmail] = useState(userEmail);
+  const [ isErrorInEmail, setIsErrorInEmail ] = useState(false);
+  useEffect(() => {
+    const emailInput = document.forms.editProfil.elements.email;
+    const divEmail = emailInput.closest('.input');
+    const serchErrorClassEmail = () => {
+      setTimeout(() => {
+        if (divEmail.classList.contains('input_status_error')) {
+          setIsErrorInEmail(true);
+        }
+        if (!divEmail.classList.contains('input_status_error') && isErrorInEmail) {
+          setIsErrorInEmail(false);
+        }
+      }, 50);
+    }
+    emailInput.addEventListener('blur', serchErrorClassEmail);
+    emailInput.addEventListener('focus', (() => {setIsErrorInEmail(false)}));
+    return () => {
+      emailInput.removeEventListener('blur', serchErrorClassEmail);
+      emailInput.removeEventListener('focus', (() => {setIsErrorInEmail(false)}));
+    }
+  }, []);
   const onChangeEmail = (e) => {
     setValueEmail(e.target.value);
   }
 
   //поле input password
-  const [valuePassword, setValuePassword] = useState('jskfur');
+  const [valuePassword, setValuePassword] = useState('123456');
   const [ isInputPasswordActive, setIsInputPasswordActive ] = useState({disabled: true});
   const [ isErrorInPassword, setIsErrorInPassword ] = useState(false);
   const passwordRef = useRef();
@@ -53,11 +79,30 @@ function EditProfile () {
   const onIconClickPassword = async() => {
     await setIsInputPasswordActive({});
     passwordRef.current.focus();
+    setValuePassword('');
   };
   const onBlurPassword = () => {
     setIsInputPasswordActive({disabled: true});
   };
 
+  //блокировка кнопки отправки формы при некорректности заполнения полей формы
+  const [isErrorInForm, setIsErrorInForm ] = useState({});
+  useEffect(() => {
+    if ((isErrorInName || isErrorInPassword || isErrorInEmail)) {
+      setIsErrorInForm({ disabled: true });
+    } else {
+      setIsErrorInForm({})
+    }
+  }, [isErrorInName, isErrorInPassword, isErrorInEmail]);
+
+  //отслеживание начала редактирования профиля
+  const [ isProfileEdit, setIsProfileEdit ] = useState(false);
+  useEffect(() => {
+    if (valueEmail !== userEmail || valuePassword !== '123456' || nameValue !== userName) {
+      setIsProfileEdit(true);
+    }
+  }, [valueEmail, valuePassword, nameValue])
+  
   return(
     <>
       <form name='editProfil' id='editProfil' className={styles.editProfileForm}>
@@ -91,10 +136,18 @@ function EditProfile () {
           onBlur={onBlurPassword}
           error={isErrorInPassword}
           errorText='Должно быть не менее 6 символов' />
-        <div className={styles.buttonsContainer}>
-          <Button type='secondary' size='medium'>Отмена</Button>
-          <Button type='primary' size='medium'>Сохранить</Button>
-        </div>
+        {isProfileEdit && (<div className={styles.buttonsContainer}>
+          <Button type='secondary' 
+                  size='medium'>
+            Отмена
+          </Button>
+          <Button type='primary' 
+                  size='medium' 
+                  id='save'
+                  {...isErrorInForm}>
+            Сохранить
+          </Button>
+        </div>)}
       </form>
     </>
   )
