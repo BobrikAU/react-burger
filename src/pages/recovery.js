@@ -55,12 +55,20 @@ function Recovery() {
     e.preventDefault();
     dispatch(openModalActionCreator('error', `Отправляем запрос на восстановление доступа 
     к аккаунту...`));
-    dispatch(requestAboutUser(
-      {
-        "email": emailValue, 
+    dispatch(requestAboutUser({
+      requestOptions: {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(
+          { 
+            "email": emailValue, 
+          }
+        ),
       },
-      'password-reset',
-      setIsRequestSuccessful));
+      endpointUrl: 'password-reset',
+      setIsRequestSuccessful}));
   };
   useEffect(() => {
     if (isRequestSuccessful.value) {

@@ -71,12 +71,21 @@ function Authorization() {
   const submit = (e) => {
     e.preventDefault();
     dispatch(openModalActionCreator('error', 'Осуществляется авторизация...'));
-    dispatch(requestAboutUser(
-      {"email": emailValue, 
-       "password": passwordValue,
+    dispatch(requestAboutUser({
+      requestOptions: {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(
+          { 
+            "email": emailValue, 
+            "password": passwordValue,
+          }
+        ),
       },
-      'auth/login',
-      setIsRequestSuccessful));
+      endpointUrl: 'auth/login',
+      setIsRequestSuccessful}));
   };
   useEffect(() => {
     if (isRequestSuccessful.value) {

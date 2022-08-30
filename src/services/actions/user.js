@@ -38,18 +38,13 @@ const saveUserActionCreator = (data) => ({
   name: data.user.name,
 });
 
-export const requestAboutUser = ( bodyRequest, 
-                                  endpointUrl, 
-                                  setIsRequestSuccessful,
-                                  options) => {
+export const requestAboutUser = ({requestOptions = {},
+                                  endpointUrl = '', 
+                                  options = {},
+                                  setIsRequestSuccessful = '',
+                                  }) => {
   return function(dispatch) {
-    fetch(`${baseUrl}${endpointUrl}`, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(bodyRequest),
-    })
+    fetch(`${baseUrl}${endpointUrl}`, requestOptions)
     .then(checkResponse)
     .then(data => {
       if (data.user) {
@@ -63,8 +58,9 @@ export const requestAboutUser = ( bodyRequest,
       //saveTokens(data);
       if (setIsRequestSuccessful) {
         setIsRequestSuccessful({value: true, message: ''});
-      } else {
-        options.resolve(data.accessToken);
+      } 
+      if (options.resolve) {
+        options.resolve(data.accessToken ? data.accessToken : null);
       }
     })
     .catch((err) => {
@@ -73,7 +69,8 @@ export const requestAboutUser = ( bodyRequest,
           value: false, 
           message: `${err}. Закоройте настоящее окно и попробуйте снова.`
         });
-      } else {
+      } 
+      if (options.reject) {
         options.reject();
       }
     })
@@ -130,7 +127,7 @@ export const restoreAccount = ( bodyRequest,
       },
       body: JSON.stringify(bodyRequest),
     })
-}*/
+}
 
 function requestUserData(accessToken) {
   return function(dispatch) {
@@ -151,26 +148,53 @@ function requestUserData(accessToken) {
     });
     return request;  
   }
-}
+}*/
 
 
 export const getUser = (dispatch, accessToken, refreshToken, options) => {
-    dispatch(requestUserData(accessToken))
-      .catch( () => {
-        new Promise((resolve, reject) => {
-        dispatch(requestAboutUser(
-          {
-            'token': refreshToken
+  new Promise ((resolve, reject) => {
+    dispatch(requestAboutUser({
+      requestOptions: {
+        headers: {
+          "authorization": accessToken
+        }
+      },
+      endpointUrl: 'auth/user',
+      options: {resolve, reject},
+      }))
+  })
+    .catch( () => {
+      new Promise((resolve, reject) => {
+        dispatch(requestAboutUser({
+          requestOptions: {
+            method: 'POST',
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(
+              {
+                'token': refreshToken
+              }
+            ),
           },
-          'auth/token',
-          '',
-          {resolve, reject}
-        ))})
+          endpointUrl: 'auth/token',
+          options: {resolve, reject},
+        }));
+      })
         .then((newAccessToken) => {
-            dispatch(requestUserData(newAccessToken));
-          }
+          new Promise((resolve, reject) => {
+            dispatch(requestAboutUser({
+              requestOptions: {
+                headers: {
+                  "authorization": newAccessToken
+                }
+              },
+              endpointUrl: 'auth/user',
+              options: {resolve, reject},
+              }));
+          })}
         )
         .catch(() => options.reject());
-      })
-  };
+    })
+};
 

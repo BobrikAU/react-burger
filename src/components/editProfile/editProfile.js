@@ -104,6 +104,7 @@ function EditProfile () {
     }
   }, [valueEmail, valuePassword, nameValue]);
 
+  //функциональность кнопки отмена
   const clickСancel = (e) => {
     e.preventDefault();
     setValuePassword('123456');
