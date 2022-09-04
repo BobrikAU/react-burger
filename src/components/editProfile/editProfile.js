@@ -1,15 +1,22 @@
 import styles from './editProfile.module.css';
 import './editProfile.css';
 import { useState, useRef, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Input, EmailInput, Button } from 
   '@ya.praktikum/react-developer-burger-ui-components';
+import { requestAboutUser, 
+         requestWithAccessToken } from '../../services/actions/user';
+import { getAccessTokenOutCookie } from '../../utils/utils';
+import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 
-function EditProfile () {
+function EditProfile ({setIsRequestSuccessful}) {
   const { userName, userEmail } = useSelector(state => ({
     userName: state.user.userName,
     userEmail: state.user.email,
   }));
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   //поле input name
   const [ nameValue, setNameValue] = useState(userName);
@@ -110,7 +117,53 @@ function EditProfile () {
     setValuePassword('123456');
     setNameValue(userName);
     setValueEmail(userEmail);
+    setIsErrorInName(false);
+    setIsErrorInEmail(false);
+    setIsErrorInPassword(false);
     setIsProfileEdit(false);
+  }
+
+  const saveNewUserData = (e) => {
+    e.preventDefault();
+    setIsRequestSuccessful({value: false, message: 'Сохраняем изменения...'})
+    const accessToken = getAccessTokenOutCookie();
+    const refreshToken = localStorage.getItem('refreshToken');
+    const saveUserData = (dispatch, token) => {
+      const request = new Promise ((resolve, reject) => {
+        dispatch(requestAboutUser({
+          requestOptions: {
+            method: 'PATCH',
+            headers: {
+              "Content-Type": "application/json",
+              "authorization": token,
+            },
+            body: JSON.stringify(
+              { 
+                "name": nameValue, 
+                "email": valueEmail, 
+                "password": valuePassword,
+              }
+            ),
+          },
+          endpointUrl: 'auth/user',
+          options: {resolve, reject}}))
+      });
+      return request;
+    };
+    new Promise ((resolve, reject) => {
+      requestWithAccessToken( dispatch, 
+                              saveUserData, 
+                              accessToken, 
+                              refreshToken, 
+                              {resolve, reject})
+    })
+      .then(() => {
+        setIsRequestSuccessful({value: true, message: ''});
+        setIsProfileEdit(false);
+      })
+      .catch(() => {
+        history.push({pathname: '/login'});
+      })
   }
   
   return(
@@ -155,7 +208,8 @@ function EditProfile () {
           <Button type='primary' 
                   size='medium' 
                   id='save'
-                  {...isErrorInForm}>
+                  {...isErrorInForm}
+                  onClick={saveNewUserData}>
             Сохранить
           </Button>
         </div>)}
@@ -163,5 +217,9 @@ function EditProfile () {
     </>
   )
 }
+
+EditProfile.propTypes = {
+  setIsRequestSuccessful: PropTypes.func
+};
 
 export default EditProfile;

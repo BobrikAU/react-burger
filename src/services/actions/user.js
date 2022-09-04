@@ -149,50 +149,55 @@ function requestUserData(accessToken) {
     return request;  
   }
 }*/
+export const updateTokens = (dispatch, refreshToken) => {
+  const request = new Promise((resolve, reject) => {
+    dispatch(requestAboutUser({
+      requestOptions: {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(
+          {
+            'token': refreshToken
+          }
+        ),
+      },
+      endpointUrl: 'auth/token',
+      options: {resolve, reject},
+    }));
+  });
+  return request;
+};
 
-
-export const getUser = (dispatch, accessToken, refreshToken, options) => {
-  new Promise ((resolve, reject) => {
+export const getUser = (dispatch, token) => {
+  const request = new Promise ((resolve, reject) => {
     dispatch(requestAboutUser({
       requestOptions: {
         headers: {
-          "authorization": accessToken
+          "authorization": token
         }
       },
       endpointUrl: 'auth/user',
       options: {resolve, reject},
       }))
-  })
+  });
+  return request;
+};
+
+export const requestWithAccessToken = ( dispatch, 
+                                        request, 
+                                        accessToken, 
+                                        refreshToken, 
+                                        options) => {
+  request(dispatch, accessToken)
+    .then(() => options.resolve())
     .catch( () => {
-      new Promise((resolve, reject) => {
-        dispatch(requestAboutUser({
-          requestOptions: {
-            method: 'POST',
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(
-              {
-                'token': refreshToken
-              }
-            ),
-          },
-          endpointUrl: 'auth/token',
-          options: {resolve, reject},
-        }));
-      })
+      updateTokens(dispatch, refreshToken)
         .then((newAccessToken) => {
-          new Promise((resolve, reject) => {
-            dispatch(requestAboutUser({
-              requestOptions: {
-                headers: {
-                  "authorization": newAccessToken
-                }
-              },
-              endpointUrl: 'auth/user',
-              options: {resolve, reject},
-              }));
-          })}
+          request(dispatch, newAccessToken);
+          options.resolve();
+        }
         )
         .catch(() => options.reject());
     })

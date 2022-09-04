@@ -11,6 +11,7 @@ import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import './profile.css';
 import { requestAboutUser, 
          eraseUserActionCreator, 
+         requestWithAccessToken,
          getUser } from '../services/actions/user';
 import Modal from '../components/modal/modal';
 import ErrorMessage from '../components/errorMassege/errorMassege';
@@ -27,13 +28,7 @@ function Profile () {
   }));
   const dispatch = useDispatch();
   const history = useHistory();
-
-
-
-
-
-
-
+  
   const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
 
   useEffect(() => {
@@ -57,7 +52,11 @@ function Profile () {
       const refreshToken = localStorage.getItem('refreshToken');
       if (accessToken && refreshToken) {
         new Promise ((resolve, reject) => {
-          getUser(dispatch, accessToken, refreshToken, {resolve, reject})
+          requestWithAccessToken( dispatch, 
+                                  getUser, 
+                                  accessToken, 
+                                  refreshToken, 
+                                  {resolve, reject})
         })
         .catch(() => {
           history.push({pathname: '/login'});
@@ -75,22 +74,38 @@ function Profile () {
   const logOutAccount = (e) => {
     e.preventDefault();
     dispatch(openModalActionCreator('error', 'Выходим из аккаунта...'));
-    const refreshToken = localStorage.getItem('refreshToken');
-    dispatch(requestAboutUser(
-      {
-        "token": refreshToken
-      },
-      'auth/logout',
-      setIsRequestSuccessful
-    ));
+    new Promise((resolve, reject) => {
+      const refreshToken = localStorage.getItem('refreshToken');
+      dispatch(requestAboutUser({
+        requestOptions: {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(
+            {
+              "token": refreshToken
+            }
+          ),
+        },
+        endpointUrl: 'auth/logout',
+        options: {resolve, reject},
+        setIsRequestSuccessful
+      }))
+    })
+    .then(() => {
+      closeModalWithDispatch();
+      history.replace({pathname: '/'});
+      setTimeout(() => {
+        dispatch(eraseUserActionCreator());
+        setCookie('accessToken', '', {'max-age': -1});
+        localStorage.removeItem('refreshToken');
+      }, 1000);
+    })    
   };
   useEffect(() => {
     if (isRequestSuccessful.value) {
       closeModalWithDispatch();
-      dispatch(eraseUserActionCreator());
-      setCookie('accessToken', '', {'max-age': -1});
-      localStorage.removeItem('refreshToken');
-      history.replace({pathname: '/'});
     }
     if (isRequestSuccessful.value === false) {
       dispatch(openModalActionCreator('error', isRequestSuccessful.message));
@@ -132,7 +147,7 @@ function Profile () {
           <section className={`pt-30 ml-15 ${styles.content}`}>
               <Switch>
                 <Route path={path} exact={true}>
-                  <EditProfile/>
+                  <EditProfile setIsRequestSuccessful={setIsRequestSuccessful}/>
                 </Route>
                 <Route path={`${path}/orders`} exact={true}>
                   <OrdersHistory/>
