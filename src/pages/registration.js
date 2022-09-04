@@ -94,13 +94,22 @@ function Registration() {
   const submit = (e) => {
     e.preventDefault();
     dispatch(openModalActionCreator('error', 'Осуществляется регистрация...'));
-    dispatch(requestAboutUser(
-      {"name": nameValue, 
-       "email": emailValue, 
-       "password": passwordValue,
+    dispatch(requestAboutUser({
+      requestOptions: {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(
+          { 
+            "name": nameValue, 
+            "email": emailValue, 
+            "password": passwordValue,
+          }
+        ),
       },
-      'auth/register',
-      setIsRequestSuccessful));
+      endpointUrl: 'auth/register',
+      setIsRequestSuccessful}));
   };
   useEffect(() => {
     if (isRequestSuccessful.value) {

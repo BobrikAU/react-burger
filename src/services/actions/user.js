@@ -26,25 +26,29 @@ function sendRequest(bodyRequest, endpointUrl) {
   return request;
 }*/
 
-export const requestAboutUser = ( bodyRequest, 
-                                  endpointUrl, 
-                                  setIsRequestSuccessful) => {
+export const eraseUserActionCreator = () => ({
+  type: SAVE_USER,
+  email: '',
+  name: '',
+});
+
+const saveUserActionCreator = (data) => ({
+  type: SAVE_USER,
+  email: data.user.email,
+  name: data.user.name,
+});
+
+export const requestAboutUser = ({requestOptions = {},
+                                  endpointUrl = '', 
+                                  options = {},
+                                  setIsRequestSuccessful = '',
+                                  }) => {
   return function(dispatch) {
-    fetch(`${baseUrl}${endpointUrl}`, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(bodyRequest),
-    })
+    fetch(`${baseUrl}${endpointUrl}`, requestOptions)
     .then(checkResponse)
     .then(data => {
       if (data.user) {
-        dispatch({
-          type: SAVE_USER,
-          email: data.user.email,
-          name: data.user.name,
-        });
+        dispatch(saveUserActionCreator(data));
       }
       if (data.accessToken && data.refreshToken) {
         const accessTokenWithoutText = data.accessToken.split('Bearer ')[1];
@@ -52,13 +56,23 @@ export const requestAboutUser = ( bodyRequest,
         localStorage.setItem('refreshToken', data.refreshToken);
       }
       //saveTokens(data);
-      setIsRequestSuccessful({value: true, message: ''});
+      if (setIsRequestSuccessful) {
+        setIsRequestSuccessful({value: true, message: ''});
+      } 
+      if (options.resolve) {
+        options.resolve(data.accessToken ? data.accessToken : null);
+      }
     })
     .catch((err) => {
-      setIsRequestSuccessful({
-        value: false, 
-        message: `${err}. Закоройте настоящее окно и попробуйте снова.`
-      });
+      if (setIsRequestSuccessful) {
+        setIsRequestSuccessful({
+          value: false, 
+          message: `${err}. Закоройте настоящее окно и попробуйте снова.`
+        });
+      } 
+      if (options.reject) {
+        options.reject();
+      }
     })
   }
 };
@@ -103,4 +117,89 @@ export const restoreAccount = ( bodyRequest,
       });
     })
   }
+
+
+  return function(dispatch) {
+    fetch(`${baseUrl}${endpointUrl}`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bodyRequest),
+    })
+}
+
+function requestUserData(accessToken) {
+  return function(dispatch) {
+    const request = new Promise ((resolve, reject) => {
+      fetch(`${baseUrl}auth/user`, {
+        headers: {
+          "authorization": accessToken
+        }
+      })
+      .then(checkResponse)
+      .then(data => {
+        dispatch(saveUserActionCreator(data));
+        resolve();
+      })
+      .catch(() => {
+        reject();
+      });
+    });
+    return request;  
+  }
 }*/
+export const updateTokens = (dispatch, refreshToken) => {
+  const request = new Promise((resolve, reject) => {
+    dispatch(requestAboutUser({
+      requestOptions: {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(
+          {
+            'token': refreshToken
+          }
+        ),
+      },
+      endpointUrl: 'auth/token',
+      options: {resolve, reject},
+    }));
+  });
+  return request;
+};
+
+export const getUser = (dispatch, token) => {
+  const request = new Promise ((resolve, reject) => {
+    dispatch(requestAboutUser({
+      requestOptions: {
+        headers: {
+          "authorization": token
+        }
+      },
+      endpointUrl: 'auth/user',
+      options: {resolve, reject},
+      }))
+  });
+  return request;
+};
+
+export const requestWithAccessToken = ( dispatch, 
+                                        request, 
+                                        accessToken, 
+                                        refreshToken, 
+                                        options) => {
+  request(dispatch, accessToken)
+    .then(() => options.resolve())
+    .catch( () => {
+      updateTokens(dispatch, refreshToken)
+        .then((newAccessToken) => {
+          request(dispatch, newAccessToken);
+          options.resolve();
+        }
+        )
+        .catch(() => options.reject());
+    })
+};
+

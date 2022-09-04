@@ -62,13 +62,21 @@ function ResetPassword() {
   const submit = (e) => {
     e.preventDefault();
     dispatch(openModalActionCreator('error', 'Осуществляется замена пароля...'));
-    dispatch(requestAboutUser(
-      {
-       "password": passwordValue,
-       "token": codeValue
+    dispatch(requestAboutUser({
+      requestOptions: {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(
+          { 
+            "password": passwordValue,
+            "token": codeValue
+          }
+        ),
       },
-      'password-reset/reset',
-      setIsRequestSuccessful));
+      endpointUrl: 'password-reset/reset',
+      setIsRequestSuccessful}));
   };
   useEffect(() => {
     if (isRequestSuccessful.value) {
