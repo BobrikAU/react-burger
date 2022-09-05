@@ -2,8 +2,8 @@ import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { Input, 
          PasswordInput, 
          Button } from '@ya.praktikum/react-developer-burger-ui-components';
-         import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import styles from './resetPassword.module.css';
 import './globalSelectorsForms.css';
 import { closeModal, openModalActionCreator } from '../services/actions/app';
@@ -16,8 +16,16 @@ function ResetPassword() {
     message: state.app.isModalActive.message,
   }));
   const history = useHistory();
+  const location = useLocation();
   
   const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
+
+  //проверка предварительного посещения recovery
+  useLayoutEffect(() => {
+    if (!location.state || !('isRecovery' in location.state)) {
+        history.replace({pathname: '/forgot-password'})
+    }
+  }, []);
 
   //функциональность поля code
   const [ codeValue, setCodeValue ] = useState('');
@@ -81,7 +89,11 @@ function ResetPassword() {
   useEffect(() => {
     if (isRequestSuccessful.value) {
       closeModalWithDispatch();
-      history.replace({pathname: '/login'});
+      if (location.state.from) {
+        history.replace({pathname: '/login', state: {from: location.state.from}});
+      } else {
+        history.replace({pathname: '/login'});
+      }
     }
     if (isRequestSuccessful.value === false) {
       dispatch(openModalActionCreator('error', isRequestSuccessful.message));
@@ -135,7 +147,12 @@ function ResetPassword() {
         <p className='text text_type_main-default text_color_inactive'>
           Вспомнили пароль?
         </p>
-        <Link to='/login' className={`text text_type_main-default ml-2 ${styles.link}`}>
+        <Link to={
+                  location.state ? 
+                  {pathname: '/login', state: {...location.state}} : 
+                  '/login'
+                 }
+              className={`text text_type_main-default ml-2 ${styles.link}`}>
           Войти
         </Link>
       </div>

@@ -150,7 +150,11 @@ function Authorization() {
           Вы — новый пользователь?
         </p>
         <Link 
-          to='/register' 
+          to={
+              location.state ? 
+              {pathname: '/register', state: {...location.state}} : 
+              '/register'
+             } 
           className={`text text_type_main-default ml-2 ${styles.link}`}>
           Зарегистрироваться
         </Link>
@@ -160,7 +164,11 @@ function Authorization() {
           Забыли пароль?
         </p>
         <Link 
-          to='/forgot-password' 
+          to={
+              location.state ?
+              {pathname: '/forgot-password', state: {...location.state}} : 
+              '/forgot-password'
+             } 
           className={`text text_type_main-default ml-2 ${styles.link}`}>
           Восстановить пароль
         </Link>
