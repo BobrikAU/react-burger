@@ -9,6 +9,8 @@ import Authorization from '../../pages/authorization';
 import Recovery from '../../pages/recovery';
 import ResetPassword from '../../pages/resetPassword';
 import Profile from '../../pages/profile';
+import ProtectedRoute from '../protectedRoute/protectedRoute';
+import RouteNotAuthorized from '../routeNotAuthorized/routeNotAuthorized';
 
 const App = () => {
 
@@ -20,21 +22,21 @@ const App = () => {
           <Route path='/' exact={true}>
             <Constructor/>
           </Route>
-          <Route path='/login' exact={true}>
+          <RouteNotAuthorized path='/login' exact={true}>
             <Authorization/>
-          </Route>
-          <Route path='/register' exact={true}>
+          </RouteNotAuthorized>
+          <RouteNotAuthorized path='/register' exact={true}>
             <Registration/>
-          </Route>
-          <Route path='/forgot-password' exact={true}>
+          </RouteNotAuthorized>
+          <RouteNotAuthorized path='/forgot-password' exact={true}>
             <Recovery/>
-          </Route>
-          <Route path='/reset-password' exact={true}>
+          </RouteNotAuthorized>
+          <RouteNotAuthorized path='/reset-password' exact={true}>
             <ResetPassword />
-          </Route>
-          <Route path='/profile'>
+          </RouteNotAuthorized>
+          <ProtectedRoute path='/profile'>
             <Profile />
-          </Route>
+          </ProtectedRoute>
           <Route>
             <NotFound404 />
           </Route>

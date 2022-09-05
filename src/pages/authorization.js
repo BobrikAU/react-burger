@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { EmailInput, 
          PasswordInput, 
          Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './authorization.module.css';
 import './globalSelectorsForms.css';
@@ -18,6 +18,7 @@ function Authorization() {
     message: state.app.isModalActive.message,
   }));
   const history = useHistory();
+  const location = useLocation();
   
   const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
 
@@ -90,12 +91,15 @@ function Authorization() {
   useEffect(() => {
     if (isRequestSuccessful.value) {
       closeModalWithDispatch();
-      history.replace({pathname: '/'});
+      if (location.state) {
+        history.replace({pathname: location.state.from});
+      }
     }
     if (isRequestSuccessful.value === false) {
       dispatch(openModalActionCreator('error', isRequestSuccessful.message));
     }
   }, [isRequestSuccessful]);
+
 
   useEffect(() => {
     const form = document.forms.authorization;
@@ -146,7 +150,11 @@ function Authorization() {
           Вы — новый пользователь?
         </p>
         <Link 
-          to='/register' 
+          to={
+              location.state ? 
+              {pathname: '/register', state: {...location.state}} : 
+              '/register'
+             } 
           className={`text text_type_main-default ml-2 ${styles.link}`}>
           Зарегистрироваться
         </Link>
@@ -156,7 +164,11 @@ function Authorization() {
           Забыли пароль?
         </p>
         <Link 
-          to='/forgot-password' 
+          to={
+              location.state ?
+              {pathname: '/forgot-password', state: {...location.state}} : 
+              '/forgot-password'
+             } 
           className={`text text_type_main-default ml-2 ${styles.link}`}>
           Восстановить пароль
         </Link>

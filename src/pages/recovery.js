@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { EmailInput,
          Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import styles from './recovery.module.css';
 import './globalSelectorsForms.css';
 import { closeModal, openModalActionCreator } from '../services/actions/app';
@@ -17,6 +17,7 @@ function Recovery() {
     message: state.app.isModalActive.message,
   }));
   const history = useHistory();
+  const location = useLocation();
 
   const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
 
@@ -73,7 +74,16 @@ function Recovery() {
   useEffect(() => {
     if (isRequestSuccessful.value) {
       closeModalWithDispatch();
-      history.replace({pathname: '/reset-password'});
+      if (location.state) {
+        history.replace({ pathname: '/reset-password', 
+                          state: {
+                            isRecovery: true,
+                            ...location.state
+                          }
+                        });
+      } else {
+        history.replace({pathname: '/reset-password', state: {isRecovery: true}});
+      }
     }
     if (isRequestSuccessful.value === false) {
       dispatch(openModalActionCreator('error', isRequestSuccessful.message));
@@ -117,7 +127,11 @@ function Recovery() {
           Вспомнили пароль?
         </p>
         <Link 
-          to='/login' 
+          to={
+              location.state ? 
+              {pathname: '/login', state: {...location.state}} : 
+              '/login'
+             } 
           className={`text text_type_main-default ml-2 ${styles.link}`}>
           Войти
         </Link>

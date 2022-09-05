@@ -44,10 +44,10 @@ function Profile () {
                                                                     });
 
   //проверка наличия авторизации
-  const [ isRequestUser, setIsRequestUser ] = useState(false);
-  useLayoutEffect(() => {
+  //const [ isRequestUser, setIsRequestUser ] = useState(false);
+  /*useLayoutEffect(() => {
     if (userName === '' ||  userEmail === '') {
-      setIsRequestUser(true);
+      //setIsRequestUser(true);
       const accessToken = getAccessTokenOutCookie();
       const refreshToken = localStorage.getItem('refreshToken');
       if (accessToken && refreshToken) {
@@ -67,7 +67,7 @@ function Profile () {
     } else {
       setIsRequestUser(false);
     }
-  }, [userName, userEmail])
+  }, [userName, userEmail])*/
 
 
   //выход из аккаунта
@@ -115,10 +115,10 @@ function Profile () {
   return(
     <main className={styles.main}>
       {
-        isRequestUser ?
+        /*isRequestUser ?
         (<h1 className='text text_type_main-large mt-20'>
           Запрашиваем данные аккаунта...
-        </h1>) :
+        </h1>) :*/
         (<>
           <aside className={`mt-30 ${styles.aside}`}>
             <menu className={styles.menu} id='menu'>

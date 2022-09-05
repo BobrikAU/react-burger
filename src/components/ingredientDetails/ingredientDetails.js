@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import styles from './ingredientDetails.module.css';
+import { useLocation } from 'react-router-dom';
 
 function IngredientDetails() {
 
@@ -10,6 +11,9 @@ function IngredientDetails() {
          proteins, 
          fat, 
          carbohydrates} = useSelector( state => state.ingredientDetails);
+  const location = useLocation();
+
+  console.log(location);
 
   return(
     <>

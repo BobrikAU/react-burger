@@ -4,7 +4,7 @@ import { Input,
          EmailInput, 
          PasswordInput, 
          Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import styles from './registration.module.css';
 import './globalSelectorsForms.css';
 import { requestAboutUser } from '../services/actions/user';
@@ -19,6 +19,7 @@ function Registration() {
     message: state.app.isModalActive.message,
   }));
   const history = useHistory();
+  const location = useLocation();
 
   const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
 
@@ -114,7 +115,9 @@ function Registration() {
   useEffect(() => {
     if (isRequestSuccessful.value) {
       closeModalWithDispatch();
-      history.replace({pathname: '/'});
+      if (location.state) {
+        history.replace({pathname: location.state.from});
+      }
     }
     if (isRequestSuccessful.value === false) {
       dispatch(openModalActionCreator('error', isRequestSuccessful.message));
@@ -182,7 +185,13 @@ function Registration() {
         <p className='text text_type_main-default text_color_inactive'>
           Уже зарегистрированы?
         </p>
-        <Link to='/login' className={`text text_type_main-default ml-2 ${styles.link}`}>
+        <Link 
+          to={
+              location.state ? 
+              {pathname: '/login', state: {...location.state}} : 
+              '/login'
+             }
+          className={`text text_type_main-default ml-2 ${styles.link}`}>
           Войти
         </Link>
       </div>
