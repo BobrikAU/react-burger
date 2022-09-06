@@ -11,6 +11,7 @@ import ResetPassword from '../../pages/resetPassword';
 import Profile from '../../pages/profile';
 import ProtectedRoute from '../protectedRoute/protectedRoute';
 import RouteNotAuthorized from '../routeNotAuthorized/routeNotAuthorized';
+import DetailsIngredient from '../../pages/detailsIngredient';
 
 const App = () => {
 
@@ -21,6 +22,9 @@ const App = () => {
         <Switch>
           <Route path='/' exact={true}>
             <Constructor/>
+          </Route>
+          <Route path='/ingredients/:_id'>
+            <DetailsIngredient />
           </Route>
           <RouteNotAuthorized path='/login' exact={true}>
             <Authorization/>
