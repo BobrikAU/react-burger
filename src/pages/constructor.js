@@ -39,7 +39,7 @@ export default function Constructor() {
       {isModalActive !== '' && (
         <Modal closeModalWithDispatch={closeModalWithDispatch} activeModal={isModalActive}>
           {isModalActive === 'orderDetails' && ( <OrderDetails/> )}
-          {isModalActive === 'ingredientDetails' && (<IngredientDetails/>)}
+          {/*{isModalActive === 'ingredientDetails' && (<IngredientDetails/>)}*/}
           {isModalActive === 'error' && (<ErrorMessage message={message}/>)}
         </Modal>
       )}

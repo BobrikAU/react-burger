@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import IngredientDetails from '../components/ingredientDetails/ingredientDetails';
@@ -11,7 +11,6 @@ function DetailsIngredient() {
   const ingredients = useSelector(state => state.burgerIngredients);
   
   useEffect(() => {
-    console.log(11111);
     if (!ingredients) {
       dispatch(getIngredients());
     }
