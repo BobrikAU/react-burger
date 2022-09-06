@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './app.module.css';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Route, Switch, useLocation, useHistory } from 'react-router-dom';
 import AppHeader from '../appHeader/appHeader';
 import Constructor from '../../pages/constructor';
 import NotFound404 from '../../pages/notFound404';
@@ -11,16 +11,24 @@ import ResetPassword from '../../pages/resetPassword';
 import Profile from '../../pages/profile';
 import ProtectedRoute from '../protectedRoute/protectedRoute';
 import RouteNotAuthorized from '../routeNotAuthorized/routeNotAuthorized';
+import DetailsIngredient from '../../pages/detailsIngredient';
+import Modal from '../modal/modal';
+import IngredientDetails from '../ingredientDetails/ingredientDetails';
 
 const App = () => {
+  const location = useLocation();
+  const background = location.state && location.state.background;
+  const ingredient = location.state && location.state.ingredient;
 
   return (
     <div className={`${styles.app} ${styles.variables}`}>
-      <BrowserRouter>
         <AppHeader/>
-        <Switch>
+        <Switch location={ background || location }>
           <Route path='/' exact={true}>
             <Constructor/>
+          </Route>
+          <Route path='/ingredients/:_id'>
+            <DetailsIngredient />
           </Route>
           <RouteNotAuthorized path='/login' exact={true}>
             <Authorization/>
@@ -41,7 +49,13 @@ const App = () => {
             <NotFound404 />
           </Route>
         </Switch>
-      </BrowserRouter>
+        {background && (<Route path='/ingredients/:_id'>
+                          <Modal>
+                            <IngredientDetails 
+                              ingredient={ingredient}
+                              modal={true}/>
+                          </Modal>
+                        </Route>)}
     </div>
   );
 }
