@@ -1,6 +1,6 @@
 import { Route, Switch, NavLink, useRouteMatch, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './profile.module.css';
 import EditProfile from '../components/editProfile/editProfile';
 import OrdersHistory from './ordersHistory';
@@ -10,17 +10,15 @@ import { changeActivePageActionCreator,
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import './profile.css';
 import { requestAboutUser, 
-         eraseUserActionCreator, 
-         requestWithAccessToken,
-         getUser } from '../services/actions/user';
+         eraseUserActionCreator } from '../services/actions/user';
 import Modal from '../components/modal/modal';
 import ErrorMessage from '../components/errorMassege/errorMassege';
-import { setCookie, getAccessTokenOutCookie } from '../utils/utils';
+import { setCookie } from '../utils/utils';
 
 function Profile () {
 
 
-  const { isModalActive, message, userName, userEmail } = useSelector (state => ({
+  const { isModalActive, message } = useSelector (state => ({
     isModalActive: state.app.isModalActive.isModalActive,
     message: state.app.isModalActive.message,
     userName: state.user.userName,
@@ -42,33 +40,6 @@ function Profile () {
                                                                       value: undefined,
                                                                       message: '',
                                                                     });
-
-  //проверка наличия авторизации
-  //const [ isRequestUser, setIsRequestUser ] = useState(false);
-  /*useLayoutEffect(() => {
-    if (userName === '' ||  userEmail === '') {
-      //setIsRequestUser(true);
-      const accessToken = getAccessTokenOutCookie();
-      const refreshToken = localStorage.getItem('refreshToken');
-      if (accessToken && refreshToken) {
-        new Promise ((resolve, reject) => {
-          requestWithAccessToken( dispatch, 
-                                  getUser, 
-                                  accessToken, 
-                                  refreshToken, 
-                                  {resolve, reject})
-        })
-        .catch(() => {
-          history.push({pathname: '/login'});
-        });
-      } else {
-        history.push({pathname: '/login'});
-      }
-    } else {
-      setIsRequestUser(false);
-    }
-  }, [userName, userEmail])*/
-
 
   //выход из аккаунта
   const logOutAccount = (e) => {
@@ -95,7 +66,7 @@ function Profile () {
     })
     .then(() => {
       closeModalWithDispatch();
-      history.replace({pathname: '/'});
+      history.replace({pathname: '/login', state: {from: '/profile'}});
       setTimeout(() => {
         dispatch(eraseUserActionCreator());
         setCookie('accessToken', '', {'max-age': -1});
@@ -114,48 +85,40 @@ function Profile () {
 
   return(
     <main className={styles.main}>
-      {
-        /*isRequestUser ?
-        (<h1 className='text text_type_main-large mt-20'>
-          Запрашиваем данные аккаунта...
-        </h1>) :*/
-        (<>
-          <aside className={`mt-30 ${styles.aside}`}>
-            <menu className={styles.menu} id='menu'>
-              <NavLink 
-                exact to={path} 
-                className={`text text_type_main-medium text_color_inactive pt-5 pb-3 
-                  ${styles.link}`} 
-                activeClassName={`text text_type_main-medium pt-5 pb-3 
-                ${styles.link} ${styles.linkActive}`}>
-                Профиль
-              </NavLink>
-              <NavLink  
-                to={`${path}/orders`} 
-                className={`text text_type_main-medium text_color_inactive pt-5 pb-3 
-                  ${styles.link}`} 
-                activeClassName={`text text_type_main-medium pt-5 pb-3 
-                ${styles.link} ${styles.linkActive}`}>
-                История заказов
-              </NavLink>
-              <Button type="secondary" size="medium" onClick={logOutAccount}>Выход</Button>
-            </menu>
-            <p className='text text_type_main-default text_color_inactive mt-20'>
-              В этом разделе вы можете изменить свои персональные данные
-            </p>
-          </aside>
-          <section className={`pt-30 ml-15 ${styles.content}`}>
-              <Switch>
-                <Route path={path} exact={true}>
-                  <EditProfile setIsRequestSuccessful={setIsRequestSuccessful}/>
-                </Route>
-                <Route path={`${path}/orders`} exact={true}>
-                  <OrdersHistory/>
-                </Route>
-              </Switch>
-          </section>
-        </>)
-      }
+      <aside className={`mt-30 ${styles.aside}`}>
+        <menu className={styles.menu} id='menu'>
+          <NavLink 
+            exact to={path} 
+            className={`text text_type_main-medium text_color_inactive pt-5 pb-3 
+              ${styles.link}`} 
+            activeClassName={`text text_type_main-medium pt-5 pb-3 
+            ${styles.link} ${styles.linkActive}`}>
+            Профиль
+          </NavLink>
+          <NavLink  
+            to={`${path}/orders`} 
+            className={`text text_type_main-medium text_color_inactive pt-5 pb-3 
+              ${styles.link}`} 
+            activeClassName={`text text_type_main-medium pt-5 pb-3 
+            ${styles.link} ${styles.linkActive}`}>
+            История заказов
+          </NavLink>
+          <Button type="secondary" size="medium" onClick={logOutAccount}>Выход</Button>
+        </menu>
+        <p className='text text_type_main-default text_color_inactive mt-20'>
+          В этом разделе вы можете изменить свои персональные данные
+        </p>
+      </aside>
+      <section className={`pt-30 ml-15 ${styles.content}`}>
+          <Switch>
+            <Route path={path} exact={true}>
+              <EditProfile setIsRequestSuccessful={setIsRequestSuccessful}/>
+            </Route>
+            <Route path={`${path}/orders`} exact={true}>
+              <OrdersHistory/>
+            </Route>
+          </Switch>
+      </section>
       {isModalActive !== '' && (
         <Modal closeModalWithDispatch={closeModalWithDispatch} 
           activeModal={isModalActive}>

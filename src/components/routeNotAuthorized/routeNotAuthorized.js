@@ -37,8 +37,10 @@ function RouteNotAuthorized({children, ...optionsRoute}) {
             history.replace({pathname: '/'});
           })
           .catch(() => {
-            setIsRequest(false)
+            setIsRequest(false);
           })
+        } else {
+          setIsRequest(false);
         }
       } else {
         setTimeout(() => {

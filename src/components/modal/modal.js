@@ -52,8 +52,8 @@ function Modal({children, activeModal, closeModalWithDispatch}) {
 
 Modal.propTypes = {
   children: PropTypes.node,
-  activeModal: PropTypes.string/*.isRequired*/,
-  closeModalWithDispatch: PropTypes.func//.isRequired,
+  activeModal: PropTypes.string,
+  closeModalWithDispatch: PropTypes.func,
 }
 
 export default Modal;

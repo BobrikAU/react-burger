@@ -11,9 +11,8 @@ import { requestAboutUser } from '../services/actions/user';
 
 function ResetPassword() {
   const dispatch = useDispatch();
-  const { isModalActive, message } = useSelector (state => ({
-    isModalActive: state.app.isModalActive.isModalActive,
-    message: state.app.isModalActive.message,
+  const { isModalActive } = useSelector (state => ({
+    isModalActive: state.app.isModalActive.isModalActive
   }));
   const history = useHistory();
   const location = useLocation();

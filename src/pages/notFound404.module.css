@@ -19,6 +19,12 @@
   text-align: center;
 }
 
+.button{
+  border: none;
+  background-color: inherit;
+  cursor: pointer;
+}
+
 .link{
   text-decoration: none;
   color: var(--text-primary-color);
@@ -28,3 +34,4 @@
 .link:hover{
   border-bottom-color: rgba(255, 255, 255, 1);
 }
+

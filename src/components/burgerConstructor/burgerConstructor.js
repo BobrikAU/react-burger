@@ -8,8 +8,7 @@ import { DELETE_OTHER_INGREDIENT,
          MOVING_INGREDIENT,
          addIngredientActionCreator } from '../../services/actions/burgerConstructor';
 import { COUNT_PRICE_BURGER } from '../../services/actions/orderDetails';
-import { openModalActionCreator } from 
-  '../../services/actions/app';
+import { openModalActionCreator } from '../../services/actions/app';
 import { useDrop } from "react-dnd";
 import OtherIngredientConstructor from 
   '../otherIngredientConstructor/otherIngredientConstructor';
@@ -32,11 +31,7 @@ function BurgerConstructor() {
       if (!bunId && item._type !== 'bun') {
         dispatch(openModalActionCreator('error','Пожалуйста, выберите сначала булку.'));
       } else {
-        dispatch(addIngredientActionCreator(item)
-          /*{
-          type: item._type === 'bun' ? ADD_BUN : ADD_OTHER_INGREDIENT,
-          id: item._id,
-        }*/);
+        dispatch(addIngredientActionCreator(item));
       }
     },
     collect: (monitor) => ({
