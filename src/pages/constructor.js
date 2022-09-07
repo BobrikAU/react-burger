@@ -28,7 +28,8 @@ export default function Constructor() {
     dispatch(changeActivePageActionCreator('constructor'));
   } , [dispatch]);
 
-  const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
+  const closeModalWithDispatch = (saveBurger) => dispatch(closeModal(isModalActive, 
+                                                                     saveBurger));
   
   return(
     <main className={styles.main}>
@@ -38,7 +39,8 @@ export default function Constructor() {
       </DndProvider>
       {isModalActive !== '' && (
         <Modal closeModalWithDispatch={closeModalWithDispatch} activeModal={isModalActive}>
-          {isModalActive === 'orderDetails' && ( <OrderDetails/> )}
+          {isModalActive === 'orderDetails' && 
+            ( <OrderDetails closeModalWithDispatch={closeModalWithDispatch}/> )}
           {/*{isModalActive === 'ingredientDetails' && (<IngredientDetails/>)}*/}
           {isModalActive === 'error' && (<ErrorMessage message={message}/>)}
         </Modal>

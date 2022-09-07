@@ -20,7 +20,7 @@ export function openModalActionCreator(typeModal, message = '') {
   }
 }
 
-export function closeModal(isModalActive) {
+export function closeModal(isModalActive, saveBurger) {
   return function(dispatch) {
     dispatch({
       type: CLOSE_MODAL,
@@ -30,7 +30,9 @@ export function closeModal(isModalActive) {
         dispatch(deleteIngrdientDetails());
         break;
       case 'orderDetails':
-        dispatch(resetConstructorActionCreator());
+        if (!saveBurger) {
+          dispatch(resetConstructorActionCreator());
+        }
         break;
       default:
         return;

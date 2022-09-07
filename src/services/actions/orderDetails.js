@@ -4,7 +4,7 @@ import { closeModal, openModalActionCreator } from '../actions/app';
 export const COUNT_PRICE_BURGER = 'COUNT_PRICE_BURGER';
 export const SAVE_ORDER_DATA = 'SAVE_ORDER_DATA';
 
-export function sendOrder(setRequest, constructorIngredients) {
+export function sendOrder(setRequest, constructorIngredients, accessToken) {
   return function(dispatch) {
     setRequest({
       isActive: true,
@@ -16,7 +16,8 @@ export function sendOrder(setRequest, constructorIngredients) {
     fetch(`${baseUrl}orders`, {
         method: 'POST',
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "authorization": accessToken,
         },
         body: JSON.stringify({
           "ingredients": listIngredients
