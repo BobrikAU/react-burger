@@ -117,7 +117,11 @@ function ResetPassword() {
   return(
     <main className={styles.main}>
       <h1 className={`text text_type_main-medium mb-6`}>Восстановление пароля</h1>
-      <form name='registration' id='form' className={`mb-20 ${styles.form}`}>
+      <form 
+        name='registration' 
+        id='form' 
+        className={`mb-20 ${styles.form}`}
+        onSubmit={submit}>
         <PasswordInput
           value={passwordValue} 
           name='password' 
@@ -136,7 +140,6 @@ function ResetPassword() {
           type='primary' 
           size='medium' 
           id='buttonRegister' 
-          onClick={submit} 
           name='button'          
           {...isErrorInForm}>
           Сохранить

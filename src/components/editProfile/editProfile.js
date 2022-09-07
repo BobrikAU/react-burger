@@ -168,7 +168,10 @@ function EditProfile ({setIsRequestSuccessful}) {
   
   return(
     <>
-      <form name='editProfil' id='editProfil' className={styles.editProfileForm}>
+      <form name='editProfil' 
+            id='editProfil' 
+            className={styles.editProfileForm}
+            onSubmit={saveNewUserData}>
         <Input 
           name='name' 
           type='text' 
@@ -208,8 +211,7 @@ function EditProfile ({setIsRequestSuccessful}) {
           <Button type='primary' 
                   size='medium' 
                   id='save'
-                  {...isErrorInForm}
-                  onClick={saveNewUserData}>
+                  {...isErrorInForm}>
             Сохранить
           </Button>
         </div>)}
