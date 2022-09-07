@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './app.module.css';
-import { Route, Switch, useLocation, useHistory } from 'react-router-dom';
+import { Route, Switch, useLocation } from 'react-router-dom';
 import AppHeader from '../appHeader/appHeader';
 import Constructor from '../../pages/constructor';
 import NotFound404 from '../../pages/notFound404';

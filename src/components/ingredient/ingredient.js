@@ -2,15 +2,11 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from './ingridient.module.css';
 import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from 'prop-types';
 import {ingredientType} from '../../utils/types';
-import { openModalActionCreator } from '../../services/actions/app';
-import { ADD_INGREDIENT_DETAILS } from '../../services/actions/ingredientDetails';
 import { useDrag } from "react-dnd";
 import { Link, useLocation } from 'react-router-dom';
 
 function Ingredient({ingredient}) {
-  const dispatch = useDispatch();
   const location = useLocation();
   const ingredientsConstructor = useSelector( state => state.burgerConstructor)
 
@@ -29,14 +25,6 @@ function Ingredient({ingredient}) {
     }
   }, [ingredient._id, ingredient.type]);
   
-  /*const openModalIngredientDetails = () => {
-    dispatch ({
-      type: ADD_INGREDIENT_DETAILS,
-      ingredient
-    })
-    dispatch(openModalActionCreator('ingredientDetails'));
-  }*/
-
   return (
     <Link to={{
                 pathname: `/ingredients/${ingredient._id}`,
@@ -49,7 +37,6 @@ function Ingredient({ingredient}) {
       <li 
         className={styles.ingreient} 
         id={ingredient.id} 
-        //onClick={openModalIngredientDetails}
         ref={dragRef}
       >
         <img 

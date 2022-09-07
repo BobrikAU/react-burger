@@ -7,7 +7,6 @@ import BurgerConstructor from '../components/burgerConstructor/burgerConstructor
 import Modal from '../components/modal/modal';
 import { closeModal,changeActivePageActionCreator } from '../services/actions/app';
 import OrderDetails from '../components/orderDetails/orderDetails';
-import IngredientDetails from '../components/ingredientDetails/ingredientDetails';
 import ErrorMessage from '../components/errorMassege/errorMassege';
 import { getIngredients } from '../services/actions/burgerIngredients';
 import styles from './constructor.module.css';
@@ -41,7 +40,6 @@ export default function Constructor() {
         <Modal closeModalWithDispatch={closeModalWithDispatch} activeModal={isModalActive}>
           {isModalActive === 'orderDetails' && 
             ( <OrderDetails closeModalWithDispatch={closeModalWithDispatch}/> )}
-          {/*{isModalActive === 'ingredientDetails' && (<IngredientDetails/>)}*/}
           {isModalActive === 'error' && (<ErrorMessage message={message}/>)}
         </Modal>
       )}
