@@ -147,7 +147,11 @@ function Registration() {
   return(
     <main className={styles.main}>
       <h1 className={`text text_type_main-medium mb-6`}>Регистрация</h1>
-      <form name='registration' id='form' className={`mb-20 ${styles.form}`}>
+      <form 
+        name='registration' 
+        id='form' 
+        className={`mb-20 ${styles.form}`}
+        onSubmit={submit}>
         <Input 
           type='text' 
           placeholder='Имя' 
@@ -174,8 +178,7 @@ function Registration() {
         <Button 
           type='primary' 
           size='medium' 
-          id='buttonRegister' 
-          onClick={submit} 
+          id='buttonRegister'
           name='button'          
           {...isButtonDisabled}>
           Зарегистрироваться

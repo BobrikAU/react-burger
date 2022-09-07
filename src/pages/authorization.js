@@ -124,7 +124,11 @@ function Authorization() {
   return(
     <main className={styles.main}>
       <h1 className={`text text_type_main-medium mb-6`}>Вход</h1>
-      <form name='authorization' id='form' className={`mb-20 ${styles.form}`}>
+      <form 
+        name='authorization' 
+        id='form' 
+        className={`mb-20 ${styles.form}`}
+        onSubmit={submit}>
         <EmailInput
           name='email' 
           value={emailValue}
@@ -138,8 +142,7 @@ function Authorization() {
         <Button 
           type='primary' 
           size='medium' 
-          id='buttonRegister' 
-          onClick={submit} 
+          id='buttonRegister'
           name='button'
           {...isErrorInForm}>
           Войти

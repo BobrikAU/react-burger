@@ -106,7 +106,11 @@ function Recovery() {
   return(
     <main className={styles.main}>
       <h1 className={`text text_type_main-medium mb-5`}>Восстановление пароля</h1>
-      <form name='recovery' id='form' className={`mb-20 ${styles.form}`}>
+      <form 
+        name='recovery' 
+        id='form' 
+        className={`mb-20 ${styles.form}`}
+        onSubmit={submit}>
         <EmailInput
           name='email' 
           value={emailValue}
@@ -115,8 +119,7 @@ function Recovery() {
         <Button 
           type='primary' 
           size='medium' 
-          id='buttonRegister' 
-          onClick={submit} 
+          id='buttonRegister'
           name='button'
           {...isErrorInForm}>
           Восстановить
