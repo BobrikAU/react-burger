@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { EmailInput,
          Button } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -90,10 +90,12 @@ function Recovery() {
     }
   }, [isRequestSuccessful]);
 
+  const form = useRef();
+
   useEffect(() => {
-    const form = document.forms.recovery;
-    const inputEmail = form.elements.email;
-    const divEmail = form.querySelector('.input_type_email');
+    //const form = document.forms.recovery;
+    const inputEmail = form.current.elements.email;
+    const divEmail = form.current.querySelector('.input_type_email');
     inputEmail.addEventListener('blur', (() => {isErrorEmailValue(divEmail)}));
     inputEmail.addEventListener('focus', (() => {setErrorEmailValue(false)}));
     return () => {
@@ -110,6 +112,7 @@ function Recovery() {
         name='recovery' 
         id='form' 
         className={`mb-20 ${styles.form}`}
+        ref={form}
         onSubmit={submit}>
         <EmailInput
           name='email' 

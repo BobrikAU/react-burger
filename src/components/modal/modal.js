@@ -9,15 +9,19 @@ import { useHistory } from 'react-router-dom';
 function Modal({children, activeModal, closeModalWithDispatch}) {
   const history = useHistory();
 
+  function closeModal() {
+    closeModalWithDispatch ? closeModalWithDispatch() : history.goBack();
+  } 
+
   const closeModalClickOverlay = (e) => {
     if (e.target.id === 'overlay') {
-      closeModalWithDispatch ? closeModalWithDispatch() : history.goBack();
+      closeModal();
     };
   }
 
   const closeModalEsc = (e) => {
     if (e.key === 'Escape') {
-      closeModalWithDispatch ? closeModalWithDispatch() : history.goBack();
+      closeModal();
     };
   }
 
@@ -38,9 +42,7 @@ function Modal({children, activeModal, closeModalWithDispatch}) {
           <div className={styles.closeIcon}>
             <CloseIcon 
               type="primary" 
-              onClick={() =>  closeModalWithDispatch ? 
-                              closeModalWithDispatch() : 
-                              history.goBack()}
+              onClick={() =>  closeModal()}
             />
           </div>
           {children}
