@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { EmailInput, 
          PasswordInput, 
          Button } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -100,13 +100,14 @@ function Authorization() {
     }
   }, [isRequestSuccessful]);
 
+  const form = useRef();
 
   useEffect(() => {
-    const form = document.forms.authorization;
-    const inputEmail = form.elements.email;
-    const inputPassword = form.elements.password;
-    const divEmail = form.querySelector('.input_type_email');
-    const divPassword = form.querySelector('.input_type_password');
+    //const form = document.forms.authorization;
+    const inputEmail = form.current.elements.email;
+    const inputPassword = form.current.elements.password;
+    const divEmail = form.current.querySelector('.input_type_email');
+    const divPassword = form.current.querySelector('.input_type_password');
     inputEmail.addEventListener('blur', (() => {isErrorEmailValue(divEmail)}));
     inputEmail.addEventListener('focus', (() => {setErrorEmailValue(false)}));
     inputPassword.addEventListener('blur', (() => {isErrorPasswordValue(divPassword)}));
@@ -128,6 +129,7 @@ function Authorization() {
         name='authorization' 
         id='form' 
         className={`mb-20 ${styles.form}`}
+        ref={form}
         onSubmit={submit}>
         <EmailInput
           name='email' 
