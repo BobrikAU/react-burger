@@ -44,7 +44,7 @@ function AppHeader() {
             "primary" : "secondary"}/>} 
           state={isLinkHover}
           changeIsHover={toggleIsHover}
-          to='/kjdsfhoifu'
+          to='/feed'
           >
           Лента заказов
         </LinkHeader>
