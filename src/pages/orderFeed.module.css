@@ -1,0 +1,42 @@
+.main{
+  width: 100%;
+  max-width: 1240px;
+  height: calc(100vh - var(--header-height));
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  grid-template-columns: 600px 580px;
+  column-gap: 60px;
+  row-gap: 20px;
+  grid-template-areas: 
+   "heading heading"
+   "orders generalInformation";
+}
+
+.heading{
+  grid-area: heading;
+  margin-bottom: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.orders{
+  grid-area: orders;
+  overflow-y: scroll;
+  scrollbar-color: #2F2F37 #8585AD;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+}
+
+.orders::-webkit-scrollbar {
+  width: 8px;
+}
+
+.orders::-webkit-scrollbar-track {
+  background: #2F2F37;
+  margin-bottom: 68px;
+}
+
+.orders::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
+}
