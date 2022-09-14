@@ -4,8 +4,8 @@
   height: calc(100vh - var(--header-height));
   display: grid;
   grid-template-rows: min-content 1fr;
-  grid-template-columns: 600px 580px;
-  column-gap: 60px;
+  grid-template-columns: 600px 584px;
+  column-gap: 56px;
   row-gap: 20px;
   grid-template-areas: 
    "heading heading"
@@ -39,4 +39,68 @@
 
 .orders::-webkit-scrollbar-thumb {
   background-color: #8585AD;
+}
+
+.stats{
+  grid-area: generalInformation;
+  width: 100%;
+  height: calc(100% - 186px);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: minmax(0, 1fr) 150px 150px;
+  gap: 60px 40px;
+  overflow: hidden;
+  box-sizing: border-box;
+  grid-template-areas:
+    "done pending"
+    "total total"
+    "totalToday totalToday";
+}
+
+.done{
+  grid-area: done;
+  height: 100%;
+}
+
+.name{
+  margin-top: 0;
+}
+
+.list{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: calc(100% - 54px);
+  overflow-y: scroll;
+  scrollbar-color: #2F2F37 #8585AD;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+}
+
+.list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.list::-webkit-scrollbar-track {
+  background: #2F2F37;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
+}
+
+.listDone li{
+  color: var(--colors-interface-success);
+}
+
+.pending{
+  grid-area: pending;
+}
+
+.total{
+  grid-area: total;
+}
+
+.totalToday{
+  grid-area: totalToday;
 }
