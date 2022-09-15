@@ -101,3 +101,8 @@
   left: auto;
   z-index: 101;
 }
+
+.link{
+  text-decoration: none;
+  color: inherit;
+}
