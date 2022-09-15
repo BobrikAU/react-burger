@@ -15,6 +15,7 @@ import DetailsIngredient from '../../pages/detailsIngredient';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredientDetails/ingredientDetails';
 import OrderFeed from '../../pages/orderFeed';
+import OrderInfo from '../../pages/orderInfo';
 
 const App = () => {
   const location = useLocation();
@@ -31,8 +32,11 @@ const App = () => {
           <Route path='/ingredients/:_id'>
             <DetailsIngredient />
           </Route>
-          <Route path='/feed'>
+          <Route path='/feed' exact={true}>
             <OrderFeed />
+          </Route>
+          <Route path='/feed/:id'>
+            <OrderInfo />
           </Route>
           <RouteNotAuthorized path='/login' exact={true}>
             <Authorization/>
