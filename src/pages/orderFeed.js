@@ -10,11 +10,11 @@ import Loader from '../images/loader.gif';
 function OrderFeed() {
   const [isRequest, setIsRequest] = useState(true);
   const dispatch = useDispatch();
-  const ingredients = useSelector(state => state.burgerIngredients);
-  const { allOrders, totalOrders, totalTodayOrders } = useSelector(state => ({
+  const { allOrders, totalOrders, totalTodayOrders, ingredients } = useSelector(state => ({
     allOrders: state.orders.allOrders.orders,
     totalOrders: state.orders.allOrders.total,
     totalTodayOrders: state.orders.allOrders.totalToday,
+    ingredients: state.burgerIngredients,
   }));
   useEffect(() => {
     if (!ingredients) {
@@ -37,6 +37,7 @@ function OrderFeed() {
                       idIngredients={ingredients}
                       currentDate={currentDate}
                       key={uuidv4()}
+                      orders={allOrders}
                       />
       );
     });

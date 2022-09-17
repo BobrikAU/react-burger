@@ -90,3 +90,18 @@ export function countingPrice(type, price, previousValue) {
     previousValue.burgerPrice += price;
   }
 }
+
+export const getOrderStatus = (status) => {
+  switch (status) {
+    case 'created':
+      return 'Создан';
+    case 'pending':
+      return 'Готовится';
+    case 'done':
+      return 'Выполнен';
+    case 'cancell':
+      return 'Отменён'
+    default:
+      return;
+  }
+}

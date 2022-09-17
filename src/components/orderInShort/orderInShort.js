@@ -4,12 +4,18 @@ import { useSelector } from 'react-redux';
 import { useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Link, useRouteMatch } from 'react-router-dom';
-import { timeString, countingPrice } from '../../utils/utils';
+import { Link, useRouteMatch, useLocation } from 'react-router-dom';
+import { timeString, countingPrice, getOrderStatus } from '../../utils/utils';
 
-function OrderInShort({ numberOrder, orderTime, burgerName, idIngredients, currentDate }) {
+function OrderInShort({ status, 
+                        numberOrder, 
+                        orderTime, 
+                        burgerName, 
+                        idIngredients, 
+                        currentDate, 
+                        orders }) {
   const ingredients = useSelector(state => state.burgerIngredients);
-
+  const location = useLocation();
   //создаем строку с временем принятия заказа
   const time = timeString(orderTime, currentDate);
 
@@ -34,7 +40,12 @@ function OrderInShort({ numberOrder, orderTime, burgerName, idIngredients, curre
                alt={name} 
                style={{zIndex: zIndex}}
                className={styles.image}/>
-          {!!moreMaximum && (<span className={`text text_type_main-default ${styles.additionalIngredients}`}>{`+${moreMaximum}`}</span>)}
+          { !!moreMaximum && 
+            ( <span className={`text text_type_main-default ${styles.additionalIngredients}`}>
+                {`+${moreMaximum}`}
+              </span>
+            )
+          }
         </div>
       )
       previousValue.burgerIngredients.push(imageIngredient);
@@ -51,40 +62,59 @@ function OrderInShort({ numberOrder, orderTime, burgerName, idIngredients, curre
     }, {burgerPrice: 0, burgerIngredients: []}) : {burgerPrice: 0, burgerIngredients: []};
     return iconsAndPrice;
   } , [ingredients, idIngredients]);
+  const orderStatus = getOrderStatus(status);
 
   const { path } = useRouteMatch();
 
   return (
-    <Link to={`${path}/${numberOrder}`} className={styles.link}>
-    <div className={`pt-6 pr-6 pb-6 pl-6 mb-4 ${styles.container}`}>
-      <span className={`text text_type_digits-default ${styles.numberOrder}`}>
-        {`#${String(numberOrder)}`}
-      </span>
-      <span className={`text text_type_main-default text_color_inactive ${styles.orderTime}`}>
-        {time}
-      </span>
-      <span className={`text text_type_main-medium ${styles.burgerName}`}>
-        {burgerName}
-      </span>
-      <div className={styles.ingredientsCotnainer}>
-        {burgerIngredients}
+    <Link to={{
+                pathname: `${path}/${numberOrder}`,
+                state: {
+                          background: location,
+                          orders
+                        }
+              }} 
+          className={`mb-4 ${styles.link}`}>
+      <div className={`pt-6 pr-6 pb-6 pl-6 ${styles.container}`}>
+        <span className={`text text_type_digits-default ${styles.numberOrder}`}>
+          {`#${String(numberOrder)}`}
+        </span>
+        <span className={`text text_type_main-default text_color_inactive ${styles.orderTime}`}>
+          {time}
+        </span>
+        <span className={`text text_type_main-medium ${styles.burgerName}`}>
+          {burgerName}
+          {!!status && (
+                        <span className={`text text_type_main-default mt-2 
+                                          ${status === 'done' && styles.doneColor} 
+                                          ${status === 'cancell' && styles.cancellColor}`}>
+                          {orderStatus}
+                        </span>
+                       )
+          }
+        </span>
+        <div className={styles.ingredientsCotnainer}>
+          {burgerIngredients}
+        </div>
+        <div className={`pl-5 ${styles.priceContainer}`} 
+          style={{zIndex: ingredients && idIngredients.length}}>
+          <span className='text text_type_digits-default mr-2'>{burgerPrice}</span>
+          <CurrencyIcon type="primary"/>
+        </div>
       </div>
-      <div className={`pl-5 ${styles.priceContainer}`} 
-        style={{zIndex: ingredients && idIngredients.length}}>
-        <span className='text text_type_digits-default mr-2'>{burgerPrice}</span>
-        <CurrencyIcon type="primary"/>
-      </div>
-    </div>
     </Link>
   )
 }
 
+OrderInShort.defaultProps = {status: ''};
+
 OrderInShort.propTypes = {
+  status: PropTypes.string,
   numberOrder: PropTypes.number.isRequired,
   orderTime: PropTypes.string.isRequired,
   burgerName: PropTypes.string.isRequired,
   idIngredients: PropTypes.arrayOf(PropTypes.string).isRequired,
   currentDate: PropTypes.object.isRequired,
-}
+};
 
 export default OrderInShort;

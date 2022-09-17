@@ -31,6 +31,8 @@
 .burgerName{
   grid-column-start: 1;
   grid-row-start: 2;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -105,4 +107,13 @@
 .link{
   text-decoration: none;
   color: inherit;
+  display: block;
+}
+
+.doneColor{
+  color: var(--colors-interface-success);
+}
+
+.cancellColor{
+  color: var(--colors-interface-error);
 }

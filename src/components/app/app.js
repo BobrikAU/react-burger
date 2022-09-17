@@ -15,12 +15,15 @@ import DetailsIngredient from '../../pages/detailsIngredient';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredientDetails/ingredientDetails';
 import OrderFeed from '../../pages/orderFeed';
-import OrderInfo from '../../pages/orderInfo';
+import FeedOrderInfo from '../../pages/feedOrderInfo';
+import OwnOrderInfo from '../../pages/ownOrderInfo';
+import OrderInfo from '../orderInfo/orderInfo';
 
 const App = () => {
   const location = useLocation();
   const background = location.state && location.state.background;
   const ingredient = location.state && location.state.ingredient;
+  const orders = location.state && location.state.orders;
 
   return (
     <div className={`${styles.app} ${styles.variables}`}>
@@ -36,7 +39,7 @@ const App = () => {
             <OrderFeed />
           </Route>
           <Route path='/feed/:id'>
-            <OrderInfo />
+            <FeedOrderInfo />
           </Route>
           <RouteNotAuthorized path='/login' exact={true}>
             <Authorization/>
@@ -50,6 +53,9 @@ const App = () => {
           <RouteNotAuthorized path='/reset-password' exact={true}>
             <ResetPassword />
           </RouteNotAuthorized>
+          <ProtectedRoute path='/profile/orders/:id' exact={true}>
+            <OwnOrderInfo />
+          </ProtectedRoute>
           <ProtectedRoute path='/profile'>
             <Profile />
           </ProtectedRoute>
@@ -57,13 +63,30 @@ const App = () => {
             <NotFound404 />
           </Route>
         </Switch>
-        {background && (<Route path='/ingredients/:_id'>
-                          <Modal>
-                            <IngredientDetails 
-                              ingredient={ingredient}
-                              modal={true}/>
-                          </Modal>
-                        </Route>)}
+        {background && (
+                          <Switch>
+                            <Route path='/ingredients/:id'>
+                              <Modal>
+                                <IngredientDetails 
+                                  ingredient={ingredient}
+                                  modal={true}/>
+                              </Modal>
+                            </Route>
+                            <Route  path='/feed/:id'
+                                    render={ () => (<Modal>
+                                                      <OrderInfo
+                                                        orders={orders}
+                                                        modal={true}/>
+                                                    </Modal>)} />
+                            <Route  path='/profile/orders/:id'
+                                    render={ () => (<Modal>
+                                                      <OrderInfo
+                                                        orders={orders}
+                                                        modal={true}/>
+                                                    </Modal>)} />
+                          </Switch>
+                        )
+        }
     </div>
   );
 }
