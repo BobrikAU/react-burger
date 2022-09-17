@@ -1,19 +1,16 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './orderInfo.module.css';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useMemo, useEffect, useState } from 'react';
-import { timeString, countingPrice } from '../utils/utils';
-import { getIngredients } from '../services/actions/burgerIngredients';
-import { changeActivePageActionCreator } from '../services/actions/app';
-import Loader from '../images/loader.gif';
+import { timeString, countingPrice, getOrderStatus } from '../../utils/utils';
+import { getIngredients } from '../../services/actions/burgerIngredients';
+import Loader from '../../images/loader.gif';
+import PropTypes from 'prop-types';
 
-function OrderInfo() {
-  const { allOrders, burgerIngredients } = useSelector(state => ({
-    allOrders : state.orders.allOrders.orders,
-    burgerIngredients: state.burgerIngredients,
-  }));
+function OrderInfo({ orders, modal }) {
+  const burgerIngredients = useSelector(state => state.burgerIngredients);
   const [isRequest, setIsRequest] = useState(true);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -22,15 +19,14 @@ function OrderInfo() {
     } else {
       setIsRequest(false);
     }
-    dispatch(changeActivePageActionCreator('orders'));
   }, [dispatch, burgerIngredients]);
   const id = parseInt(useParams().id, 10);
   const { number, name, status, ingredients, createdAt } = useMemo(() => {
-    const value = allOrders.find((item) => {
+    const value = orders.find((item) => {
         return id === item.number
     });
     return value;
-  }, [allOrders, id]);
+  }, [orders, id]);
 
   const listIngredients = useMemo (() => {
     const value = ingredients.reduce((previousValue, item) => {
@@ -50,7 +46,6 @@ function OrderInfo() {
     }, []);
     return value;
   }, [ingredients]);
-  console.log();
   
   const { liste, burgerPrice } = useMemo(() => {
     const value = burgerIngredients ? listIngredients.reduce((previousValue, item) => {
@@ -84,13 +79,24 @@ function OrderInfo() {
 
   const time = timeString(createdAt, new Date(new Date().toDateString()));
 
+  const orderStatus = getOrderStatus(status);
+  
+  const location = useLocation();
+  window.history.replaceState(null, null, location.pathname);
+
   return isRequest ?
   (<img src={Loader} alt='Загружаем данные...'/>) :
   (
-    <main className={styles.main}>
-      <span className={`text text_type_digits-default mb-10 ${styles.number}`}>{`#${number}`}</span>
+    <>
+      <span className={`text text_type_digits-default mb-10 ${!modal && styles.number}`}>
+        {`#${number}`}
+      </span>
       <h1 className='text text_type_main-medium mb-3'>{name}</h1>
-      <span className={`text text_type_main-default ${styles.status}`}>{status === 'done' ? 'Выполнен' : 'В работе'}</span>
+      <span className={`text text_type_main-default ${styles.status}
+                        ${status === 'done' && styles.doneColor}
+                        ${status === 'cancell' && styles.cancellColor}`}>
+        {orderStatus}
+      </span>
       <span className='text text_type_main-medium mb-6'>Состав:</span>
       <ul className={`mb-10 ${styles.list}`}>{liste}</ul>
       <div className={styles.timePrice}>
@@ -100,8 +106,12 @@ function OrderInfo() {
           <CurrencyIcon type="primary" />
         </div>
       </div>
-    </main>
+    </>
   );
+}
+
+OrderInfo.propTypes = {
+  orders: PropTypes.array.isRequired,
 }
 
 export default OrderInfo;

@@ -8,6 +8,16 @@ import { useHistory } from 'react-router-dom';
 
 function Modal({children, activeModal, closeModalWithDispatch}) {
   const history = useHistory();
+  if (history.location.pathname.indexOf('feed') > -1 || 
+      history.location.pathname.indexOf('profile/orders') > -1) {
+    activeModal = 'orders';
+  }
+  /*if (history.location.pathname.indexOf('profile/orders') > -1) {
+    activeModal = 'orders';
+  }*/
+  if (history.location.pathname.indexOf('ingredients') > -1) {
+    activeModal = 'ingredientDetails';
+  }
 
   function closeModal() {
     closeModalWithDispatch ? closeModalWithDispatch() : history.goBack();
@@ -35,9 +45,9 @@ function Modal({children, activeModal, closeModalWithDispatch}) {
 
   return ReactDOM.createPortal(
     ( <ModalOverlay closeModalClickOverlay={closeModalClickOverlay}>
-        <div className={` pl-10 pt-10 pr-10 pb-15 
+        <div className={` pl-10 pr-10 ${activeModal === 'orders' ? 'pt-15 pb-10' :'pt-10 pb-15'} 
                           ${styles.modal} 
-                          ${activeModal ? styles[activeModal] : styles.ingredientDetails}
+                          ${activeModal && styles[activeModal]}
                         `}>
           <div className={styles.closeIcon}>
             <CloseIcon 

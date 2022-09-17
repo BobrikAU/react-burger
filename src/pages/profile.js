@@ -1,4 +1,4 @@
-import { Route, Switch, NavLink, useRouteMatch, useHistory } from 'react-router-dom';
+import { Route, Switch, NavLink, useRouteMatch, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from 'react';
 import styles from './profile.module.css';
@@ -34,6 +34,7 @@ function Profile () {
   }, [dispatch]);
 
   const {path} = useRouteMatch();
+  const { pathname } = useLocation();
 
   
   const [ isRequestSuccessful, setIsRequestSuccessful ] = useState({
@@ -83,6 +84,17 @@ function Profile () {
     }
   }, [isRequestSuccessful]);
 
+  const text = (path, pathname) => {
+    switch (pathname) {
+      case `${path}/orders`:
+        return 'В этом разделе вы можете просмотреть свою историю заказов';
+      case `${path}`:
+        return 'В этом разделе вы можете изменить свои персональные данные';
+      default:
+        return;
+    }
+  };
+
   return(
     <main className={styles.main}>
       <aside className={`mt-30 ${styles.aside}`}>
@@ -106,10 +118,10 @@ function Profile () {
           <Button type="secondary" size="medium" onClick={logOutAccount}>Выход</Button>
         </menu>
         <p className='text text_type_main-default text_color_inactive mt-20'>
-          В этом разделе вы можете изменить свои персональные данные
+          {text(path, pathname)}
         </p>
       </aside>
-      <section className={`pt-30 ml-15 ${styles.content}`}>
+      <section className={`ml-10 pl-2 ${styles.content}`}>
           <Switch>
             <Route path={path} exact={true}>
               <EditProfile setIsRequestSuccessful={setIsRequestSuccessful}/>

@@ -8,7 +8,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 function Ingredient({ingredient}) {
   const location = useLocation();
-  const ingredientsConstructor = useSelector( state => state.burgerConstructor)
+  const ingredientsConstructor = useSelector( state => state.burgerConstructor);
 
   const number = ingredient._id === ingredientsConstructor.bun ? 1 : 
     ingredientsConstructor.others.reduce(
