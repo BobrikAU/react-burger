@@ -3,7 +3,7 @@ import { SAVE_ALL_ORDERS } from '../actions/orders';
 const initialState = {
   allOrders: {},
   userOrders: [
-    {
+    /*{
       ingredients: [
                       '60d3b41abdacab0026a733c7',
                       '60d3b41abdacab0026a733c8',
@@ -96,7 +96,7 @@ const initialState = {
       createdAt: '2022-02-10T14:43:22.587Z',
       updatedAt: '2021-06-23T14:43:22.587Z',
       name: 'Death Star Starship Main бургер',
-    }
+    }*/
   ],
 }
 

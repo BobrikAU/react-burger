@@ -16,7 +16,6 @@ function FeedOrderInfo() {
   //const allOrders = useSelector(state => state.orders.allOrders.orders);
   //const burgerIngredients = useSelector(state => state.burgerIngredients);
   const dispatch = useDispatch();
-  console.log()
   useEffect(() => {
     if (!burgerIngredients) {
       dispatch(getIngredients());
