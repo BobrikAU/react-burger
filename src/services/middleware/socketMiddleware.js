@@ -20,15 +20,12 @@ export const socketMiddleware = store => next => action => {
   }
   if (socket) {
     socket.onopen = (e) => {
-      console.log('onopen', e);
       dispatch({ type: WS_CONNECTION_SUCCESS, socket: e.currentTarget});
     };
     socket.onclose = (e) => {
-      console.log('onclose', e);
       dispatch({ type: WS_CONNECTION_CLOSED });
     };
     socket.onmessage = (e) => {
-      console.log('onmessage', e.data);
       const data = JSON.parse(e.data);
       const url = e.currentTarget.url;
       if (url.indexOf('orders/all') > 0) {
@@ -38,7 +35,6 @@ export const socketMiddleware = store => next => action => {
       }
     };
     socket.onerror = (e) => {
-      console.log('onerror', e);
       dispatch({type: WS_CONNECTION_ERROR, payload: e})
     }
   }

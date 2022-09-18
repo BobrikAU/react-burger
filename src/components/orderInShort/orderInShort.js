@@ -16,17 +16,11 @@ function OrderInShort({ status,
                         orders }) {
   const ingredients = useSelector(state => state.burgerIngredients);
   const location = useLocation();
+
   //создаем строку с временем принятия заказа
   const time = timeString(orderTime, currentDate);
 
   //создаем ряд картинок с ингредиентами и подсчитываем стоимость бургера
-  /*function countingPrice(type, price, previousValue) {
-    if (type === "bun") {
-      previousValue.burgerPrice += price * 2;
-    } else {
-      previousValue.burgerPrice += price;
-    }
-  }*/
   function makeIngredientIcon(index, image, name, previousValue) {
     if (index <= 5) {
       const zIndex = idIngredients.length - index;

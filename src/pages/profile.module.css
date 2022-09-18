@@ -31,5 +31,5 @@
 }
 
 .content{
-  max-width: calc(100% - 368px);
+  width: calc(100% - 368px);
 }
