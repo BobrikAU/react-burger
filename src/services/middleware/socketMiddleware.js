@@ -1,7 +1,8 @@
 import {  WS_CONNECTION_START,
           WS_CONNECTION_SUCCESS, 
           WS_CONNECTION_CLOSED, 
-          WS_CONNECTION_BREAK } from '../actions/socketMiddleware';
+          WS_CONNECTION_BREAK, 
+          WS_CONNECTION_ERROR } from '../actions/socketMiddleware';
 import { SAVE_ALL_ORDERS } from '../actions/orders';
 
 export const socketMiddleware = store => next => action => {
@@ -19,12 +20,15 @@ export const socketMiddleware = store => next => action => {
   }
   if (socket) {
     socket.onopen = (e) => {
+      console.log('onopen', e);
       dispatch({ type: WS_CONNECTION_SUCCESS, socket: e.currentTarget});
     };
     socket.onclose = (e) => {
+      console.log('onclose', e);
       dispatch({ type: WS_CONNECTION_CLOSED });
     };
     socket.onmessage = (e) => {
+      console.log('onmessage', e.data);
       const data = JSON.parse(e.data);
       const url = e.currentTarget.url;
       if (url.indexOf('orders/all') > 0) {
@@ -32,6 +36,10 @@ export const socketMiddleware = store => next => action => {
       } else if (url.indexOf('orders?token') > 0) {
         dispatch({ type: SAVE_ALL_ORDERS, userOrders: data.orders})
       }
+    };
+    socket.onerror = (e) => {
+      console.log('onerror', e);
+      dispatch({type: WS_CONNECTION_ERROR, payload: e})
     }
   }
   return next(action);

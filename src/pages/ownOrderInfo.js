@@ -26,7 +26,7 @@ function OwnOrderInfo() {
       dispatch(socketStartHistoryActionCreator())
     }
     return () => {
-      if (userOrders) {
+      if (userOrders.length) {
         dispatch({type: WS_CONNECTION_BREAK})
       };
     }
