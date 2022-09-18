@@ -103,7 +103,13 @@ const initialState = {
 export const ordersReducer = (state = initialState, action) => {
   switch (action.type) {
     case SAVE_ALL_ORDERS:
-      return {...state, allOrders: action.allOrders}
+      if (action.allOrders) {
+        return {...state, allOrders: action.allOrders}
+      }
+      if (action.userOrders) {
+        return {...state, userOrders: action.userOrders}
+      }
+      break;
     default:
       return state;
   }

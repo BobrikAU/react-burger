@@ -26,7 +26,12 @@ export const socketMiddleware = store => next => action => {
     };
     socket.onmessage = (e) => {
       const data = JSON.parse(e.data);
-      dispatch({ type: SAVE_ALL_ORDERS, allOrders: data})
+      const url = e.currentTarget.url;
+      if (url.indexOf('orders/all') > 0) {
+        dispatch({ type: SAVE_ALL_ORDERS, allOrders: data})
+      } else if (url.indexOf('orders?token') > 0) {
+        dispatch({ type: SAVE_ALL_ORDERS, userOrders: data.orders})
+      }
     }
   }
   return next(action);
