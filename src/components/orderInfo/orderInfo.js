@@ -8,6 +8,7 @@ import { timeString, countingPrice, getOrderStatus } from '../../utils/utils';
 import { getIngredients } from '../../services/actions/burgerIngredients';
 import Loader from '../../images/loader.gif';
 import PropTypes from 'prop-types';
+import { orderType } from '../../utils/types';
 
 function OrderInfo({ orders, modal }) {
   const burgerIngredients = useSelector(state => state.burgerIngredients);
@@ -111,7 +112,8 @@ function OrderInfo({ orders, modal }) {
 }
 
 OrderInfo.propTypes = {
-  orders: PropTypes.array.isRequired,
+  orders: PropTypes.arrayOf(orderType).isRequired,
+  modal: PropTypes.bool,
 }
 
 export default OrderInfo;

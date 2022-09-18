@@ -12,9 +12,6 @@ function Modal({children, activeModal, closeModalWithDispatch}) {
       history.location.pathname.indexOf('profile/orders') > -1) {
     activeModal = 'orders';
   }
-  /*if (history.location.pathname.indexOf('profile/orders') > -1) {
-    activeModal = 'orders';
-  }*/
   if (history.location.pathname.indexOf('ingredients') > -1) {
     activeModal = 'ingredientDetails';
   }

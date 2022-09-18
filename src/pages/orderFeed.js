@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { changeActivePageActionCreator } from '../services/actions/app';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './orderFeed.module.css';
@@ -10,7 +10,6 @@ import {  socketStartFeedActionCreator,
           WS_CONNECTION_BREAK } from '../services/actions/socketMiddleware';
 
 function OrderFeed() {
-  //const [isRequest, setIsRequest] = useState(true);
   const dispatch = useDispatch();
   const { allOrders, totalOrders, totalTodayOrders, ingredients } = useSelector(state => ({
     allOrders: state.orders.allOrders.orders,
@@ -21,9 +20,7 @@ function OrderFeed() {
   useEffect(() => {
     if (!ingredients) {
       dispatch(getIngredients());
-    }/*else {
-      setIsRequest(false);
-    }*/
+    }
     dispatch(changeActivePageActionCreator('orders'));
     if (ingredients) {
       dispatch(socketStartFeedActionCreator());
@@ -53,6 +50,7 @@ function OrderFeed() {
 
   //формируем перечени заказов готовых и в работе
   const {pendingOrders, doneOrders} = useMemo(() => {
+    //формируем предварительно сплошные списки (без разбития по 10 в одном)
     const lists = allOrders && allOrders.reduce((previousValue, item) => {
       if (item.status === 'done') {
         previousValue.doneOrders.push(<li className='text text_type_digits-default mb-2 mr-2' 
@@ -67,8 +65,7 @@ function OrderFeed() {
       }
       return previousValue;
     }, {pendingOrders: [], doneOrders: []});
-
-    
+    //разбиваем большие списки на массивы списков по 10 строк в каждой
     if (allOrders && lists.doneOrders.length > 0) {
       lists.doneOrders = lists.doneOrders.reduce((previousValue, item, index) => {
         
@@ -81,7 +78,6 @@ function OrderFeed() {
         return previousValue;
       }, [])
     }
-
     if (allOrders && lists.pendingOrders.length > 0) {
       lists.pendingOrders = lists.pendingOrders.reduce((previousValue, item, index) => {
         
@@ -94,9 +90,6 @@ function OrderFeed() {
         return previousValue;
       }, [])
     }
-
-
-
     return allOrders ? lists : {pendingOrders: [], doneOrders: []};
   }, [allOrders]);
 
@@ -111,9 +104,6 @@ function OrderFeed() {
       <section className={styles.stats}>
         <div className={styles.done}>
           <p className={`text text_type_main-medium mb-6 ${styles.name}`}>Готовы:</p>
-          {/*<ul className={`${styles.list} ${styles.listDone}`} key={uuidv4()}>
-            {doneOrders}
-          </ul>*/}
           <div className={styles.listsContainer}>
             {doneOrders.map((item) => (
               <ul className={`${styles.list} ${styles.listDone}`} key={uuidv4()}>
@@ -121,18 +111,9 @@ function OrderFeed() {
               </ul>
             ))}
           </div>
-          
-
-
-
-
-
         </div>
         <div className={styles.pending}>
           <p className={`text text_type_main-medium mb-6 ${styles.name}`}>В работе:</p>
-          {/* <ul className={styles.list}>
-            {pendingOrders}
-          </ul>*/}
           <div className={styles.listsContainer}>
             {pendingOrders.map((item) => (
               <ul className={styles.list} key={uuidv4()}>
@@ -140,10 +121,6 @@ function OrderFeed() {
               </ul>
             ))}
           </div>
-
-
-
-
         </div>
         <div className={styles.total}>
           <p className={`text text_type_main-medium ${styles.name}`}>

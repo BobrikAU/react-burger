@@ -1,7 +1,8 @@
 import {  WS_CONNECTION_START,
           WS_CONNECTION_SUCCESS, 
           WS_CONNECTION_CLOSED, 
-          WS_CONNECTION_BREAK } from '../actions/socketMiddleware';
+          WS_CONNECTION_BREAK, 
+          WS_CONNECTION_ERROR } from '../actions/socketMiddleware';
 import { SAVE_ALL_ORDERS } from '../actions/orders';
 
 export const socketMiddleware = store => next => action => {
@@ -32,6 +33,9 @@ export const socketMiddleware = store => next => action => {
       } else if (url.indexOf('orders?token') > 0) {
         dispatch({ type: SAVE_ALL_ORDERS, userOrders: data.orders})
       }
+    };
+    socket.onerror = (e) => {
+      dispatch({type: WS_CONNECTION_ERROR, payload: e})
     }
   }
   return next(action);
