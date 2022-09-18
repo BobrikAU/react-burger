@@ -6,6 +6,8 @@ import { useState, useEffect } from 'react';
 import { changeActivePageActionCreator } from '../services/actions/app';
 import { getIngredients } from '../services/actions/burgerIngredients';
 import Loader from '../images/loader.gif';
+import  { socketStartHistoryActionCreator, 
+          WS_CONNECTION_BREAK } from '../services/actions/socketMiddleware';
 
 function OrdersHistory() {
   const [isRequest, setIsRequest] = useState(true);
@@ -21,6 +23,12 @@ function OrdersHistory() {
       setIsRequest(false);
     }
     dispatch(changeActivePageActionCreator('account'));
+    if (ingredients) {
+      dispatch(socketStartHistoryActionCreator())
+    }
+    return () => {
+      dispatch({type: WS_CONNECTION_BREAK});
+    }
   }, [dispatch, ingredients]);
 
   const currentDate = new Date(new Date().toDateString());

@@ -1,4 +1,4 @@
-import { wsBaseUrl } from '../../utils/utils';
+import { wsBaseUrl, getCookie } from '../../utils/utils';
 
 export const WS_CONNECTION_START = 'WS_CONNECTION_START';
 export const WS_CONNECTION_SUCCESS = 'WS_CONNECTION_SUCCESS';
@@ -14,3 +14,12 @@ export function socketStartFeedActionCreator () {
     payload: {wsUrl: `${wsBaseUrl}/all`}
   }
 }
+
+export function socketStartHistoryActionCreator () {
+  const accessToken = getCookie('accessToken');
+  return {
+    type: WS_CONNECTION_START,
+    payload: {wsUrl: `${wsBaseUrl}?token=${accessToken}`}
+  }
+}
+
