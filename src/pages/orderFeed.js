@@ -68,14 +68,32 @@ function OrderFeed() {
       return previousValue;
     }, {pendingOrders: [], doneOrders: []});
 
-    /*if (lists.doneOrders.length > 0) {
+    
+    if (allOrders && lists.doneOrders.length > 0) {
       lists.doneOrders = lists.doneOrders.reduce((previousValue, item, index) => {
+        
         if ( index % 10 === 0) {
           previousValue.push([]);
         }
-        return previousValue[Math.floor(index)].push(item);
+        
+        previousValue[Math.floor(index / 10)].push(item);
+        
+        return previousValue;
       }, [])
-    }*/
+    }
+
+    if (allOrders && lists.pendingOrders.length > 0) {
+      lists.pendingOrders = lists.pendingOrders.reduce((previousValue, item, index) => {
+        
+        if ( index % 10 === 0) {
+          previousValue.push([]);
+        }
+        
+        previousValue[Math.floor(index / 10)].push(item);
+        
+        return previousValue;
+      }, [])
+    }
 
 
 
@@ -93,15 +111,16 @@ function OrderFeed() {
       <section className={styles.stats}>
         <div className={styles.done}>
           <p className={`text text_type_main-medium mb-6 ${styles.name}`}>Готовы:</p>
-          <ul className={`${styles.list} ${styles.listDone}`} key={uuidv4()}>
+          {/*<ul className={`${styles.list} ${styles.listDone}`} key={uuidv4()}>
             {doneOrders}
-          </ul>
-          {/*doneOrders.map((item) => (
-            <ul className={`${styles.list} ${styles.listDone}`} key={uuidv4()}>
-              {item}
-            </ul>
-          ))*/}
-          
+          </ul>*/}
+          <div className={styles.listsContainer}>
+            {doneOrders.map((item) => (
+              <ul className={`${styles.list} ${styles.listDone}`} key={uuidv4()}>
+                {item}
+              </ul>
+            ))}
+          </div>
           
 
 
@@ -111,9 +130,20 @@ function OrderFeed() {
         </div>
         <div className={styles.pending}>
           <p className={`text text_type_main-medium mb-6 ${styles.name}`}>В работе:</p>
-          <ul className={styles.list}>
+          {/* <ul className={styles.list}>
             {pendingOrders}
-          </ul>
+          </ul>*/}
+          <div className={styles.listsContainer}>
+            {pendingOrders.map((item) => (
+              <ul className={styles.list} key={uuidv4()}>
+                {item}
+              </ul>
+            ))}
+          </div>
+
+
+
+
         </div>
         <div className={styles.total}>
           <p className={`text text_type_main-medium ${styles.name}`}>
