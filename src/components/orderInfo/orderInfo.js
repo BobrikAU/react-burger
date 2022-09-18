@@ -91,7 +91,7 @@ function OrderInfo({ orders, modal }) {
       <span className={`text text_type_digits-default mb-10 ${!modal && styles.number}`}>
         {`#${number}`}
       </span>
-      <h1 className='text text_type_main-medium mb-3'>{name}</h1>
+      <h1 className={`text text_type_main-medium mb-3 ${styles.name}`}>{name}</h1>
       <span className={`text text_type_main-default ${styles.status}
                         ${status === 'done' && styles.doneColor}
                         ${status === 'cancell' && styles.cancellColor}`}>

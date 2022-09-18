@@ -30,7 +30,7 @@ function OrderInShort({ status,
   function makeIngredientIcon(index, image, name, previousValue) {
     if (index <= 5) {
       const zIndex = idIngredients.length - index;
-      const moreMaximum = index === 5 ? String(idIngredients.length - 6) : false;
+      const moreMaximum = index === 5 ? idIngredients.length - 6 : false;
       const imageIngredient = (
         <div key={uuidv4()} 
              className={ `${styles.imageContainer} 
@@ -42,7 +42,7 @@ function OrderInShort({ status,
                className={styles.image}/>
           { !!moreMaximum && 
             ( <span className={`text text_type_main-default ${styles.additionalIngredients}`}>
-                {`+${moreMaximum}`}
+                {`+${String(moreMaximum)}`}
               </span>
             )
           }
@@ -82,8 +82,10 @@ function OrderInShort({ status,
         <span className={`text text_type_main-default text_color_inactive ${styles.orderTime}`}>
           {time}
         </span>
-        <span className={`text text_type_main-medium ${styles.burgerName}`}>
-          {burgerName}
+        <div className={styles.nameAndStatus}>
+          <span className={`text text_type_main-medium ${styles.burgerName}`}>
+            {burgerName}
+          </span>
           {!!status && (
                         <span className={`text text_type_main-default mt-2 
                                           ${status === 'done' && styles.doneColor} 
@@ -92,7 +94,7 @@ function OrderInShort({ status,
                         </span>
                        )
           }
-        </span>
+        </div>
         <div className={styles.ingredientsCotnainer}>
           {burgerIngredients}
         </div>

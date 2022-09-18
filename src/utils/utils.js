@@ -1,4 +1,5 @@
 export const baseUrl = 'https://norma.nomoreparties.space/api/';
+export const wsBaseUrl = 'wss://norma.nomoreparties.space/orders';
 
 export async function checkResponse (res) {
     if (!res.ok) {

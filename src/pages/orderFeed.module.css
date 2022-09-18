@@ -71,7 +71,7 @@
   padding: 0;
   list-style: none;
   max-height: calc(100% - 54px);
-  overflow-y: scroll;
+  overflow-y: auto;
   scrollbar-color: #2F2F37 #8585AD;
   scrollbar-width: thin;
   scroll-behavior: smooth;

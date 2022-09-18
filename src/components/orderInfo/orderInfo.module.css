@@ -36,7 +36,7 @@
   list-style: none;
   margin-top: 0;
   padding: 0;
-  max-height: 304px;
+  height: 304px;
   overflow-y: scroll;
   scrollbar-color: #2F2F37 #8585AD;
   scrollbar-width: thin;
@@ -55,7 +55,11 @@
   background-color: #8585AD;
 }
 
-
+.name{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 
 
 
