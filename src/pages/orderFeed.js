@@ -6,9 +6,11 @@ import OrderInShort from '../components/orderInShort/orderInShort';
 import { v4 as uuidv4 } from 'uuid';
 import { getIngredients } from '../services/actions/burgerIngredients';
 import Loader from '../images/loader.gif';
+import {  socketStartFeedActionCreator,
+          WS_CONNECTION_BREAK } from '../services/actions/socketMiddleware';
 
 function OrderFeed() {
-  const [isRequest, setIsRequest] = useState(true);
+  //const [isRequest, setIsRequest] = useState(true);
   const dispatch = useDispatch();
   const { allOrders, totalOrders, totalTodayOrders, ingredients } = useSelector(state => ({
     allOrders: state.orders.allOrders.orders,
@@ -19,16 +21,22 @@ function OrderFeed() {
   useEffect(() => {
     if (!ingredients) {
       dispatch(getIngredients());
-    }else {
+    }/*else {
       setIsRequest(false);
-    }
+    }*/
     dispatch(changeActivePageActionCreator('orders'));
+    if (ingredients) {
+      dispatch(socketStartFeedActionCreator());
+    }
+    return () => {
+      dispatch({type: WS_CONNECTION_BREAK});
+    }
   }, [dispatch, ingredients]);
 
   //формируем карточки заказов
   const currentDate = new Date(new Date().toDateString());
   const ordersArray = useMemo(() => {
-    return allOrders.map((item) => {
+    return allOrders && allOrders.map((item) => {
       const { number, createdAt, name, ingredients } = item;
       return (
         <OrderInShort numberOrder={number} 
@@ -45,24 +53,54 @@ function OrderFeed() {
 
   //формируем перечени заказов готовых и в работе
   const {pendingOrders, doneOrders} = useMemo(() => {
-    const lists = allOrders.reduce((previousValue, item) => {
+    const lists = allOrders && allOrders.reduce((previousValue, item) => {
       if (item.status === 'done') {
         previousValue.doneOrders.push(<li className='text text_type_digits-default mb-2 mr-2' 
                                           key={uuidv4()}>
                                             {item.number}
                                       </li>);
-      } else {
+      } else if (item.status === 'pending') {
         previousValue.pendingOrders.push( <li className='text text_type_digits-default mb-2' 
                                               key={uuidv4()}>
                                                 {item.number}
                                           </li>);
       }
       return previousValue;
-    }, {pendingOrders: [], doneOrders: []})
-    return lists;
+    }, {pendingOrders: [], doneOrders: []});
+
+    
+    if (allOrders && lists.doneOrders.length > 0) {
+      lists.doneOrders = lists.doneOrders.reduce((previousValue, item, index) => {
+        
+        if ( index % 10 === 0) {
+          previousValue.push([]);
+        }
+        
+        previousValue[Math.floor(index / 10)].push(item);
+        
+        return previousValue;
+      }, [])
+    }
+
+    if (allOrders && lists.pendingOrders.length > 0) {
+      lists.pendingOrders = lists.pendingOrders.reduce((previousValue, item, index) => {
+        
+        if ( index % 10 === 0) {
+          previousValue.push([]);
+        }
+        
+        previousValue[Math.floor(index / 10)].push(item);
+        
+        return previousValue;
+      }, [])
+    }
+
+
+
+    return allOrders ? lists : {pendingOrders: [], doneOrders: []};
   }, [allOrders]);
 
-  return isRequest ?
+  return (!allOrders && !ingredients) ?
   (<img src={Loader} alt='Загружаем данные...'/>) :
   (
     <main className={styles.main}>
@@ -73,27 +111,51 @@ function OrderFeed() {
       <section className={styles.stats}>
         <div className={styles.done}>
           <p className={`text text_type_main-medium mb-6 ${styles.name}`}>Готовы:</p>
-          <ul className={`${styles.list} ${styles.listDone}`}>
+          {/*<ul className={`${styles.list} ${styles.listDone}`} key={uuidv4()}>
             {doneOrders}
-          </ul>
+          </ul>*/}
+          <div className={styles.listsContainer}>
+            {doneOrders.map((item) => (
+              <ul className={`${styles.list} ${styles.listDone}`} key={uuidv4()}>
+                {item}
+              </ul>
+            ))}
+          </div>
+          
+
+
+
+
+
         </div>
         <div className={styles.pending}>
           <p className={`text text_type_main-medium mb-6 ${styles.name}`}>В работе:</p>
-          <ul className={styles.list}>
+          {/* <ul className={styles.list}>
             {pendingOrders}
-          </ul>
+          </ul>*/}
+          <div className={styles.listsContainer}>
+            {pendingOrders.map((item) => (
+              <ul className={styles.list} key={uuidv4()}>
+                {item}
+              </ul>
+            ))}
+          </div>
+
+
+
+
         </div>
         <div className={styles.total}>
           <p className={`text text_type_main-medium ${styles.name}`}>
             Выполнено за все время:
           </p>
-          <p className='text text_type_digits-large'>{totalOrders.toLocaleString()}</p>
+          <p className='text text_type_digits-large'>{allOrders && totalOrders.toLocaleString()}</p>
         </div>
         <div className={styles.totalToday}>
           <p className={`text text_type_main-medium ${styles.name}`}>
             Выполнено за сегодня:
           </p>
-          <p className='text text_type_digits-large'>{totalTodayOrders.toLocaleString()}</p>
+          <p className='text text_type_digits-large'>{allOrders && totalTodayOrders.toLocaleString()}</p>
         </div>
       </section>
     </main>

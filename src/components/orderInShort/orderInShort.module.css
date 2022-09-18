@@ -28,11 +28,14 @@
   z-index: 1;
 }
 
-.burgerName{
+.nameAndStatus{
   grid-column-start: 1;
   grid-row-start: 2;
   display: flex;
   flex-direction: column;
+}
+
+.burgerName{
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

@@ -66,26 +66,32 @@
   margin-top: 0;
 }
 
-.list{
-  margin: 0;
-  padding: 0;
-  list-style: none;
+.listsContainer{
+  display: flex;
   max-height: calc(100% - 54px);
-  overflow-y: scroll;
+  overflow-x: hidden;
+  overflow-y: auto;
   scrollbar-color: #2F2F37 #8585AD;
   scrollbar-width: thin;
   scroll-behavior: smooth;
 }
 
-.list::-webkit-scrollbar {
+.list{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: min-content;
+}
+
+.listsContainer::-webkit-scrollbar {
   width: 8px;
 }
 
-.list::-webkit-scrollbar-track {
+.listsContainer::-webkit-scrollbar-track {
   background: #2F2F37;
 }
 
-.list::-webkit-scrollbar-thumb {
+.listsContainer::-webkit-scrollbar-thumb {
   background-color: #8585AD;
 }
 
