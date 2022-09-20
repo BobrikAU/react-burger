@@ -2,7 +2,6 @@ import styles from './orderInShort.module.css';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useMemo } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link, useRouteMatch, useLocation } from 'react-router-dom';
 import { timeString, countingPrice, getOrderStatus } from '../../utils/utils';
@@ -21,12 +20,12 @@ function OrderInShort({ status,
   const time = timeString(orderTime, currentDate);
 
   //создаем ряд картинок с ингредиентами и подсчитываем стоимость бургера
-  function makeIngredientIcon(index, image, name, previousValue) {
+  function makeIngredientIcon(index, image, name, uuid, previousValue) {
     if (index <= 5) {
       const zIndex = idIngredients.length - index;
       const moreMaximum = index === 5 ? idIngredients.length - 6 : false;
       const imageIngredient = (
-        <div key={uuidv4()} 
+        <div key={`${uuid}-${index}`} 
              className={ `${styles.imageContainer} 
                           ${!!moreMaximum && styles.manyIngredients}`} 
              style={{zIndex: zIndex}}>
@@ -51,7 +50,11 @@ function OrderInShort({ status,
         return item === i._id
       })
       countingPrice(ingredient.type, ingredient.price, previousValue);
-      makeIngredientIcon(index, ingredient.image, ingredient.name, previousValue);
+      makeIngredientIcon( index, 
+                          ingredient.image, 
+                          ingredient.name,
+                          ingredient.uuid,
+                          previousValue);
       return previousValue;
     }, {burgerPrice: 0, burgerIngredients: []}) : {burgerPrice: 0, burgerIngredients: []};
     return iconsAndPrice;

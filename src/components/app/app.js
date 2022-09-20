@@ -1,4 +1,5 @@
-import React from 'react';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styles from './app.module.css';
 import { Route, Switch, useLocation } from 'react-router-dom';
 import AppHeader from '../appHeader/appHeader';
@@ -18,8 +19,17 @@ import OrderFeed from '../../pages/orderFeed';
 import FeedOrderInfo from '../../pages/feedOrderInfo';
 import OwnOrderInfo from '../../pages/ownOrderInfo';
 import OrderInfo from '../orderInfo/orderInfo';
+import { getIngredients } from '../../services/actions/burgerIngredients';
 
 const App = () => {
+  const burgerIngredients = useSelector(state => state.burgerIngredients);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!burgerIngredients) {
+      dispatch(getIngredients());
+    }
+  }, []);
+
   const location = useLocation();
   const background = location.state && location.state.background;
   const ingredient = location.state && location.state.ingredient;
@@ -66,20 +76,20 @@ const App = () => {
         {background && (
                           <Switch>
                             <Route path='/ingredients/:id'>
-                              <Modal>
+                              <Modal activeModal='ingredientDetails'>
                                 <IngredientDetails 
                                   ingredient={ingredient}
                                   modal={true}/>
                               </Modal>
                             </Route>
                             <Route  path='/feed/:id'
-                                    render={ () => (<Modal>
+                                    render={ () => (<Modal activeModal='orders'>
                                                       <OrderInfo
                                                         orders={orders}
                                                         modal={true}/>
                                                     </Modal>)} />
                             <Route  path='/profile/orders/:id'
-                                    render={ () => (<Modal>
+                                    render={ () => (<Modal activeModal='orders'>
                                                       <OrderInfo
                                                         orders={orders}
                                                         modal={true}/>

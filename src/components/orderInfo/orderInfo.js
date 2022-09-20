@@ -1,26 +1,15 @@
 import { useParams, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { v4 as uuidv4 } from 'uuid';
+import { useSelector } from 'react-redux';
 import styles from './orderInfo.module.css';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useMemo, useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { timeString, countingPrice, getOrderStatus } from '../../utils/utils';
-import { getIngredients } from '../../services/actions/burgerIngredients';
 import Loader from '../../images/loader.gif';
 import PropTypes from 'prop-types';
 import { orderType } from '../../utils/types';
 
 function OrderInfo({ orders, modal }) {
   const burgerIngredients = useSelector(state => state.burgerIngredients);
-  const [isRequest, setIsRequest] = useState(true);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (!burgerIngredients) {
-      dispatch(getIngredients());
-    } else {
-      setIsRequest(false);
-    }
-  }, [dispatch, burgerIngredients]);
   const id = parseInt(useParams().id, 10);
   const { number, name, status, ingredients, createdAt } = useMemo(() => {
     const value = orders.find((item) => {
@@ -58,7 +47,7 @@ function OrderInfo({ orders, modal }) {
       }
       countingPrice(ingredientInfo.type, ingredientInfo.price, previousValue);
       previousValue.liste.push(
-        <li key={uuidv4()} className={`mb-4 ${styles.ingredient}`}>
+        <li key={ingredientInfo.uuid} className={`mb-4 ${styles.ingredient}`}>
           <div className={styles.container}>
             <img src={ingredientInfo.image} 
                  alt={ingredientInfo.name} 
@@ -85,7 +74,7 @@ function OrderInfo({ orders, modal }) {
   const location = useLocation();
   window.history.replaceState(null, null, location.pathname);
 
-  return isRequest ?
+  return !burgerIngredients ?
   (<img src={Loader} alt='Загружаем данные...'/>) :
   (
     <>

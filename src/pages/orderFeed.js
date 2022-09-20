@@ -4,10 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import styles from './orderFeed.module.css';
 import OrderInShort from '../components/orderInShort/orderInShort';
 import { v4 as uuidv4 } from 'uuid';
-import { getIngredients } from '../services/actions/burgerIngredients';
 import Loader from '../images/loader.gif';
 import {  socketStartFeedActionCreator,
-          WS_CONNECTION_BREAK } from '../services/actions/socketMiddleware';
+          closeWsConnectionActionCreator } from '../services/actions/socketMiddleware';
 
 function OrderFeed() {
   const dispatch = useDispatch();
@@ -18,15 +17,12 @@ function OrderFeed() {
     ingredients: state.burgerIngredients,
   }));
   useEffect(() => {
-    if (!ingredients) {
-      dispatch(getIngredients());
-    }
     dispatch(changeActivePageActionCreator('orders'));
     if (ingredients) {
       dispatch(socketStartFeedActionCreator());
     }
     return () => {
-      dispatch({type: WS_CONNECTION_BREAK});
+      dispatch(closeWsConnectionActionCreator());
     }
   }, [dispatch, ingredients]);
 
@@ -34,14 +30,14 @@ function OrderFeed() {
   const currentDate = new Date(new Date().toDateString());
   const ordersArray = useMemo(() => {
     return allOrders && allOrders.map((item) => {
-      const { number, createdAt, name, ingredients } = item;
+      const { number, createdAt, name, ingredients, _id } = item;
       return (
         <OrderInShort numberOrder={number} 
                       orderTime={createdAt} 
                       burgerName={name}
                       idIngredients={ingredients}
                       currentDate={currentDate}
-                      key={uuidv4()}
+                      key={_id}
                       orders={allOrders}
                       />
       );
@@ -54,41 +50,32 @@ function OrderFeed() {
     const lists = allOrders && allOrders.reduce((previousValue, item) => {
       if (item.status === 'done') {
         previousValue.doneOrders.push(<li className='text text_type_digits-default mb-2 mr-2' 
-                                          key={uuidv4()}>
+                                          key={item._id}>
                                             {item.number}
                                       </li>);
       } else if (item.status === 'pending') {
         previousValue.pendingOrders.push( <li className='text text_type_digits-default mb-2' 
-                                              key={uuidv4()}>
+                                              key={item._id}>
                                                 {item.number}
                                           </li>);
       }
       return previousValue;
     }, {pendingOrders: [], doneOrders: []});
     //разбиваем большие списки на массивы списков по 10 строк в каждой
-    if (allOrders && lists.doneOrders.length > 0) {
-      lists.doneOrders = lists.doneOrders.reduce((previousValue, item, index) => {
-        
+    function splitList (list) {
+      return list.reduce((previousValue, item, index) => {
         if ( index % 10 === 0) {
-          previousValue.push([]);
+          previousValue.push({numbers: [], uuid: uuidv4()});
         }
-        
-        previousValue[Math.floor(index / 10)].push(item);
-        
+        previousValue[Math.floor(index / 10)].numbers.push(item);
         return previousValue;
-      }, [])
+      }, []);
+    }
+    if (allOrders && lists.doneOrders.length > 0) {
+      lists.doneOrders = splitList(lists.doneOrders);
     }
     if (allOrders && lists.pendingOrders.length > 0) {
-      lists.pendingOrders = lists.pendingOrders.reduce((previousValue, item, index) => {
-        
-        if ( index % 10 === 0) {
-          previousValue.push([]);
-        }
-        
-        previousValue[Math.floor(index / 10)].push(item);
-        
-        return previousValue;
-      }, [])
+      lists.pendingOrders = splitList(lists.pendingOrders);
     }
     return allOrders ? lists : {pendingOrders: [], doneOrders: []};
   }, [allOrders]);
@@ -106,8 +93,8 @@ function OrderFeed() {
           <p className={`text text_type_main-medium mb-6 ${styles.name}`}>Готовы:</p>
           <div className={styles.listsContainer}>
             {doneOrders.map((item) => (
-              <ul className={`${styles.list} ${styles.listDone}`} key={uuidv4()}>
-                {item}
+              <ul className={`${styles.list} ${styles.listDone}`} key={item.uuid}>
+                {item.numbers}
               </ul>
             ))}
           </div>
@@ -116,8 +103,8 @@ function OrderFeed() {
           <p className={`text text_type_main-medium mb-6 ${styles.name}`}>В работе:</p>
           <div className={styles.listsContainer}>
             {pendingOrders.map((item) => (
-              <ul className={styles.list} key={uuidv4()}>
-                {item}
+              <ul className={styles.list} key={item.uuid}>
+                {item.numbers}
               </ul>
             ))}
           </div>
@@ -126,13 +113,17 @@ function OrderFeed() {
           <p className={`text text_type_main-medium ${styles.name}`}>
             Выполнено за все время:
           </p>
-          <p className='text text_type_digits-large'>{allOrders && totalOrders.toLocaleString()}</p>
+          <p className='text text_type_digits-large'>
+            {allOrders && totalOrders.toLocaleString()}
+          </p>
         </div>
         <div className={styles.totalToday}>
           <p className={`text text_type_main-medium ${styles.name}`}>
             Выполнено за сегодня:
           </p>
-          <p className='text text_type_digits-large'>{allOrders && totalTodayOrders.toLocaleString()}</p>
+          <p className='text text_type_digits-large'>
+            {allOrders && totalTodayOrders.toLocaleString()}
+          </p>
         </div>
       </section>
     </main>

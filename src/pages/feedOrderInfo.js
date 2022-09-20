@@ -2,11 +2,10 @@ import OrderInfo from "../components/orderInfo/orderInfo";
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './feedOrderInfo.module.css';
 import { useEffect } from 'react';
-import { getIngredients } from '../services/actions/burgerIngredients';
 import loader from '../images/loader.gif';
-import { socketStartFeedActionCreator } from '../services/actions/socketMiddleware';
+import {  socketStartFeedActionCreator, 
+          closeWsConnectionActionCreator } from '../services/actions/socketMiddleware';
 import { changeActivePageActionCreator } from '../services/actions/app';
-import { WS_CONNECTION_BREAK } from '../services/actions/socketMiddleware';
 
 function FeedOrderInfo() {
   const { allOrders, burgerIngredients } = useSelector(state => ({
@@ -15,9 +14,6 @@ function FeedOrderInfo() {
   }));
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!burgerIngredients) {
-      dispatch(getIngredients());
-    }
     dispatch(changeActivePageActionCreator('orders'));
   }, [dispatch, burgerIngredients]);
   
@@ -27,7 +23,7 @@ function FeedOrderInfo() {
     }
     return () => {
       if (allOrders) {
-        dispatch({type: WS_CONNECTION_BREAK})
+        dispatch(closeWsConnectionActionCreator());
       };
     }
   }, [dispatch, burgerIngredients, allOrders]);

@@ -11,7 +11,13 @@ export const WS_CONNECTION_BREAK = 'WS_CONNECTION_BREAK';
 export function socketStartFeedActionCreator () {
   return {
     type: WS_CONNECTION_START,
-    payload: {wsUrl: `${wsBaseUrl}/all`}
+    payload: {wsUrl: `${wsBaseUrl}/all`, fieldName: 'allOrders'}
+  }
+}
+
+export function closeWsConnectionActionCreator () {
+  return {
+    type: WS_CONNECTION_BREAK
   }
 }
 
@@ -19,7 +25,7 @@ export function socketStartHistoryActionCreator () {
   const accessToken = getCookie('accessToken');
   return {
     type: WS_CONNECTION_START,
-    payload: {wsUrl: `${wsBaseUrl}?token=${accessToken}`}
+    payload: {wsUrl: `${wsBaseUrl}?token=${accessToken}`, fieldName: 'userOrders'}
   }
 }
 

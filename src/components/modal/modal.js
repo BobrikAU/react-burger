@@ -8,13 +8,6 @@ import { useHistory } from 'react-router-dom';
 
 function Modal({children, activeModal, closeModalWithDispatch}) {
   const history = useHistory();
-  if (history.location.pathname.indexOf('feed') > -1 || 
-      history.location.pathname.indexOf('profile/orders') > -1) {
-    activeModal = 'orders';
-  }
-  if (history.location.pathname.indexOf('ingredients') > -1) {
-    activeModal = 'ingredientDetails';
-  }
 
   function closeModal() {
     closeModalWithDispatch ? closeModalWithDispatch() : history.goBack();

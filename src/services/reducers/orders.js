@@ -8,13 +8,10 @@ const initialState = {
 export const ordersReducer = (state = initialState, action) => {
   switch (action.type) {
     case SAVE_ALL_ORDERS:
-      if (action.allOrders) {
-        return {...state, allOrders: action.allOrders}
-      }
-      if (action.userOrders) {
-        return {...state, userOrders: action.userOrders}
-      }
-      break;
+      return {...state, 
+              [action.fieldName]: action.fieldName === 'allOrders' ? 
+                                    action.data : 
+                                    action.data.orders};
     case ERASE_USER_ORDERS:
       return {...state, userOrders: []};
     default:
