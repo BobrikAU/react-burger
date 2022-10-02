@@ -1,4 +1,5 @@
-import React from 'react';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styles from './app.module.css';
 import { Route, Switch, useLocation } from 'react-router-dom';
 import AppHeader from '../appHeader/appHeader';
@@ -14,11 +15,25 @@ import RouteNotAuthorized from '../routeNotAuthorized/routeNotAuthorized';
 import DetailsIngredient from '../../pages/detailsIngredient';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredientDetails/ingredientDetails';
+import OrderFeed from '../../pages/orderFeed';
+import FeedOrderInfo from '../../pages/feedOrderInfo';
+import OwnOrderInfo from '../../pages/ownOrderInfo';
+import OrderInfo from '../orderInfo/orderInfo';
+import { getIngredients } from '../../services/actions/burgerIngredients';
 
 const App = () => {
+  const burgerIngredients = useSelector(state => state.burgerIngredients);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!burgerIngredients) {
+      dispatch(getIngredients());
+    }
+  }, []);
+
   const location = useLocation();
   const background = location.state && location.state.background;
   const ingredient = location.state && location.state.ingredient;
+  const orders = location.state && location.state.orders;
 
   return (
     <div className={`${styles.app} ${styles.variables}`}>
@@ -29,6 +44,12 @@ const App = () => {
           </Route>
           <Route path='/ingredients/:_id'>
             <DetailsIngredient />
+          </Route>
+          <Route path='/feed' exact={true}>
+            <OrderFeed />
+          </Route>
+          <Route path='/feed/:id'>
+            <FeedOrderInfo />
           </Route>
           <RouteNotAuthorized path='/login' exact={true}>
             <Authorization/>
@@ -42,6 +63,9 @@ const App = () => {
           <RouteNotAuthorized path='/reset-password' exact={true}>
             <ResetPassword />
           </RouteNotAuthorized>
+          <ProtectedRoute path='/profile/orders/:id' exact={true}>
+            <OwnOrderInfo />
+          </ProtectedRoute>
           <ProtectedRoute path='/profile'>
             <Profile />
           </ProtectedRoute>
@@ -49,13 +73,30 @@ const App = () => {
             <NotFound404 />
           </Route>
         </Switch>
-        {background && (<Route path='/ingredients/:_id'>
-                          <Modal>
-                            <IngredientDetails 
-                              ingredient={ingredient}
-                              modal={true}/>
-                          </Modal>
-                        </Route>)}
+        {background && (
+                          <Switch>
+                            <Route path='/ingredients/:id'>
+                              <Modal activeModal='ingredientDetails'>
+                                <IngredientDetails 
+                                  ingredient={ingredient}
+                                  modal={true}/>
+                              </Modal>
+                            </Route>
+                            <Route  path='/feed/:id'
+                                    render={ () => (<Modal activeModal='orders'>
+                                                      <OrderInfo
+                                                        orders={orders}
+                                                        modal={true}/>
+                                                    </Modal>)} />
+                            <Route  path='/profile/orders/:id'
+                                    render={ () => (<Modal activeModal='orders'>
+                                                      <OrderInfo
+                                                        orders={orders}
+                                                        modal={true}/>
+                                                    </Modal>)} />
+                          </Switch>
+                        )
+        }
     </div>
   );
 }
