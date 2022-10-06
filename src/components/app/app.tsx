@@ -20,9 +20,11 @@ import FeedOrderInfo from '../../pages/feedOrderInfo';
 import OwnOrderInfo from '../../pages/ownOrderInfo';
 import OrderInfo from '../orderInfo/orderInfo';
 import { getIngredients } from '../../services/actions/burgerIngredients';
+import { TIgredient, TLocation, TLocationWithState } from '../../utils/types';
 
 const App = () => {
-  const burgerIngredients = useSelector(state => state.burgerIngredients);
+  const burgerIngredients: null | Array<TIgredient> = useSelector(state => 
+    state.burgerIngredients);
   const dispatch = useDispatch();
   useEffect(() => {
     if (!burgerIngredients) {
@@ -30,7 +32,7 @@ const App = () => {
     }
   }, []);
 
-  const location = useLocation();
+  const location: TLocation | TLocationWithState= useLocation();
   const background = location.state && location.state.background;
   const ingredient = location.state && location.state.ingredient;
   const orders = location.state && location.state.orders;

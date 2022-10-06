@@ -101,7 +101,7 @@ function OrderInfo({ orders, modal }) {
 }
 
 OrderInfo.propTypes = {
-  orders: PropTypes.arrayOf(orderType).isRequired,
+  orders: PropTypes.arrayOf(orderType),
   modal: PropTypes.bool,
 }
 
