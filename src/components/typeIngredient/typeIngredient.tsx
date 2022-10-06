@@ -1,10 +1,16 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import PropTypes from 'prop-types';
 import styles from './typeIngredient.module.css';
 import Ingredient from "../ingredient/ingredient";
 
-const TypeIngredient = React.forwardRef( ({type, id, children}, ref) => {
+interface ITypeIngredientProps {
+  children: string;
+  type: string;
+  id: string;
+}
+
+const TypeIngredient = React.forwardRef( ({type, id, children}: ITypeIngredientProps, 
+  ref: React.ForwardedRef<HTMLLIElement>) => {
 
   const ingredients = useSelector( state => state.burgerIngredients);
 
@@ -21,11 +27,5 @@ const TypeIngredient = React.forwardRef( ({type, id, children}, ref) => {
     </li>
   )
 });
-
-TypeIngredient.propTypes = {
-  children: PropTypes.string,
-  type: PropTypes.string,
-  id: PropTypes.string
-}
 
 export default TypeIngredient;
