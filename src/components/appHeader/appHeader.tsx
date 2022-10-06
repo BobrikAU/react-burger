@@ -8,15 +8,20 @@ import { Link } from 'react-router-dom';
 
 function AppHeader() {
 
-  const activePage = useSelector((state) => state.app.activePage)
+  const activePage: string = useSelector((state) => state.app.activePage);
 
-  const [isLinkHover, setIsLinkHover] = useState({
+  interface IAppHeaderState {
+    'Конструктор': boolean;
+    'Лента заказов': boolean;
+    'Личный кабинет': boolean;
+  }
+  const [isLinkHover, setIsLinkHover] = useState<IAppHeaderState> ({
                                                    'Конструктор': false,
                                                    'Лента заказов': false,
                                                    'Личный кабинет': false
                                                  });
 
-  const toggleIsHover = (newState) => {
+  const toggleIsHover = (newState: IAppHeaderState): void => {
     setIsLinkHover({
       ...newState
     });

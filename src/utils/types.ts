@@ -1,4 +1,3 @@
-import { type } from 'os';
 import PropTypes from 'prop-types';
 
 export const orderType = PropTypes.shape({
