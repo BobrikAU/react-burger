@@ -12,7 +12,7 @@ export const resetConstructorActionCreator = (): {type: 'RESET_CONSTRUCTOR'} => 
   }
 };
 
-interface IAddIngredientAction {
+export interface IAddIngredientAction {
   type: 'ADD_BUN' | 'ADD_OTHER_INGREDIENT';
   id: string;
   uuid?: string;
