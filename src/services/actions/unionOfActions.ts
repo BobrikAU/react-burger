@@ -1,5 +1,9 @@
 import { IChangeActivePageAction, IOpenModalAction, ICloseModalAction } from './app';
-import { IResetConstructorAction, IAddIngredientAction } from './burgerConstructor';
+import {  IResetConstructorAction,
+          IAddBunAction,
+          IAddOtherIngredientAction,
+          IMovingIngredientAction,
+          IDeleteIngredientAction } from './burgerConstructor';
 import { IUpdateIngredientsAction } from './burgerIngredients';
 import { IDeleteIngrdientDetailsAction } from './ingredientDetails';
 import { ISaveOrderDataAction } from './orderDetails';
@@ -7,12 +11,15 @@ import { ISocketStartFeedAndHistoryActions,
          ICloseWsConnectionAction } from './socketMiddleware';
 import { ISaveOrEraseUserAction } from './user';
 
-export type AllActions = 
+export type TAllActions = 
   | IChangeActivePageAction
   | IOpenModalAction
   | ICloseModalAction
   | IResetConstructorAction
-  | IAddIngredientAction
+  | IAddBunAction
+  | IAddOtherIngredientAction
+  | IMovingIngredientAction
+  | IDeleteIngredientAction
   | IUpdateIngredientsAction
   | IDeleteIngrdientDetailsAction
   | ISaveOrderDataAction

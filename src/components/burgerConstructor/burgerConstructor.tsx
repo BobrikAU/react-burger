@@ -6,7 +6,9 @@ import { CurrencyIcon, Button, ConstructorElement } from
   '@ya.praktikum/react-developer-burger-ui-components';
 import { DELETE_OTHER_INGREDIENT, 
          MOVING_INGREDIENT,
-         addIngredientActionCreator } from '../../services/actions/burgerConstructor';
+         addIngredientActionCreator,
+         movingIngredientActionCreator,
+         deleteIngredientActionCreator } from '../../services/actions/burgerConstructor';
 import { COUNT_PRICE_BURGER } from '../../services/actions/orderDetails';
 import { openModalActionCreator } from '../../services/actions/app';
 import { useDrop } from "react-dnd";
@@ -96,19 +98,16 @@ function BurgerConstructor() {
   //удаление ингредиента из конструктора
   const removeIngredient = (e: React.MouseEvent<SVGAElement>): void => {
     const ingredientInConstructor = e.currentTarget.closest('li');
-    dispatch({
-      type: DELETE_OTHER_INGREDIENT,
-      index: ingredientInConstructor && ingredientInConstructor.getAttribute('index'),
-    });
+    const index = ingredientInConstructor && 
+      Number(ingredientInConstructor.getAttribute('index'));
+    if (index) {
+      dispatch(deleteIngredientActionCreator(index));
+    }
   };
 
   //перемещение ингредиента в конструкторе
   const moveIngredient = (indexOfMoved: number, indexOfRecipient: number): void => {
-    dispatch({
-      type: MOVING_INGREDIENT,
-      indexOfMoved,
-      indexOfRecipient,
-    })
+    dispatch(movingIngredientActionCreator(indexOfMoved, indexOfRecipient))
   };
 
   return (

@@ -1,5 +1,5 @@
 import { OPEN_MODAL, CLOSE_MODAL, CHANGE_ACTIVE_PAGE } from '../actions/app';
-import { AllActions } from '../actions/unionOfActions';
+import { TAllActions } from '../actions/unionOfActions';
 
 interface IInitialState {
   activePage: string;
@@ -16,7 +16,7 @@ const initialState: IInitialState = {
   }
 };
 
-export const appReducer = (state = initialState, action: AllActions): IInitialState => {
+export const appReducer = (state = initialState, action: TAllActions): IInitialState => {
   switch (action.type) {
     case CHANGE_ACTIVE_PAGE:
       return {

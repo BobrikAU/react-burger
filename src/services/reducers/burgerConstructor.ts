@@ -3,12 +3,18 @@ import { ADD_BUN,
          DELETE_OTHER_INGREDIENT, 
          MOVING_INGREDIENT,
          RESET_CONSTRUCTOR } from '../actions/burgerConstructor';
+import { TAllActions } from '../actions/unionOfActions';
 
-const initialState = {
+interface IInitialState {
+  bun: string;
+  others: Array<{id: string; uuid: string;}>;
+}
+const initialState: IInitialState = {
   bun: '',
   others: [],
 }
-export const burgerConstructorReducer = (state = initialState, action) => {
+export const burgerConstructorReducer = (state = initialState, action: TAllActions): 
+  IInitialState => {
   switch (action.type) {
     case RESET_CONSTRUCTOR:
       return {
