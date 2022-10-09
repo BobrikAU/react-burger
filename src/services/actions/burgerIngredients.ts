@@ -6,8 +6,8 @@ import { TIgredient } from '../../utils/types';
 export const UPDATE_INGREDIENTS: 'UPDATE_INGREDIENTS' = 'UPDATE_INGREDIENTS';
 
 export interface IUpdateIngredientsAction {
-  type: 'UPDATE_INGREDIENTS';
-  ingredients: Array<TIgredient>;
+  readonly type: 'UPDATE_INGREDIENTS';
+  readonly ingredients: Array<TIgredient>;
 }
 const updateIngredientsActionCreator = (data: Array<Omit<TIgredient, 'uuid'> & 
   {uuid: string;}>) => {

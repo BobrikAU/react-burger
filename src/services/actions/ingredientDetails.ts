@@ -3,7 +3,7 @@ export const DELETE_INGREDIENT_DETAILS: 'DELETE_INGREDIENT_DETAILS' =
   'DELETE_INGREDIENT_DETAILS';
 
 export interface IDeleteIngrdientDetailsAction {
-  type: 'DELETE_INGREDIENT_DETAILS';
+  readonly type: 'DELETE_INGREDIENT_DETAILS';
 } 
 export function deleteIngrdientDetails(): IDeleteIngrdientDetailsAction {
   return {

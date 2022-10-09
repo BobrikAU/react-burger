@@ -1,38 +1,58 @@
 import { baseUrl, checkResponse } from '../../utils/utils';
 import { setCookie } from '../../utils/utils';
 
-export const SAVE_USER = 'SAVE_USER';
+export const SAVE_USER: 'SAVE_USER' = 'SAVE_USER';
 
-export const eraseUserActionCreator = () => ({
+export interface ISaveOrEraseUserAction {
+  readonly type: 'SAVE_USER';
+  readonly email: string;
+  readonly name: string;
+}
+export const eraseUserActionCreator = (): ISaveOrEraseUserAction => ({
   type: SAVE_USER,
   email: '',
   name: '',
 });
 
-const saveUserActionCreator = (data) => ({
+const saveUserActionCreator = (data: {[name: string]: string}): ISaveOrEraseUserAction => ({
   type: SAVE_USER,
-  email: data.user.email,
-  name: data.user.name,
+  email: data.email,
+  name: data.name,
 });
 
+type TDataInResolveAboutUser = {
+  success: boolean;
+  user?: {[name: string]: string};
+  accessToken?: string;
+  refreshToken?: string;
+};
+interface IRequestAboutUserProps {
+  requestOptions: {};
+  endpointUrl: string;
+  options?: {resolve?: (value: string | null) => void, reject?: () => void};
+  setIsRequestSuccessful?: string | React.Dispatch<React.SetStateAction<{
+    value: undefined | boolean;
+    message: string;
+  }>>;
+}
 export const requestAboutUser = ({requestOptions = {},
                                   endpointUrl = '', 
                                   options = {},
                                   setIsRequestSuccessful = '',
-                                  }) => {
+                                  }: IRequestAboutUserProps) => {
   return function(dispatch) {
     fetch(`${baseUrl}${endpointUrl}`, requestOptions)
     .then(checkResponse)
-    .then(data => {
+    .then((data: TDataInResolveAboutUser) => {
       if (data.user) {
-        dispatch(saveUserActionCreator(data));
+        dispatch(saveUserActionCreator(data.user));
       }
       if (data.accessToken && data.refreshToken) {
         const accessTokenWithoutText = data.accessToken.split('Bearer ')[1];
         setCookie('accessToken', accessTokenWithoutText, {path: '/'});
         localStorage.setItem('refreshToken', data.refreshToken);
       }
-      if (setIsRequestSuccessful) {
+      if (setIsRequestSuccessful && typeof setIsRequestSuccessful !== 'string') {
         setIsRequestSuccessful({value: true, message: ''});
       } 
       if (options.resolve) {
@@ -40,7 +60,7 @@ export const requestAboutUser = ({requestOptions = {},
       }
     })
     .catch((err) => {
-      if (setIsRequestSuccessful) {
+      if (setIsRequestSuccessful && typeof setIsRequestSuccessful !== 'string') {
         setIsRequestSuccessful({
           value: false, 
           message: `${err}. Закоройте настоящее окно и попробуйте снова.`
@@ -53,8 +73,8 @@ export const requestAboutUser = ({requestOptions = {},
   }
 };
 
-export const updateTokens = (dispatch, refreshToken) => {
-  const request = new Promise((resolve, reject) => {
+export const updateTokens = (dispatch, refreshToken: string) => {
+  const request = new Promise<string | null>((resolve, reject) => {
     dispatch(requestAboutUser({
       requestOptions: {
         method: 'POST',
@@ -74,8 +94,8 @@ export const updateTokens = (dispatch, refreshToken) => {
   return request;
 };
 
-export const getUser = (dispatch, token) => {
-  const request = new Promise ((resolve, reject) => {
+export const getUser = (dispatch, token: string) => {
+  const request = new Promise<string | null> ((resolve, reject) => {
     dispatch(requestAboutUser({
       requestOptions: {
         headers: {
@@ -90,16 +110,21 @@ export const getUser = (dispatch, token) => {
 };
 
 export const requestWithAccessToken = ( dispatch, 
-                                        request, 
-                                        accessToken, 
-                                        refreshToken, 
-                                        options) => {
+                                        request: (arg0: any, arg1: string) => Promise<unknown>, 
+                                        accessToken: string, 
+                                        refreshToken: string, 
+                                        options: {
+                                          resolve: () => void, 
+                                          reject: () => void
+                                        }) => {
   request(dispatch, accessToken)
     .then(() => options.resolve())
     .catch( () => {
       updateTokens(dispatch, refreshToken)
         .then((newAccessToken) => {
-          request(dispatch, newAccessToken);
+          if (newAccessToken) {
+            request(dispatch, newAccessToken);
+          }
           options.resolve();
         }
         )

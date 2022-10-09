@@ -9,8 +9,8 @@ export const WS_CONNECTION_CLOSED: 'WS_CONNECTION_CLOSED' = 'WS_CONNECTION_CLOSE
 export const WS_CONNECTION_BREAK: 'WS_CONNECTION_BREAK' = 'WS_CONNECTION_BREAK';
 
 export interface ISocketStartFeedAndHistoryActions {
-  type: 'WS_CONNECTION_START';
-  payload: {[name: string]: string}
+  readonly type: 'WS_CONNECTION_START';
+  readonly payload: {[name: string]: string}
 }
 export function socketStartFeedActionCreator (): ISocketStartFeedAndHistoryActions {
   return {
@@ -20,7 +20,7 @@ export function socketStartFeedActionCreator (): ISocketStartFeedAndHistoryActio
 }
 
 export interface ICloseWsConnectionAction {
-  type: 'WS_CONNECTION_BREAK';
+  readonly type: 'WS_CONNECTION_BREAK';
 }
 export function closeWsConnectionActionCreator (): ICloseWsConnectionAction {
   return {

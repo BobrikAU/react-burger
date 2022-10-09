@@ -6,8 +6,8 @@ export const CLOSE_MODAL: 'CLOSE_MODAL' = 'CLOSE_MODAL';
 export const CHANGE_ACTIVE_PAGE: 'CHANGE_ACTIVE_PAGE' = 'CHANGE_ACTIVE_PAGE';
 
 export interface IChangeActivePageAction {
-  type: 'CHANGE_ACTIVE_PAGE';
-  activePage: string;
+  readonly type: 'CHANGE_ACTIVE_PAGE';
+  readonly activePage: string;
 }
 export function changeActivePageActionCreator(page: string): IChangeActivePageAction {
   return {
@@ -17,9 +17,9 @@ export function changeActivePageActionCreator(page: string): IChangeActivePageAc
 }
 
 export interface IOpenModalAction {
-  type: 'OPEN_MODAL';
-  isModalActive: string;
-  message: string;
+  readonly type: 'OPEN_MODAL';
+  readonly isModalActive: string;
+  readonly message: string;
 }
 export function openModalActionCreator(typeModal: string, message: string = ''): 
   IOpenModalAction {
@@ -31,7 +31,7 @@ export function openModalActionCreator(typeModal: string, message: string = ''):
 }
 
 export interface ICloseModalAction {
-  type: 'CLOSE_MODAL';
+  readonly type: 'CLOSE_MODAL';
 }
 function closeModalActionCreator(): ICloseModalAction {
   return {

@@ -5,6 +5,19 @@ import { TIgredient } from '../../utils/types';
 export const COUNT_PRICE_BURGER: 'COUNT_PRICE_BURGER' = 'COUNT_PRICE_BURGER';
 export const SAVE_ORDER_DATA: 'SAVE_ORDER_DATA' = 'SAVE_ORDER_DATA';
 
+export interface ISaveOrderDataAction {
+  readonly type: 'SAVE_ORDER_DATA';
+  readonly number: string;
+  readonly execution: string;
+}
+const saveOrderDataActionCreator = (number: number): ISaveOrderDataAction => {
+  return {
+    type: SAVE_ORDER_DATA,
+    number: String(number),
+    execution: 'Ваш заказ начали готовить',
+  }
+}
+
 interface IConstructorIngredients {
   bun: string;
   others: {id: string, uuid: string}[];
@@ -53,11 +66,7 @@ export function sendOrder(setRequest: TSetRequest,
       })
       .then(checkResponse)
       .then((data: ISendOrderResponseData) => {
-        dispatch({
-                    type: SAVE_ORDER_DATA,
-                    number: String(data.order.number),
-                    execution: 'Ваш заказ начали готовить',
-                  });
+        dispatch(saveOrderDataActionCreator(data.order.number));
       })
       .catch((err: string) => {
         const message = `Оправка заказа была неудачной.${err} 

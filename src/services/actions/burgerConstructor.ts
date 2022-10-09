@@ -6,16 +6,19 @@ export const DELETE_OTHER_INGREDIENT: 'DELETE_OTHER_INGREDIENT' = 'DELETE_OTHER_
 export const MOVING_INGREDIENT: 'MOVING_INGREDIENT' = 'MOVING_INGREDIENT';
 export const RESET_CONSTRUCTOR: 'RESET_CONSTRUCTOR' = 'RESET_CONSTRUCTOR';
 
-export const resetConstructorActionCreator = (): {type: 'RESET_CONSTRUCTOR'} => {
+export interface IResetConstructorAction {
+  readonly type: 'RESET_CONSTRUCTOR';
+}
+export const resetConstructorActionCreator = (): IResetConstructorAction => {
   return {
     type: RESET_CONSTRUCTOR,
   }
 };
 
 export interface IAddIngredientAction {
-  type: 'ADD_BUN' | 'ADD_OTHER_INGREDIENT';
-  id: string;
-  uuid?: string;
+  readonly type: 'ADD_BUN' | 'ADD_OTHER_INGREDIENT';
+  readonly id: string;
+  readonly uuid?: string;
 }
 interface IItem {
   _id: string;
