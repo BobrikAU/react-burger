@@ -6,9 +6,10 @@ import {  IResetConstructorAction,
           IDeleteIngredientAction } from './burgerConstructor';
 import { IUpdateIngredientsAction } from './burgerIngredients';
 import { IDeleteIngrdientDetailsAction } from './ingredientDetails';
-import { ISaveOrderDataAction } from './orderDetails';
-import { ISocketStartFeedAndHistoryActions, 
-         ICloseWsConnectionAction } from './socketMiddleware';
+import {  ISaveOrderDataAction,
+          ICountPriceBurgerAction } from './orderDetails';
+import {  ISocketStartFeedAndHistoryActions, 
+          ICloseWsConnectionAction } from './socketMiddleware';
 import { ISaveOrEraseUserAction } from './user';
 
 export type TAllActions = 
@@ -23,6 +24,7 @@ export type TAllActions =
   | IUpdateIngredientsAction
   | IDeleteIngrdientDetailsAction
   | ISaveOrderDataAction
+  | ICountPriceBurgerAction
   | ISocketStartFeedAndHistoryActions
   | ICloseWsConnectionAction
   | ISaveOrEraseUserAction

@@ -5,6 +5,18 @@ import { TIgredient } from '../../utils/types';
 export const COUNT_PRICE_BURGER: 'COUNT_PRICE_BURGER' = 'COUNT_PRICE_BURGER';
 export const SAVE_ORDER_DATA: 'SAVE_ORDER_DATA' = 'SAVE_ORDER_DATA';
 
+export interface ICountPriceBurgerAction {
+  type: 'COUNT_PRICE_BURGER';
+  price: number;
+}
+export const countPriceBurgerActionCreator = (burgerPrice: number): 
+  ICountPriceBurgerAction => {
+  return {
+    type: COUNT_PRICE_BURGER,
+    price: burgerPrice,
+  }
+};
+
 export interface ISaveOrderDataAction {
   readonly type: 'SAVE_ORDER_DATA';
   readonly number: string;

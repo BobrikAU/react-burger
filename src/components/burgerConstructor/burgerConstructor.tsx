@@ -9,7 +9,8 @@ import { DELETE_OTHER_INGREDIENT,
          addIngredientActionCreator,
          movingIngredientActionCreator,
          deleteIngredientActionCreator } from '../../services/actions/burgerConstructor';
-import { COUNT_PRICE_BURGER } from '../../services/actions/orderDetails';
+import { COUNT_PRICE_BURGER, 
+         countPriceBurgerActionCreator } from '../../services/actions/orderDetails';
 import { openModalActionCreator } from '../../services/actions/app';
 import { useDrop } from "react-dnd";
 import OtherIngredientConstructor from 
@@ -89,10 +90,7 @@ function BurgerConstructor() {
       (previousValue, item) => {
         return previousValue + (item !== undefined ? item.price : 0);
       }, 0);
-    dispatch({
-      type: COUNT_PRICE_BURGER,
-      price: burgerPrice,
-    })
+    dispatch(countPriceBurgerActionCreator(burgerPrice));
   }, [bun, othersIngredients, dispatch]);
 
   //удаление ингредиента из конструктора
