@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { changeActivePageActionCreator } from '../services/actions/app';
 import Loader from '../images/loader.gif';
 import  { socketStartHistoryActionCreator, 
-          closeWsConnectionActionCreator } from '../services/actions/socketMiddleware';
+          breakWsConnectionActionCreator } from '../services/actions/socketMiddleware';
 
 function OrdersHistory() {
   const dispatch = useDispatch();
@@ -19,7 +19,7 @@ function OrdersHistory() {
       dispatch(socketStartHistoryActionCreator())
     }
     return () => {
-      dispatch(closeWsConnectionActionCreator());
+      dispatch(breakWsConnectionActionCreator());
     }
   }, [dispatch, ingredients]);
 

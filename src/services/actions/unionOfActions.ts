@@ -8,8 +8,11 @@ import { IUpdateIngredientsAction } from './burgerIngredients';
 import { IDeleteIngrdientDetailsAction } from './ingredientDetails';
 import {  ISaveOrderDataAction,
           ICountPriceBurgerAction } from './orderDetails';
-import {  ISocketStartFeedAndHistoryActions, 
-          ICloseWsConnectionAction } from './socketMiddleware';
+import {  ISocketStartFeedAndHistoryActions,
+          IBreakWsConnectionAction, 
+          ICloseWsConnectionAction,
+          IOpenWsConnectionAction, 
+          IErrorWsConnectionAction } from './socketMiddleware';
 import { ISaveOrEraseUserAction } from './user';
 import { ISaveAllOrdersAction, IEraseUserOrdersAction } from './orders';
 
@@ -27,7 +30,10 @@ export type TAllActions =
   | ISaveOrderDataAction
   | ICountPriceBurgerAction
   | ISocketStartFeedAndHistoryActions
+  | IBreakWsConnectionAction
   | ICloseWsConnectionAction
+  | IOpenWsConnectionAction
+  | IErrorWsConnectionAction
   | ISaveOrEraseUserAction
   | ISaveAllOrdersAction
   | IEraseUserOrdersAction

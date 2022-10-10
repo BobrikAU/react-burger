@@ -6,7 +6,7 @@ import OrderInShort from '../components/orderInShort/orderInShort';
 import { v4 as uuidv4 } from 'uuid';
 import Loader from '../images/loader.gif';
 import {  socketStartFeedActionCreator,
-          closeWsConnectionActionCreator } from '../services/actions/socketMiddleware';
+          breakWsConnectionActionCreator } from '../services/actions/socketMiddleware';
 
 function OrderFeed() {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ function OrderFeed() {
       dispatch(socketStartFeedActionCreator());
     }
     return () => {
-      dispatch(closeWsConnectionActionCreator());
+      dispatch(breakWsConnectionActionCreator());
     }
   }, [dispatch, ingredients]);
 

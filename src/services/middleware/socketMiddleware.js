@@ -1,4 +1,7 @@
 import { saveAllOrdersActionCreater } from '../actions/orders';
+import { closeWsConnectionActionCreator, 
+         openWsConnectionActionCreator,
+         errorWsConnectionActionCreator } from '../actions/socketMiddleware';
 
 export const socketMiddleware = wsActions => store => next => action => {
   const actionType = action.type;
@@ -16,18 +19,17 @@ export const socketMiddleware = wsActions => store => next => action => {
   }
   if (socket) {
     socket.onopen = (e) => {
-      dispatch({ type: wsActions.success, socket: e.currentTarget});
+      dispatch(openWsConnectionActionCreator (e.currentTarget));
     };
     socket.onclose = (e) => {
-      dispatch({ type: wsActions.closed });
+      dispatch(closeWsConnectionActionCreator());
     };
     socket.onmessage = (e) => {
       const data = JSON.parse(e.data);
       dispatch(saveAllOrdersActionCreater(wsActions.onMessage, fieldName, data));
     };
     socket.onerror = (e) => {
-      console.log(e);
-      dispatch({type: wsActions.error, payload: e})
+      dispatch(errorWsConnectionActionCreator(e));
     }
   }
   return next(action);
