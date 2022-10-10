@@ -1,3 +1,4 @@
+import { saveAllOrdersActionCreater } from '../actions/orders';
 
 export const socketMiddleware = wsActions => store => next => action => {
   const actionType = action.type;
@@ -22,7 +23,7 @@ export const socketMiddleware = wsActions => store => next => action => {
     };
     socket.onmessage = (e) => {
       const data = JSON.parse(e.data);
-      dispatch({ type: wsActions.onMessage, fieldName, data});
+      dispatch(saveAllOrdersActionCreater(wsActions.onMessage, fieldName, data));
     };
     socket.onerror = (e) => {
       console.log(e);

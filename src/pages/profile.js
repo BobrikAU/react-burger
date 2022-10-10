@@ -19,7 +19,7 @@ import { requestAboutUser,
 import Modal from '../components/modal/modal';
 import ErrorMessage from '../components/errorMassege/errorMassege';
 import { setCookie } from '../utils/utils';
-import { ERASE_USER_ORDERS } from '../services/actions/orders';
+import { eraseUserOrdersActionCreator } from '../services/actions/orders';
 
 function Profile () {
   const { isModalActive, message } = useSelector (state => ({
@@ -74,7 +74,7 @@ function Profile () {
       history.replace({pathname: '/login', state: {from: '/profile'}});
       setTimeout(() => {
         dispatch(eraseUserActionCreator());
-        dispatch({type: ERASE_USER_ORDERS});
+        dispatch(eraseUserOrdersActionCreator());
         setCookie('accessToken', '', {'max-age': -1, path: '/'});
         localStorage.removeItem('refreshToken');
       }, 1000);

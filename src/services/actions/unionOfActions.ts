@@ -11,6 +11,7 @@ import {  ISaveOrderDataAction,
 import {  ISocketStartFeedAndHistoryActions, 
           ICloseWsConnectionAction } from './socketMiddleware';
 import { ISaveOrEraseUserAction } from './user';
+import { ISaveAllOrdersAction, IEraseUserOrdersAction } from './orders';
 
 export type TAllActions = 
   | IChangeActivePageAction
@@ -28,3 +29,5 @@ export type TAllActions =
   | ISocketStartFeedAndHistoryActions
   | ICloseWsConnectionAction
   | ISaveOrEraseUserAction
+  | ISaveAllOrdersAction
+  | IEraseUserOrdersAction
