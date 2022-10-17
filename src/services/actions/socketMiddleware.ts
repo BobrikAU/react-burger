@@ -46,9 +46,9 @@ export function closeWsConnectionActionCreator (): ICloseWsConnectionAction {
 
 export interface IOpenWsConnectionAction {
   type: 'WS_CONNECTION_SUCCESS';
-  socket: EventTarget | null;
+  socket: WebSocket | null;
 }
-export function openWsConnectionActionCreator (WsSocket: EventTarget | null)
+export function openWsConnectionActionCreator (WsSocket: WebSocket | null)
   : IOpenWsConnectionAction {
   return { type: wsActions.success, socket: WsSocket}
 }

@@ -6,10 +6,10 @@ import { TAllActions } from '../actions/unionOfActions';
 
 interface ISocketMiddlewareState {
   wsStatus: string;
-  socket: EventTarget | null;
+  socket: WebSocket | null;
   error: Event | null;
 }
-const initialState = {
+const initialState: ISocketMiddlewareState = {
   wsStatus: 'disconnect',
   socket: null,
   error: null

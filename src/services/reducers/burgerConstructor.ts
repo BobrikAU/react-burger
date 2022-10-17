@@ -5,16 +5,16 @@ import { ADD_BUN,
          RESET_CONSTRUCTOR } from '../actions/burgerConstructor';
 import { TAllActions } from '../actions/unionOfActions';
 
-interface IInitialState {
+interface IBurgerConstructorState {
   bun: string;
   others: Array<{id: string; uuid: string;}>;
 }
-const initialState: IInitialState = {
+const initialState: IBurgerConstructorState = {
   bun: '',
   others: [],
 }
 export const burgerConstructorReducer = (state = initialState, action: TAllActions): 
-  IInitialState => {
+IBurgerConstructorState => {
   switch (action.type) {
     case RESET_CONSTRUCTOR:
       return {
