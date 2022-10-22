@@ -34,7 +34,7 @@ export const wsActions = {
 };
 const enhancer = composeEnhancers(applyMiddleware(thunk, socketMiddleware(wsActions)));
 
-const store = createStore(rootReducer, enhancer);
+export const store = createStore(rootReducer, enhancer);
 
 root.render(
   <Provider store={store}>

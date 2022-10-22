@@ -1,6 +1,6 @@
 import { baseUrl, checkResponse } from '../../utils/utils';
 import { closeModal, openModalActionCreator } from './app';
-import { TIgredient } from '../../utils/types';
+import { TIgredient, TAppThunk } from '../../utils/types';
 
 export const COUNT_PRICE_BURGER: 'COUNT_PRICE_BURGER' = 'COUNT_PRICE_BURGER';
 export const SAVE_ORDER_DATA: 'SAVE_ORDER_DATA' = 'SAVE_ORDER_DATA';
@@ -57,7 +57,7 @@ interface ISendOrderResponseData {
 }
 export function sendOrder(setRequest: TSetRequest, 
                           constructorIngredients: IConstructorIngredients, 
-                          accessToken: string) {
+                          accessToken: string): TAppThunk {
   return function(dispatch) {
     setRequest({
       isActive: true,

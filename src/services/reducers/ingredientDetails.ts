@@ -1,5 +1,4 @@
-import { ADD_INGREDIENT_DETAILS,
-         DELETE_INGREDIENT_DETAILS} from '../actions/ingredientDetails';
+import { DELETE_INGREDIENT_DETAILS} from '../actions/ingredientDetails';
 import { TIgredient } from '../../utils/types';
 import { TAllActions } from '../actions/unionOfActions';
 

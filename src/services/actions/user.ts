@@ -1,5 +1,5 @@
-import { baseUrl, checkResponse } from '../../utils/utils';
-import { setCookie } from '../../utils/utils';
+import { baseUrl, checkResponse, setCookie } from '../../utils/utils';
+import { TAppThunk } from '../../utils/types'
 
 export const SAVE_USER: 'SAVE_USER' = 'SAVE_USER';
 
@@ -39,7 +39,7 @@ export const requestAboutUser = ({requestOptions = {},
                                   endpointUrl = '', 
                                   options = {},
                                   setIsRequestSuccessful = '',
-                                  }: IRequestAboutUserProps) => {
+                                  }: IRequestAboutUserProps): TAppThunk => {
   return function(dispatch) {
     fetch(`${baseUrl}${endpointUrl}`, requestOptions)
     .then(checkResponse)
@@ -73,7 +73,8 @@ export const requestAboutUser = ({requestOptions = {},
   }
 };
 
-export const updateTokens = (dispatch, refreshToken: string) => {
+export const updateTokens = (dispatch: (arg0: TAppThunk<void>) => void, 
+  refreshToken: string) => {
   const request = new Promise<string | null>((resolve, reject) => {
     dispatch(requestAboutUser({
       requestOptions: {
@@ -94,7 +95,7 @@ export const updateTokens = (dispatch, refreshToken: string) => {
   return request;
 };
 
-export const getUser = (dispatch, token: string) => {
+export const getUser = (dispatch: (arg0: TAppThunk<void>) => void, token: string) => {
   const request = new Promise<string | null> ((resolve, reject) => {
     dispatch(requestAboutUser({
       requestOptions: {
@@ -109,14 +110,15 @@ export const getUser = (dispatch, token: string) => {
   return request;
 };
 
-export const requestWithAccessToken = ( dispatch, 
-                                        request: (arg0: any, arg1: string) => Promise<unknown>, 
-                                        accessToken: string, 
-                                        refreshToken: string, 
-                                        options: {
-                                          resolve: () => void, 
-                                          reject: () => void
-                                        }) => {
+export const requestWithAccessToken = ( 
+  dispatch: (arg0: TAppThunk) => void, 
+  request: (arg0: (arg0: TAppThunk) => void, arg1: string) => Promise<unknown>, 
+  accessToken: string, 
+  refreshToken: string, 
+  options: {
+    resolve: () => void, 
+    reject: () => void
+  }) => {
   request(dispatch, accessToken)
     .then(() => options.resolve())
     .catch( () => {
@@ -131,4 +133,3 @@ export const requestWithAccessToken = ( dispatch,
         .catch(() => options.reject());
     })
 };
-

@@ -1,4 +1,8 @@
 import PropTypes from 'prop-types';
+import { ThunkAction } from 'redux-thunk';
+import { TRootState } from '../services/reducers/index';
+import { TAllActions } from '../services/actions/unionOfActions';
+import { useDispatch } from 'react-redux';
 
 export const orderType = PropTypes.shape({
   createdAt: PropTypes.string,
@@ -65,3 +69,8 @@ export type TLocationWithState = Omit<TLocation, 'state'> & {
     orders?: Array<TOrder>;
   };
 };
+
+export type TAppThunk<ReturnType = void> = ThunkAction<ReturnType, TRootState, 
+  unknown, TAllActions>;
+
+export type TDispatch = typeof useDispatch;

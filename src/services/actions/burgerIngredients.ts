@@ -1,7 +1,7 @@
 import { baseUrl, checkResponse } from '../../utils/utils';
 import { openModalActionCreator } from './app';
 import { v4 as uuidv4 } from 'uuid';
-import { TIgredient } from '../../utils/types';
+import { TIgredient, TAppThunk } from '../../utils/types';
 
 export const UPDATE_INGREDIENTS: 'UPDATE_INGREDIENTS' = 'UPDATE_INGREDIENTS';
 
@@ -10,7 +10,7 @@ export interface IUpdateIngredientsAction {
   readonly ingredients: Array<TIgredient>;
 }
 const updateIngredientsActionCreator = (data: Array<Omit<TIgredient, 'uuid'> & 
-  {uuid: string;}>) => {
+  {uuid: string;}>): TAppThunk => {
   return function(dispatch) {
     data.forEach(ingredient => {
       ingredient.uuid = uuidv4();
@@ -23,8 +23,8 @@ const updateIngredientsActionCreator = (data: Array<Omit<TIgredient, 'uuid'> &
   }
 };
 
-export function getIngredients() {
-  return function (dispatch): void {
+export function getIngredients(): TAppThunk {
+  return function (dispatch) {
     fetch(`${baseUrl}ingredients`)
     .then(checkResponse)
     .then( (data: {succses: Boolean, data: Array<TIgredient>}) => {

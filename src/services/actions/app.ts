@@ -1,5 +1,6 @@
 import { deleteIngrdientDetails } from './ingredientDetails';
 import { resetConstructorActionCreator } from './burgerConstructor';
+import { TAppThunk } from '../../utils/types';
 
 export const OPEN_MODAL: 'OPEN_MODAL' = 'OPEN_MODAL';
 export const CLOSE_MODAL: 'CLOSE_MODAL' = 'CLOSE_MODAL';
@@ -39,8 +40,8 @@ function closeModalActionCreator(): ICloseModalAction {
   }
 }
 
-export function closeModal(isModalActive: string, saveBurger: boolean) {
-  return function(dispatch): void {
+export function closeModal(isModalActive: string, saveBurger: boolean): TAppThunk {
+  return function(dispatch) {
     dispatch(closeModalActionCreator());
     switch (isModalActive){
       case 'ingredientDetails':
