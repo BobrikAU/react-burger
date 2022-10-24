@@ -1,5 +1,9 @@
 import { baseUrl, checkResponse, setCookie } from '../../utils/utils';
-import { TAppThunk } from '../../utils/types'
+import { TAppThunk, TAppDispatch } from '../../utils/types';  
+
+
+
+
 
 export const SAVE_USER: 'SAVE_USER' = 'SAVE_USER';
 
@@ -35,12 +39,12 @@ interface IRequestAboutUserProps {
     message: string;
   }>>;
 }
-export const requestAboutUser = ({requestOptions = {},
+export const requestAboutUser: TAppThunk = ({requestOptions = {},
                                   endpointUrl = '', 
                                   options = {},
                                   setIsRequestSuccessful = '',
-                                  }: IRequestAboutUserProps): TAppThunk => {
-  return function(dispatch) {
+                                  }: IRequestAboutUserProps) => {
+  return function(dispatch: TAppDispatch) {
     fetch(`${baseUrl}${endpointUrl}`, requestOptions)
     .then(checkResponse)
     .then((data: TDataInResolveAboutUser) => {
@@ -73,8 +77,7 @@ export const requestAboutUser = ({requestOptions = {},
   }
 };
 
-export const updateTokens = (dispatch: (arg0: TAppThunk<void>) => void, 
-  refreshToken: string) => {
+export const updateTokens = (dispatch, refreshToken: string) => {
   const request = new Promise<string | null>((resolve, reject) => {
     dispatch(requestAboutUser({
       requestOptions: {
@@ -95,7 +98,7 @@ export const updateTokens = (dispatch: (arg0: TAppThunk<void>) => void,
   return request;
 };
 
-export const getUser = (dispatch: (arg0: TAppThunk<void>) => void, token: string) => {
+export const getUser = (dispatch, token: string) => {
   const request = new Promise<string | null> ((resolve, reject) => {
     dispatch(requestAboutUser({
       requestOptions: {

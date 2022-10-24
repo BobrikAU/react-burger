@@ -1,12 +1,12 @@
 import { Route, useHistory, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { useLayoutEffect, useState } from 'react';
+import { useSelector, useDispatch } from '../../utils/hooks';
+import { useLayoutEffect, useState, FC } from 'react';
 import { requestWithAccessToken,
          getUser } from '../../services/actions/user';
 import { getAccessTokenOutCookie } from '../../utils/utils';
-import PropTypes from 'prop-types';
+import { IRoute } from '../../utils/types';
 
-function ProtectedRoute({children, ...optionsRoute}) {
+const ProtectedRoute: FC<IRoute> = ({children, ...optionsRoute}) => {
   const {userName, userEmail} = useSelector(state => ({
     userName: state.user.userName, 
     userEmail: state.user.email,
@@ -60,11 +60,6 @@ function ProtectedRoute({children, ...optionsRoute}) {
       }
     />
   )
-}
-
-ProtectedRoute.propTypes = {
-  children: PropTypes.element,
-  path: PropTypes.string
 }
 
 export default ProtectedRoute;

@@ -1,12 +1,13 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../utils/hooks";
 import styles from './ingridient.module.css';
 import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import {ingredientType} from '../../utils/types';
 import { useDrag } from "react-dnd";
 import { Link, useLocation } from 'react-router-dom';
+import { TIgredient } from '../../utils/types';
 
-function Ingredient({ingredient}) {
+function Ingredient({ingredient}: {ingredient: TIgredient} ) {
   const location = useLocation();
   const ingredientsConstructor = useSelector( state => state.burgerConstructor);
 
@@ -36,7 +37,7 @@ function Ingredient({ingredient}) {
           className={styles.link}>
       <li 
         className={styles.ingreient} 
-        id={ingredient.id} 
+        id={ingredient._id} 
         ref={dragRef}
       >
         <img 

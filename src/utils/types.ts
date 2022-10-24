@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { ThunkAction } from 'redux-thunk';
-import { TRootState } from '../services/reducers/index';
 import { TAllActions } from '../services/actions/unionOfActions';
-import { useDispatch } from 'react-redux';
+import { Action, ActionCreator } from 'redux';
+import { store } from '../index';
 
 export const orderType = PropTypes.shape({
   createdAt: PropTypes.string,
@@ -45,6 +45,28 @@ export type TIgredient = {
   readonly uuid: string;
 };
 
+export interface IRoute {
+  children: JSX.Element;
+  path: string;
+  exact?: boolean;
+}
+
+export type TOtherIgredient = {
+  _id?: string;
+  name?: string;
+  type?: string;
+  proteins?: number;
+  fat?: number;
+  carbohydrates?: number;
+  calories?: number;
+  price?: number;
+  image?: string;
+  image_mobile?: string;
+  image_large?: string;
+  __v?: number;
+  uuid?: string;
+};
+
 export type TLocation = {
   hash: string;
   pathname: string;
@@ -70,7 +92,8 @@ export type TLocationWithState = Omit<TLocation, 'state'> & {
   };
 };
 
-export type TAppThunk<ReturnType = void> = ThunkAction<ReturnType, TRootState, 
-  unknown, TAllActions>;
-
-export type TDispatch = typeof useDispatch;
+export type TRootState = ReturnType<typeof store.getState>;
+export type TAppThunk<TReturn = void> = ActionCreator<
+    ThunkAction<TReturn, Action, TRootState, TAllActions>
+  >;
+export type TAppDispatch = typeof store.dispatch;

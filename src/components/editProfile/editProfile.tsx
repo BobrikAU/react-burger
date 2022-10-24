@@ -1,7 +1,7 @@
 import styles from './editProfile.module.css';
 import './editProfile.css';
 import React, { useState, useRef, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../utils/hooks';
 import { Input, EmailInput, Button } from 
   '@ya.praktikum/react-developer-burger-ui-components';
 import { requestAboutUser, 
@@ -33,7 +33,7 @@ function EditProfile ({setIsRequestSuccessful}: IEditProfileProps) {
   const [ isInputNameActive, setIsInputNameActive ] = 
     useState<IIsDisabledInState>({disabled: true});
   const [ isErrorInName, setIsErrorInName ] = useState<boolean>(false);
-  const nameRef = useRef<HTMLInputElement>();
+  const nameRef = useRef<HTMLInputElement>(null);
   const changeNameValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setNameValue(value);

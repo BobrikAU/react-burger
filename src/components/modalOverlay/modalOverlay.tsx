@@ -1,18 +1,18 @@
-import React from "react";
+import React, { FC } from "react";
 import styles from './modalOverlay.module.css';
 import PropTypes from "prop-types";
 
-function ModalOverlay({children, closeModalClickOverlay}) {
+interface IModalOverlay {
+  children: JSX.Element;
+  closeModalClickOverlay: (e: React.MouseEvent<HTMLDivElement>) => void;
+}
+
+const ModalOverlay: FC<IModalOverlay> = ({children, closeModalClickOverlay}) => {
   return(
     <div className={styles.modalOverlay} id={'overlay'} onClick={closeModalClickOverlay}>
         {children}
     </div>
   )
-}
-
-ModalOverlay.propTypes = {
-  children: PropTypes.element.isRequired,
-  closeModalClickOverlay: PropTypes.func.isRequired
 }
 
 export default ModalOverlay;

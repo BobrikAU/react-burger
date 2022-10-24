@@ -3,9 +3,19 @@ import { DragIcon, ConstructorElement } from
   '@ya.praktikum/react-developer-burger-ui-components';
 import { useDrag, useDrop } from 'react-dnd';
 import PropTypes from 'prop-types';
-import { ingredientType } from '../../utils/types';
+import { ingredientType, TIgredient, TOtherIgredient } from '../../utils/types';
+import { FC } from 'react';
 
-const OtherIngredientConstructor = ({item, index, removeIngredient, moveIngredient}) => {
+interface IOtherIngredientConstructor {
+  item: TOtherIgredient;
+  index: number;
+  removeIngredient: (e: React.MouseEvent<SVGAElement>) => void;
+  moveIngredient: (indexOfMoved: number, indexOfRecipient: number) => void;
+};
+
+const OtherIngredientConstructor: FC<IOtherIngredientConstructor> = (
+    {item, index, removeIngredient, moveIngredient}
+  ) => {
 
   const [, dragRef] = useDrag({
     type: 'ingredientInConstructor',
@@ -14,27 +24,22 @@ const OtherIngredientConstructor = ({item, index, removeIngredient, moveIngredie
 
   const [, DropTargetRef] = useDrop({
     accept: 'ingredientInConstructor',
-    drop: (item) => {
+    drop: (item: {index: number}) => {
       moveIngredient(item.index, index);
     }
-  })
+  });
+
+  const {name, image, price} = item;
 
   return (
     <li className={`pl-4 ${styles.otherIngredient}`} index={index}  ref={dragRef}>
       <div className={styles.container} ref={DropTargetRef}>
         <DragIcon type="primary" />
-        <ConstructorElement text={item.name} thumbnail={item.image} 
-          price={item.price} handleClose={removeIngredient}/>
+        {name && image && price && (<ConstructorElement text={name} thumbnail={image} 
+          price={price} handleClose={removeIngredient}/>)}
       </div>
     </li>
   );
 };
-
-OtherIngredientConstructor.propTypes = {
-  item: ingredientType,
-  index: PropTypes.number,
-  removeIngredient: PropTypes.func,
-  moveIngredient: PropTypes.func,
-}
 
 export default OtherIngredientConstructor;

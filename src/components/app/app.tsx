@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+//import { useSelector/*, useDispatch*/ } from 'react-redux';
+import { useSelector, useDispatch } from '../../utils/hooks';
 import styles from './app.module.css';
 import { Route, Switch, useLocation } from 'react-router-dom';
 import AppHeader from '../appHeader/appHeader';
@@ -78,20 +79,20 @@ const App = () => {
         {background && (
                           <Switch>
                             <Route path='/ingredients/:id'>
-                              <Modal activeModal='ingredientDetails'>
+                              {ingredient && <Modal activeModal='ingredientDetails'>
                                 <IngredientDetails 
                                   ingredient={ingredient}
                                   modal={true}/>
-                              </Modal>
+                              </Modal>}
                             </Route>
                             <Route  path='/feed/:id'
-                                    render={ () => (<Modal activeModal='orders'>
+                                    render={ () => (orders && <Modal activeModal='orders'>
                                                       <OrderInfo
                                                         orders={orders}
                                                         modal={true}/>
                                                     </Modal>)} />
                             <Route  path='/profile/orders/:id'
-                                    render={ () => (<Modal activeModal='orders'>
+                                    render={ () => (orders && <Modal activeModal='orders'>
                                                       <OrderInfo
                                                         orders={orders}
                                                         modal={true}/>

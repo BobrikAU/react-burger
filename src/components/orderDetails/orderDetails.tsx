@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../utils/hooks';
 import { useHistory } from 'react-router-dom';
 import styles from './orderDetails.module.css';
 import {CheckMarkIcon} from '@ya.praktikum/react-developer-burger-ui-components';
@@ -7,8 +7,10 @@ import { sendOrder } from '../../services/actions/orderDetails';
 import { getAccessTokenOutCookie } from '../../utils/utils';
 import { requestWithAccessToken, getUser } from '../../services/actions/user';
 import PropTypes from 'prop-types';
+import { TAllActions } from '../../services/actions/unionOfActions';
 
-function OrderDetails({closeModalWithDispatch}) {
+function OrderDetails({closeModalWithDispatch}: 
+  {closeModalWithDispatch: (saveBurger: any) => TAllActions}) {
 
   const { constructorIngredients,
           orderDetails, 
@@ -27,7 +29,7 @@ function OrderDetails({closeModalWithDispatch}) {
                                           });
 
   useEffect(() => {
-    new Promise((resolve, reject) => {
+    new Promise<void>((resolve, reject) => {
       if (userName === '' || userEmail === '') {
         setRequest({isActive: true, message: 'Запрашиваем информацию о пользователе...'});
         const accessToken = getAccessTokenOutCookie();

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../utils/hooks";
 import styles from './burgerConstructor.module.css';
 import { CurrencyIcon, Button, ConstructorElement } from 
   '@ya.praktikum/react-developer-burger-ui-components';
@@ -15,7 +15,7 @@ import { openModalActionCreator } from '../../services/actions/app';
 import { useDrop } from "react-dnd";
 import OtherIngredientConstructor from 
   '../otherIngredientConstructor/otherIngredientConstructor';
-import { TIgredient } from '../../utils/types';
+import { TIgredient, TOtherIgredient } from '../../utils/types';
 
 function BurgerConstructor() {
 
@@ -68,27 +68,30 @@ function BurgerConstructor() {
   }
 
   //подбор перечня ингредиентов с их данными по id
-  const bun = React.useMemo<TIgredient | undefined>( () => {
-    return ingredients.find(item => {
+  const bun = React.useMemo<TIgredient | undefined | null>( () => {
+    return ingredients && ingredients.find(item => {
       return item._id === bunId;
     });
   },[bunId, ingredients]);
-  const othersIngredients = React.useMemo<Array<TIgredient | undefined>>( () => {
+  
+  const othersIngredients = React.useMemo<Array<TOtherIgredient | undefined | null>>( () => {
     return othersId.map((item) => {
-      const ingredient = {...ingredients.find( meal => {
+      const ingredient  = ingredients && {...ingredients.find( meal => {
         return meal._id === item.id;
       })};
-      ingredient.uuid = item.uuid;
+      if (ingredient !== null) {
+        ingredient.uuid = item.uuid;
+      }
       return ingredient;
     });
   }, [othersId, ingredients]);
 
   //подсчет стоимости бургера
   useEffect(() => {
-    const bunPrice = bun === undefined ? 0 : bun.price;
+    const bunPrice = (bun === undefined || bun === null) ? 0 : bun.price;
     const burgerPrice = bunPrice * 2 + othersIngredients.reduce( 
       (previousValue, item) => {
-        return previousValue + (item !== undefined ? item.price : 0);
+        return previousValue + (item && item.price ? item.price : 0);
       }, 0);
     dispatch(countPriceBurgerActionCreator(burgerPrice));
   }, [bun, othersIngredients, dispatch]);
@@ -119,9 +122,13 @@ function BurgerConstructor() {
         <ul className={`${othersIngredients.length !== 0 && "mt-4 mb-4 pr-4"} 
         ${styles.othersIngredients}`}>
           {othersIngredients.map((item, index) => {
-            return (<OtherIngredientConstructor item={item} index={index} 
-              removeIngredient={removeIngredient} moveIngredient={moveIngredient} 
-              key={item && item.uuid}/>)
+            return item && (
+              <OtherIngredientConstructor item={item} 
+                                          index={index} 
+                                          removeIngredient={removeIngredient} 
+                                          moveIngredient={moveIngredient} 
+                                          key={item && item.uuid}/>
+              )
           })}
         </ul>
         <li className={`${styles.bun} pr-4`}>

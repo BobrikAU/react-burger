@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../utils/hooks";
 import styles from './appHeader.module.css';
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from 
   '@ya.praktikum/react-developer-burger-ui-components';
 import LinkHeader from '../linkHeader/linkHeader';
 import { Link } from 'react-router-dom';
 
+export interface IAppHeaderState {
+  'Конструктор': boolean;
+  'Лента заказов': boolean;
+  'Личный кабинет': boolean;
+}
+
 function AppHeader() {
 
   const activePage: string = useSelector((state) => state.app.activePage);
 
-  interface IAppHeaderState {
-    'Конструктор': boolean;
-    'Лента заказов': boolean;
-    'Личный кабинет': boolean;
-  }
   const [isLinkHover, setIsLinkHover] = useState<IAppHeaderState> ({
                                                    'Конструктор': false,
                                                    'Лента заказов': false,

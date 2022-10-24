@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../utils/hooks";
 import styles from './typeIngredient.module.css';
 import Ingredient from "../ingredient/ingredient";
 
@@ -18,7 +18,7 @@ const TypeIngredient = React.forwardRef( ({type, id, children}: ITypeIngredientP
     <li id={id} ref={ref}>
       <h2 className={`text text_type_main-medium ${styles.title}`}>{children}</h2>
       <ul className={`pl-4 pr-4 pt-6 pb-10 ${styles.list}`}>
-        {ingredients.map((item) => {
+        {ingredients && ingredients.map((item) => {
           return item['type'] === type && (
             <Ingredient key={item.uuid} ingredient={item}/>
           )

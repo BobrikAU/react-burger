@@ -1,13 +1,13 @@
 import { Route, useHistory, useLocation } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux';
-import { useLayoutEffect, useState } from 'react';
+import { useSelector, useDispatch } from '../../utils/hooks';
+import { useLayoutEffect, useState, FC } from 'react';
 import { getAccessTokenOutCookie } from '../../utils/utils';
 import { requestWithAccessToken,
          getUser } from '../../services/actions/user';
 import Loader from '../../images/loader.gif';
+import { IRoute } from '../../utils/types';
 
-function RouteNotAuthorized({children, ...optionsRoute}) {
+const RouteNotAuthorized: FC<IRoute> = ({children, ...optionsRoute}) => {
   const {userName, userEmail} = useSelector(state => ({
     userName: state.user.userName, 
     userEmail: state.user.email,
@@ -58,11 +58,6 @@ function RouteNotAuthorized({children, ...optionsRoute}) {
                     children}
     />
   )
-}
-
-RouteNotAuthorized.propTypes = {
-  children: PropTypes.element,
-  path: PropTypes.string
 }
 
 export default RouteNotAuthorized;
