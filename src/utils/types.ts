@@ -4,7 +4,7 @@ import { TAllActions } from '../services/actions/unionOfActions';
 import { Action, ActionCreator } from 'redux';
 import { store } from '../index';
 
-export const orderType = PropTypes.shape({
+/*export const orderType = PropTypes.shape({
   createdAt: PropTypes.string,
   ingredients: PropTypes.arrayOf(PropTypes.string),
   name: PropTypes.string,
@@ -27,7 +27,7 @@ export const ingredientType = PropTypes.shape({
   image_mobile: PropTypes.string,
   image_large: PropTypes.string,
   __v: PropTypes.number
-});
+});*/
 
 export type TIgredient = {
   readonly _id: string;
@@ -90,6 +90,11 @@ export type TLocationWithState = Omit<TLocation, 'state'> & {
     ingredient?: TIgredient;
     orders?: Array<TOrder>;
   };
+};
+
+export type TIsRequestSuccessful = {
+  value: undefined | boolean;
+  message: string;
 };
 
 export type TRootState = ReturnType<typeof store.getState>;

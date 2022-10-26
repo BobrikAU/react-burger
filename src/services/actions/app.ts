@@ -40,7 +40,7 @@ function closeModalActionCreator(): ICloseModalAction {
   }
 }
 
-export const closeModal: TAppThunk = (isModalActive: string, saveBurger: boolean) => {
+export const closeModal: TAppThunk = (isModalActive: string, saveBurger?: boolean) => {
   return function(dispatch: TAppDispatch) {
     dispatch(closeModalActionCreator());
     switch (isModalActive){

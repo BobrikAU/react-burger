@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../utils/hooks';
 import { Input, 
          EmailInput, 
          PasswordInput, 
@@ -19,15 +19,15 @@ function Registration() {
     message: state.app.isModalActive.message,
   }));
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation<{from: string}>();
 
   const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
 
   //функциональность поля name
   const [ nameValue, setNameValue ] = useState('');
   const [ errorName, setErrorName ] = useState(false);
-  const refName = useRef();
-  const onChangeName = (e) => {
+  const refName = useRef(null);
+  const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value;
     setNameValue(text);
   };
@@ -45,12 +45,12 @@ function Registration() {
   //функциональность поля email
   const [ emailValue, setEmailValue ] = useState('');
   const [ errorEmailValue, setErrorEmailValue ] = useState(false);
-  const onChangeEmail = (e) => {
+  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmailValue(e.target.value);
   };
-  const isErrorEmailValue = (divEmail) => {
+  const isErrorEmailValue = (divEmail: HTMLElement | null) => {
     setTimeout( () => {
-      if (divEmail.classList.contains("input_status_error")) {
+      if (divEmail && divEmail.classList.contains("input_status_error")) {
         setErrorEmailValue(true);
       } else {
         setErrorEmailValue(false);
@@ -61,12 +61,12 @@ function Registration() {
   //функциональность поля password
   const [ passwordValue, setPasswordValue ] = useState('');
   const [ errorPasswordValue, setErrorPasswordValue ] = useState(false);
-  const onChangePassword = (e) => {
+  const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordValue(e.target.value);
   };
-  const isErrorPasswordValue = (divPassword) => {
+  const isErrorPasswordValue = (divPassword: HTMLElement | null) => {
     setTimeout( () => {
-      if (divPassword.classList.contains("input_status_error")) {
+      if (divPassword && divPassword.classList.contains("input_status_error")) {
         setErrorPasswordValue(true);
       } else {
         setErrorPasswordValue(false);
@@ -75,7 +75,8 @@ function Registration() {
   };
 
   //блокировка кнопки отправки формы при некорректности заполнения полей формы
-  const [isButtonDisabled, setIsButtonDisabled ] = useState({ disabled: true });
+  const [isButtonDisabled, setIsButtonDisabled ] = useState<{disabled?: boolean}>
+    ({ disabled: true });
   useEffect(() => {
     if (nameValue && !errorName && emailValue && !errorEmailValue && 
       passwordValue && !errorPasswordValue) {
@@ -92,7 +93,7 @@ function Registration() {
                                                                       value: undefined,
                                                                       message: '',
                                                                     });
-  const submit = (e) => {
+  const submit = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(openModalActionCreator('error', 'Осуществляется регистрация...'));
     dispatch(requestAboutUser({
@@ -124,25 +125,36 @@ function Registration() {
     }
   }, [isRequestSuccessful]);
 
-  const form = useRef();
+  const form = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     //const form = document.forms.registration;
-    const inputEmail = form.current.elements.email;
+    const htmlElements: {[name: string]: HTMLElement | null} = {};
+    if (form.current) {
+      htmlElements.inputEmail = form.current.elements['email'];
+      htmlElements.inputPassword = form.current.elements['password'];
+      htmlElements.divEmail = form.current.querySelector('.input_type_email');
+      htmlElements.divPassword = form.current.querySelector('.input_type_password');
+    }
+    const { inputEmail, inputPassword, divEmail, divPassword } = htmlElements;
+    /*const inputEmail = form.current.elements.email;
     const inputPassword = form.current.elements.password;
     const divEmail = form.current.querySelector('.input_type_email');
-    const divPassword = form.current.querySelector('.input_type_password');
-    inputEmail.addEventListener('blur', (() => {isErrorEmailValue(divEmail)}));
-    inputEmail.addEventListener('focus', (() => {setErrorEmailValue(false)}));
-    inputPassword.addEventListener('blur', (() => {isErrorPasswordValue(divPassword)}));
-    inputPassword.addEventListener('focus', (() => {setErrorPasswordValue(false)}));
-    return () => {
-      inputEmail.removeEventListener('blur', 
-        (() => {isErrorEmailValue(divEmail)}));
-      inputEmail.removeEventListener('focus', (() => {setErrorEmailValue(false)}));
-      inputPassword.removeEventListener('blur', 
-        (() => {isErrorPasswordValue(divPassword)}));
-      inputPassword.removeEventListener('focus', (() => {setErrorPasswordValue(false)}));
+    const divPassword = form.current.querySelector('.input_type_password');*/
+
+    if (inputEmail && inputPassword) {
+      inputEmail.addEventListener('blur', (() => {isErrorEmailValue(divEmail)}));
+      inputEmail.addEventListener('focus', (() => {setErrorEmailValue(false)}));
+      inputPassword.addEventListener('blur', (() => {isErrorPasswordValue(divPassword)}));
+      inputPassword.addEventListener('focus', (() => {setErrorPasswordValue(false)}));
+      return () => {
+        inputEmail.removeEventListener('blur', 
+          (() => {isErrorEmailValue(divEmail)}));
+        inputEmail.removeEventListener('focus', (() => {setErrorEmailValue(false)}));
+        inputPassword.removeEventListener('blur', 
+          (() => {isErrorPasswordValue(divPassword)}));
+        inputPassword.removeEventListener('focus', (() => {setErrorPasswordValue(false)}));
+      }
     }
   }, []);
 
@@ -179,6 +191,7 @@ function Registration() {
           onChange={onChangePassword}
         />
         <Button 
+          htmlType='submit'
           type='primary' 
           size='medium' 
           id='buttonRegister'

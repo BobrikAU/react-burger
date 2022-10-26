@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../utils/hooks';
 import BurgerIngredients from '../components/burgerIngredients/burgerIngredients';
 import BurgerConstructor from '../components/burgerConstructor/burgerConstructor';
 import Modal from '../components/modal/modal';
@@ -23,7 +23,7 @@ export default function Constructor() {
     dispatch(changeActivePageActionCreator('constructor'));
   } , [dispatch]);
 
-  const closeModalWithDispatch = (saveBurger) => dispatch(closeModal(isModalActive, 
+  const closeModalWithDispatch = (saveBurger: boolean | undefined) => dispatch(closeModal(isModalActive, 
                                                                      saveBurger));
   
   return(
@@ -34,9 +34,9 @@ export default function Constructor() {
       </DndProvider>
       {isModalActive !== '' && (
         <Modal closeModalWithDispatch={closeModalWithDispatch} activeModal={isModalActive}>
-          {isModalActive === 'orderDetails' && 
-            ( <OrderDetails closeModalWithDispatch={closeModalWithDispatch}/> )}
-          {isModalActive === 'error' && (<ErrorMessage message={message}/>)}
+          {isModalActive === 'orderDetails' ? 
+            ( <OrderDetails closeModalWithDispatch={closeModalWithDispatch}/> ) :
+            isModalActive === 'error' && (<ErrorMessage message={message}/>)}
         </Modal>
       )}
     </main>

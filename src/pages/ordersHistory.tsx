@@ -1,6 +1,6 @@
 import styles from './ordersHistory.module.css';
 import OrderInShort from '../components/orderInShort/orderInShort';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../utils/hooks';
 import { useEffect } from 'react';
 import { changeActivePageActionCreator } from '../services/actions/app';
 import Loader from '../images/loader.gif';

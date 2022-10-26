@@ -4,8 +4,8 @@ import  { Route,
           useRouteMatch, 
           useHistory, 
           useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from "../utils/hooks";
+import React, { SyntheticEvent, useEffect, useState } from 'react';
 import styles from './profile.module.css';
 import EditProfile from '../components/editProfile/editProfile';
 import OrdersHistory from './ordersHistory';
@@ -20,6 +20,7 @@ import Modal from '../components/modal/modal';
 import ErrorMessage from '../components/errorMassege/errorMassege';
 import { setCookie } from '../utils/utils';
 import { eraseUserOrdersActionCreator } from '../services/actions/orders';
+import { TIsRequestSuccessful } from '../utils/types';
 
 function Profile () {
   const { isModalActive, message } = useSelector (state => ({
@@ -41,13 +42,13 @@ function Profile () {
   const { pathname } = useLocation();
 
   
-  const [ isRequestSuccessful, setIsRequestSuccessful ] = useState({
+  const [ isRequestSuccessful, setIsRequestSuccessful ] = useState<TIsRequestSuccessful>({
                                                                       value: undefined,
                                                                       message: '',
                                                                     });
 
   //выход из аккаунта
-  const logOutAccount = (e) => {
+  const logOutAccount = (e: SyntheticEvent) => {
     e.preventDefault();
     dispatch(openModalActionCreator('error', 'Выходим из аккаунта...'));
     new Promise((resolve, reject) => {
@@ -89,7 +90,7 @@ function Profile () {
     }
   }, [isRequestSuccessful]);
 
-  const text = (path, pathname) => {
+  const text = (path: string, pathname: string) => {
     switch (pathname) {
       case `${path}/orders`:
         return 'В этом разделе вы можете просмотреть свою историю заказов';
@@ -120,7 +121,9 @@ function Profile () {
             ${styles.link} ${styles.linkActive}`}>
             История заказов
           </NavLink>
-          <Button type="secondary" size="medium" onClick={logOutAccount}>Выход</Button>
+          <Button htmlType='button' type="secondary" size="medium" onClick={logOutAccount}>
+            Выход
+          </Button>
         </menu>
         <p className='text text_type_main-default text_color_inactive mt-20'>
           {text(path, pathname)}

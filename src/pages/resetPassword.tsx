@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { Input, 
          PasswordInput, 
          Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../utils/hooks';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import styles from './resetPassword.module.css';
 import './globalSelectorsForms.css';
@@ -15,7 +15,7 @@ function ResetPassword() {
     isModalActive: state.app.isModalActive.isModalActive
   }));
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation<{from: string}>();
   
   const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
 
@@ -28,8 +28,8 @@ function ResetPassword() {
 
   //функциональность поля code
   const [ codeValue, setCodeValue ] = useState('');
-  const refCode = useRef();
-  const onChangeCode = (e) => {
+  const refCode = useRef(null);
+  const onChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value;
     setCodeValue(text);
   };
@@ -37,12 +37,12 @@ function ResetPassword() {
   //функциональность поля password
   const [ passwordValue, setPasswordValue ] = useState('');
   const [ errorPasswordValue, setErrorPasswordValue ] = useState(false);
-  const onChangePassword = (e) => {
+  const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordValue(e.target.value);
   };
-  const isErrorPasswordValue = (divPassword) => {
+  const isErrorPasswordValue = (divPassword: HTMLElement | null) => {
     setTimeout( () => {
-      if (divPassword.classList.contains("input_status_error")) {
+      if (divPassword && divPassword.classList.contains("input_status_error")) {
         setErrorPasswordValue(true);
       } else {
         setErrorPasswordValue(false);
@@ -51,7 +51,7 @@ function ResetPassword() {
   };
 
   //блокировка кнопки отправки формы при некорректности заполнения полей формы
-  const [isErrorInForm, setIsErrorInForm ] = useState({ disabled: true });
+  const [isErrorInForm, setIsErrorInForm ] = useState<{disabled?: boolean}>({ disabled: true });
   useEffect(() => {
     if (codeValue && passwordValue && !errorPasswordValue) {
       setIsErrorInForm({});
@@ -66,7 +66,7 @@ function ResetPassword() {
                                                                       value: undefined,
                                                                       message: '',
                                                                     });
-  const submit = (e) => {
+  const submit = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(openModalActionCreator('error', 'Осуществляется замена пароля...'));
     dispatch(requestAboutUser({
@@ -99,19 +99,32 @@ function ResetPassword() {
     }
   }, [isRequestSuccessful]);
 
-  const form = useRef();
+  const form = useRef<HTMLFormElement>(null);
   useLayoutEffect(() => {
     //const form = document.forms.registration;
-    const inputPassword = form.current.elements.password;
+    const htmlElements: {[name: string]: HTMLElement | null} = {};
+    if (form.current) {
+      htmlElements.inputPassword = form.current.elements['password'];
+      htmlElements.divPassword = form.current.querySelector('.input_type_password');
+      htmlElements.labelPassword = htmlElements.divPassword && 
+        htmlElements.divPassword.querySelector('.input__placeholder');
+    }
+    const { inputPassword, divPassword, labelPassword } = htmlElements;
+
+
+
+    /*const inputPassword = form.current.elements.password;
     const divPassword = form.current.querySelector('.input_type_password');
-    const labelPassword = divPassword.querySelector('.input__placeholder');
-    labelPassword.textContent = 'Введите новый пароль';
-    inputPassword.addEventListener('blur', (() => {isErrorPasswordValue(divPassword)}));
-    inputPassword.addEventListener('focus', (() => {setErrorPasswordValue(false)}));
-    return () => {
-      inputPassword.removeEventListener('blur', 
-        (() => {isErrorPasswordValue(divPassword)}));
-      inputPassword.removeEventListener('focus', (() => {setErrorPasswordValue(false)}));
+    const labelPassword = divPassword.querySelector('.input__placeholder');*/
+    if (inputPassword && labelPassword) {
+      labelPassword.textContent = 'Введите новый пароль';
+      inputPassword.addEventListener('blur', (() => {isErrorPasswordValue(divPassword)}));
+      inputPassword.addEventListener('focus', (() => {setErrorPasswordValue(false)}));
+      return () => {
+        inputPassword.removeEventListener('blur', 
+          (() => {isErrorPasswordValue(divPassword)}));
+        inputPassword.removeEventListener('focus', (() => {setErrorPasswordValue(false)}));
+      }
     }
   }, []);
 
@@ -139,6 +152,7 @@ function ResetPassword() {
           onChange={onChangeCode}
         />
         <Button 
+          htmlType='submit'
           type='primary' 
           size='medium' 
           id='buttonRegister' 

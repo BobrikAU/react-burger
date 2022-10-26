@@ -8,9 +8,16 @@ import { getAccessTokenOutCookie } from '../../utils/utils';
 import { requestWithAccessToken, getUser } from '../../services/actions/user';
 import PropTypes from 'prop-types';
 import { TAllActions } from '../../services/actions/unionOfActions';
+import { ThunkAction } from 'redux-thunk';
+import { Action } from 'redux';
+import { TRootState } from '../../utils/types';
 
-function OrderDetails({closeModalWithDispatch}: 
-  {closeModalWithDispatch: (saveBurger: any) => TAllActions}) {
+interface IOrderDetailsProps {
+  closeModalWithDispatch: (saveBurger?: boolean) => 
+    TAllActions | ThunkAction<void, Action<any>, TRootState, TAllActions>
+}
+
+function OrderDetails({closeModalWithDispatch}: IOrderDetailsProps) {
 
   const { constructorIngredients,
           orderDetails, 

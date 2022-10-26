@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { changeActivePageActionCreator } from '../services/actions/app';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../utils/hooks';
 import styles from './orderFeed.module.css';
 import OrderInShort from '../components/orderInShort/orderInShort';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,14 +8,26 @@ import Loader from '../images/loader.gif';
 import {  socketStartFeedActionCreator,
           breakWsConnectionActionCreator } from '../services/actions/socketMiddleware';
 
+
+type TLists = {
+  pendingOrders: JSX.Element[];
+  doneOrders: JSX.Element[];
+};
+type TSmallLists = {
+  pendingOrders: {numbers: JSX.Element[], uuid: string}[];
+  doneOrders: {numbers: JSX.Element[], uuid: string}[];
+};
+
 function OrderFeed() {
   const dispatch = useDispatch();
-  const { allOrders, totalOrders, totalTodayOrders, ingredients } = useSelector(state => ({
-    allOrders: state.orders.allOrders.orders,
-    totalOrders: state.orders.allOrders.total,
-    totalTodayOrders: state.orders.allOrders.totalToday,
+  const { allOrders, totalOrders, totalTodayOrders, ingredients } = useSelector(state => {
+    const allOrders = state.orders.allOrders;
+    return {
+    allOrders: 'orders' in allOrders && allOrders.orders,
+    totalOrders: 'total' in allOrders && allOrders.total,
+    totalTodayOrders: 'totalToday' in allOrders && allOrders.totalToday,
     ingredients: state.burgerIngredients,
-  }));
+  }});
   useEffect(() => {
     dispatch(changeActivePageActionCreator('orders'));
     if (ingredients) {
@@ -45,9 +57,11 @@ function OrderFeed() {
   }, [allOrders]);
 
   //формируем перечени заказов готовых и в работе
-  const {pendingOrders, doneOrders} = useMemo(() => {
+  const {pendingOrders, doneOrders} = 
+    useMemo<TSmallLists>(() => {
     //формируем предварительно сплошные списки (без разбития по 10 в одном)
-    const lists = allOrders && allOrders.reduce((previousValue, item) => {
+    const lists: false | TLists = allOrders && 
+      allOrders.reduce((previousValue: TLists, item) => {
       if (item.status === 'done') {
         previousValue.doneOrders.push(<li className='text text_type_digits-default mb-2 mr-2' 
                                           key={item._id}>
@@ -62,8 +76,11 @@ function OrderFeed() {
       return previousValue;
     }, {pendingOrders: [], doneOrders: []});
     //разбиваем большие списки на массивы списков по 10 строк в каждой
-    function splitList (list) {
-      return list.reduce((previousValue, item, index) => {
+    const smallLists: TSmallLists = {doneOrders: [], pendingOrders: []}
+    function splitList (list: JSX.Element[]) {
+      return list.reduce((previousValue: {numbers: JSX.Element[], uuid: string}[], 
+                          item, 
+                          index) => {
         if ( index % 10 === 0) {
           previousValue.push({numbers: [], uuid: uuidv4()});
         }
@@ -71,13 +88,13 @@ function OrderFeed() {
         return previousValue;
       }, []);
     }
-    if (allOrders && lists.doneOrders.length > 0) {
-      lists.doneOrders = splitList(lists.doneOrders);
+    if (allOrders && lists && lists.doneOrders.length > 0) {
+      smallLists.doneOrders = splitList(lists.doneOrders);
     }
-    if (allOrders && lists.pendingOrders.length > 0) {
-      lists.pendingOrders = splitList(lists.pendingOrders);
+    if (allOrders && lists && lists.pendingOrders.length > 0) {
+      smallLists.pendingOrders = splitList(lists.pendingOrders);
     }
-    return allOrders ? lists : {pendingOrders: [], doneOrders: []};
+    return allOrders ? smallLists : {pendingOrders: [], doneOrders: []};
   }, [allOrders]);
 
   return (!allOrders && !ingredients) ?

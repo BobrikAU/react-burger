@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 interface IIngredientDetailsProps {
   ingredient: TIgredient;
-  modal: boolean
+  modal?: boolean
 }
 
 function IngredientDetails({ingredient, modal}: IIngredientDetailsProps) {

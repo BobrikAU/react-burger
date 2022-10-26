@@ -3,14 +3,17 @@ import ReactDOM from "react-dom";
 import styles from './modal.module.css';
 import ModalOverlay from '../modalOverlay/modalOverlay';
 import {CloseIcon} from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from "prop-types";
 import { useHistory } from 'react-router-dom';
-import { AnyAction } from "redux";
+import { TAllActions } from '../../services/actions/unionOfActions';
+import { ThunkAction } from 'redux-thunk';
+import { Action } from 'redux';
+import { TRootState } from '../../utils/types';
 
 interface IModal {
-  children?: JSX.Element;
+  children?: JSX.Element | boolean;
   activeModal: string;
-  closeModalWithDispatch?: (saveBurger?: boolean) => AnyAction;
+  closeModalWithDispatch?: (saveBurger?: boolean) => 
+    TAllActions | ThunkAction<void, Action<any>, TRootState, TAllActions>;
 }
 
 const Modal: FC<IModal> = ({children, activeModal, closeModalWithDispatch}) => {

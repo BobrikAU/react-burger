@@ -5,8 +5,7 @@ import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components
 import { useMemo } from 'react';
 import { timeString, countingPrice, getOrderStatus } from '../../utils/utils';
 import Loader from '../../images/loader.gif';
-import PropTypes from 'prop-types';
-import { orderType, TOrder } from '../../utils/types';
+import { TOrder } from '../../utils/types';
 import { FC } from 'react';
 
 interface IOrderInfo {
@@ -89,7 +88,7 @@ const OrderInfo: FC<IOrderInfo> = ({ orders, modal }) => {
     return value;
   }, [listIngredients, burgerIngredients])};
 
-  const time = timeString(createdAt, new Date(new Date().toDateString()));
+  const time = createdAt && timeString(createdAt, new Date(new Date().toDateString()));
 
   const orderStatus = getOrderStatus(status);
   

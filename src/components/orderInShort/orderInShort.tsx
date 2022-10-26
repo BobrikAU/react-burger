@@ -8,7 +8,7 @@ import { timeString, countingPrice, getOrderStatus } from '../../utils/utils';
 import { TOrder } from '../../utils/types';
 
 interface IOrderInShort {
-  status: string;
+  status?: string;
   numberOrder: number;
   orderTime: string;
   burgerName: string;

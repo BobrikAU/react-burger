@@ -9,12 +9,10 @@ import { requestAboutUser,
 import { getAccessTokenOutCookie } from '../../utils/utils';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import { TIsRequestSuccessful } from '../../utils/types';
 
 interface IEditProfileProps {
-  setIsRequestSuccessful : React.Dispatch<React.SetStateAction<{
-    value: undefined | boolean;
-    message: string;
-  }>>
+  setIsRequestSuccessful : React.Dispatch<React.SetStateAction<TIsRequestSuccessful>>
 }
 interface IIsDisabledInState {
   disabled?: boolean
@@ -239,9 +237,5 @@ function EditProfile ({setIsRequestSuccessful}: IEditProfileProps) {
     </>
   )
 }
-
-EditProfile.propTypes = {
-  setIsRequestSuccessful: PropTypes.func
-};
 
 export default EditProfile;

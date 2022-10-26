@@ -1,5 +1,5 @@
 import OrderInfo from "../components/orderInfo/orderInfo";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../utils/hooks';
 import styles from './feedOrderInfo.module.css';
 import { useEffect } from 'react';
 import loader from '../images/loader.gif';
@@ -9,7 +9,7 @@ import { changeActivePageActionCreator } from '../services/actions/app';
 
 function FeedOrderInfo() {
   const { allOrders, burgerIngredients } = useSelector(state => ({
-    allOrders: state.orders.allOrders.orders,
+    allOrders: 'orders'in state.orders.allOrders &&  state.orders.allOrders.orders,
     burgerIngredients: state.burgerIngredients
   }));
   const dispatch = useDispatch();
