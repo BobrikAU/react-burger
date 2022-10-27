@@ -100,8 +100,8 @@ function BurgerConstructor() {
   const removeIngredient = (e: React.MouseEvent<SVGAElement>): void => {
     const ingredientInConstructor = e.currentTarget.closest('li');
     const index = ingredientInConstructor && 
-      Number(ingredientInConstructor.getAttribute('index'));
-    if (index) {
+      Number(ingredientInConstructor.getAttribute('id'));
+    if (index || index === 0) {
       dispatch(deleteIngredientActionCreator(index));
     }
   };

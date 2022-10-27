@@ -32,7 +32,7 @@ const OtherIngredientConstructor: FC<IOtherIngredientConstructor> = (
   const {name, image, price} = item;
 
   return (
-    <li className={`pl-4 ${styles.otherIngredient}`} index={index}  ref={dragRef}>
+    <li className={`pl-4 ${styles.otherIngredient}`} id={String(index)}  ref={dragRef}>
       <div className={styles.container} ref={DropTargetRef}>
         <DragIcon type="primary" />
         {name && image && price && (<ConstructorElement text={name} thumbnail={image} 
