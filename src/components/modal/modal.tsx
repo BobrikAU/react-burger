@@ -24,7 +24,7 @@ const Modal: FC<IModal> = ({children, activeModal, closeModalWithDispatch}) => {
   } 
 
   const closeModalClickOverlay = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.currentTarget.id === 'overlay') {
+    if (e.currentTarget.id === 'overlay' && e.currentTarget === e.target) {
       closeModal();
     };
   }

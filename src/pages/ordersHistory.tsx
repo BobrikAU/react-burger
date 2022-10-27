@@ -24,7 +24,7 @@ function OrdersHistory() {
   }, [dispatch, ingredients]);
 
   const currentDate = new Date(new Date().toDateString());
-  const cardsUserOrders = userOrders.map((item) => {
+  const cardsUserOrders = userOrders.length !== 0 && userOrders.map((item) => {
     const { number, createdAt, name, ingredients, status, _id } = item;
     return (
       <OrderInShort numberOrder={number} 
