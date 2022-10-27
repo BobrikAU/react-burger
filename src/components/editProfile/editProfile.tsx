@@ -5,9 +5,9 @@ import { useSelector, useDispatch } from '../../utils/hooks';
 import { Input, EmailInput, Button } from 
   '@ya.praktikum/react-developer-burger-ui-components';
 import { requestAboutUser, 
-         requestWithAccessToken } from '../../services/actions/user';
+         /*requestWithAccessToken,*/ updateTokens } from '../../services/actions/user';
 import { getAccessTokenOutCookie } from '../../utils/utils';
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { TIsRequestSuccessful } from '../../utils/types';
 
@@ -143,7 +143,7 @@ function EditProfile ({setIsRequestSuccessful}: IEditProfileProps) {
     setIsRequestSuccessful({value: false, message: 'Сохраняем изменения...'})
     const accessToken = getAccessTokenOutCookie();
     const refreshToken = localStorage.getItem('refreshToken');
-    const saveUserData = (dispatch, token: string) => {
+    const saveUserData = (token: string) => {
       const request = new Promise ((resolve, reject) => {
         dispatch(requestAboutUser({
           requestOptions: {
@@ -165,16 +165,26 @@ function EditProfile ({setIsRequestSuccessful}: IEditProfileProps) {
       });
       return request;
     };
-    new Promise ((resolve, reject) => {
-      requestWithAccessToken( dispatch, 
-                              saveUserData, 
-                              accessToken, 
-                              refreshToken, 
-                              {resolve, reject})
+    new Promise<void> ((resolve, reject) => {
+      saveUserData(accessToken)
+      .then(() => resolve())
+      .catch( () => {
+          updateTokens(dispatch, refreshToken)
+            .then((newAccessToken) => {
+              if (newAccessToken) {
+                saveUserData(newAccessToken);
+              }
+              resolve();
+            }
+            )
+            .catch(() => reject());
+      })
     })
       .then(() => {
+        console.log('resolve');
         setIsRequestSuccessful({value: true, message: ''});
         setIsProfileEdit(false);
+        console.log('setIsProfileEdit', isProfileEdit)
       })
       .catch(() => {
         history.push({pathname: '/login'});

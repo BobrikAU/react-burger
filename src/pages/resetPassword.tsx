@@ -104,7 +104,7 @@ function ResetPassword() {
     //const form = document.forms.registration;
     const htmlElements: {[name: string]: HTMLElement | null} = {};
     if (form.current) {
-      htmlElements.inputPassword = form.current.elements['password'];
+      htmlElements.inputPassword = form.current.querySelector("[name='password']");
       htmlElements.divPassword = form.current.querySelector('.input_type_password');
       htmlElements.labelPassword = htmlElements.divPassword && 
         htmlElements.divPassword.querySelector('.input__placeholder');

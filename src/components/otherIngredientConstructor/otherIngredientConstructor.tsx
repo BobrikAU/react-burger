@@ -3,7 +3,7 @@ import { DragIcon, ConstructorElement } from
   '@ya.praktikum/react-developer-burger-ui-components';
 import { useDrag, useDrop } from 'react-dnd';
 import PropTypes from 'prop-types';
-import { ingredientType, TIgredient, TOtherIgredient } from '../../utils/types';
+import { /*ingredientType,*/ TIgredient, TOtherIgredient } from '../../utils/types';
 import { FC } from 'react';
 
 interface IOtherIngredientConstructor {

@@ -17,7 +17,7 @@ function Recovery() {
     message: state.app.isModalActive.message,
   }));
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation<{}>();
 
   const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
 
@@ -96,7 +96,7 @@ function Recovery() {
     //const form = document.forms.recovery;
     const htmlElements: {[name: string]: HTMLElement | null} = {};
     if (form.current) {
-      htmlElements.inputEmail = form.current.elements['email'];
+      htmlElements.inputEmail = form.current.querySelector("[name='email']");
       htmlElements.divEmail = form.current.querySelector('.input_type_email');
     }
     const { inputEmail, divEmail } = htmlElements;

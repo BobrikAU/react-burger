@@ -2,8 +2,8 @@ import { Route, useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from '../../utils/hooks';
 import { useLayoutEffect, useState, FC } from 'react';
 import { getAccessTokenOutCookie } from '../../utils/utils';
-import { requestWithAccessToken,
-         getUser } from '../../services/actions/user';
+import { /*requestWithAccessToken,*/
+         getUser, updateTokens } from '../../services/actions/user';
 import Loader from '../../images/loader.gif';
 import { IRoute } from '../../utils/types';
 
@@ -25,12 +25,20 @@ const RouteNotAuthorized: FC<IRoute> = ({children, ...optionsRoute}) => {
         const accessToken = getAccessTokenOutCookie();
         const refreshToken = localStorage.getItem('refreshToken');
         if (accessToken && refreshToken) {
-          new Promise ((resolve, reject) => {
-            requestWithAccessToken( dispatch, 
-                                    getUser, 
-                                    accessToken, 
-                                    refreshToken, 
-                                    {resolve, reject})
+          new Promise<void> ((resolve, reject) => {
+            getUser(dispatch, accessToken)
+            .then(() => resolve())
+            .catch( () => {
+              updateTokens(dispatch, refreshToken)
+                .then((newAccessToken) => {
+                  if (newAccessToken) {
+                    getUser(dispatch, newAccessToken);
+                  }
+                  resolve();
+                }
+                )
+                .catch(() => reject());
+            })
           })
           .then(() => {
             setIsRequest(false)

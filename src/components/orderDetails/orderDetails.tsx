@@ -5,7 +5,7 @@ import styles from './orderDetails.module.css';
 import {CheckMarkIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import { sendOrder } from '../../services/actions/orderDetails';
 import { getAccessTokenOutCookie } from '../../utils/utils';
-import { requestWithAccessToken, getUser } from '../../services/actions/user';
+import { getUser, updateTokens } from '../../services/actions/user';
 import PropTypes from 'prop-types';
 import { TAllActions } from '../../services/actions/unionOfActions';
 import { ThunkAction } from 'redux-thunk';
@@ -42,12 +42,20 @@ function OrderDetails({closeModalWithDispatch}: IOrderDetailsProps) {
         const accessToken = getAccessTokenOutCookie();
         const refreshToken = localStorage.getItem('refreshToken');
         if (accessToken && refreshToken) {
-          new Promise ((resolve, reject) => {
-            requestWithAccessToken( dispatch, 
-                                    getUser, 
-                                    accessToken, 
-                                    refreshToken, 
-                                    {resolve, reject})
+          new Promise<void> ((resolve, reject) => {
+            getUser(dispatch, accessToken)
+            .then(() => resolve())
+            .catch( () => {
+              updateTokens(dispatch, refreshToken)
+                .then((newAccessToken) => {
+                  if (newAccessToken) {
+                    getUser(dispatch, newAccessToken);
+                  }
+                  resolve();
+                }
+                )
+                .catch(() => reject());
+            })
           })
           .then(() => {
             resolve();

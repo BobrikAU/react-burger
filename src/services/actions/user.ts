@@ -1,5 +1,7 @@
 import { baseUrl, checkResponse, setCookie } from '../../utils/utils';
 import { TAppThunk, TAppDispatch } from '../../utils/types';  
+import { Dispatch } from 'redux';
+import { TAllActions } from './unionOfActions';
 
 
 
@@ -77,7 +79,8 @@ export const requestAboutUser: TAppThunk = ({requestOptions = {},
   }
 };
 
-export const updateTokens = (dispatch, refreshToken: string) => {
+export const updateTokens = ( dispatch: TAppThunk<void> | Dispatch<TAllActions>, 
+                              refreshToken: string | null) => {
   const request = new Promise<string | null>((resolve, reject) => {
     dispatch(requestAboutUser({
       requestOptions: {
@@ -98,7 +101,7 @@ export const updateTokens = (dispatch, refreshToken: string) => {
   return request;
 };
 
-export const getUser = (dispatch, token: string) => {
+export const getUser = (dispatch: Dispatch<TAllActions> | TAppThunk<void>, token: string) => {
   const request = new Promise<string | null> ((resolve, reject) => {
     dispatch(requestAboutUser({
       requestOptions: {
@@ -113,7 +116,7 @@ export const getUser = (dispatch, token: string) => {
   return request;
 };
 
-export const requestWithAccessToken = ( 
+/*export const requestWithAccessToken = ( 
   dispatch: (arg0: TAppThunk) => void, 
   request: (arg0: (arg0: TAppThunk) => void, arg1: string) => Promise<unknown>, 
   accessToken: string, 
@@ -135,4 +138,4 @@ export const requestWithAccessToken = (
         )
         .catch(() => options.reject());
     })
-};
+};*/

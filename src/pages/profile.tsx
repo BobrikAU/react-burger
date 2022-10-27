@@ -83,6 +83,7 @@ function Profile () {
   };
   useEffect(() => {
     if (isRequestSuccessful.value) {
+      console.log('setIsRequestSuccessful', isRequestSuccessful.value)
       closeModalWithDispatch();
     }
     if (isRequestSuccessful.value === false) {

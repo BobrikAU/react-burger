@@ -106,8 +106,8 @@ function Authorization() {
     //const form = document.forms.authorization;
     const htmlElements: {[name: string]: HTMLElement | null} = {};
     if (form.current) {
-      htmlElements.inputEmail = form.current.elements['email'];
-      htmlElements.inputPassword = form.current.elements['password'];
+      htmlElements.inputEmail = form.current.querySelector("[name='email']");
+      htmlElements.inputPassword = form.current.querySelector("[name='password']");
       htmlElements.divEmail = form.current && form.current.querySelector('.input_type_email');
       htmlElements.divPassword = form.current.querySelector('.input_type_password');
     }
