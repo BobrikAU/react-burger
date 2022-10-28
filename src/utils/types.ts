@@ -3,6 +3,12 @@ import { TAllActions } from '../services/actions/unionOfActions';
 import { Action, ActionCreator } from 'redux';
 import { store } from '../index';
 
+export type TRootState = ReturnType<typeof store.getState>;
+export type TAppThunk<TReturn = void> = ActionCreator<
+    ThunkAction<TReturn, Action, TRootState, TAllActions>
+  >;
+export type TAppDispatch = typeof store.dispatch;
+
 export type TIgredient = {
   readonly _id: string;
   readonly name: string;
@@ -70,9 +76,3 @@ export type TIsRequestSuccessful = {
   value: undefined | boolean;
   message: string;
 };
-
-export type TRootState = ReturnType<typeof store.getState>;
-export type TAppThunk<TReturn = void> = ActionCreator<
-    ThunkAction<TReturn, Action, TRootState, TAllActions>
-  >;
-export type TAppDispatch = typeof store.dispatch;
