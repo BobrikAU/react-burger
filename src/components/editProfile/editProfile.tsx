@@ -4,10 +4,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from '../../utils/hooks';
 import { Input, EmailInput, Button } from 
   '@ya.praktikum/react-developer-burger-ui-components';
-import { requestAboutUser, 
-         /*requestWithAccessToken,*/ updateTokens } from '../../services/actions/user';
+import { requestAboutUser, updateTokens } from '../../services/actions/user';
 import { getAccessTokenOutCookie } from '../../utils/utils';
-//import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { TIsRequestSuccessful } from '../../utils/types';
 
@@ -55,9 +53,6 @@ function EditProfile ({setIsRequestSuccessful}: IEditProfileProps) {
   const [ isErrorInEmail, setIsErrorInEmail ] = useState<boolean>(false);
   const formEditProfile = useRef<HTMLFormElement>(null);
   useEffect(() => {
-    /*const emailInput: Element | RadioNodeList | null = formEditProfile.current && 
-      formEditProfile.current.elements.namedItem('email');
-    const divEmail = emailInput && emailInput.closest('.input');*/
     const divEmail = formEditProfile.current && 
       formEditProfile.current.querySelector('.input_type_email');
     const emailInput = divEmail && divEmail.querySelector('.input__textfield');

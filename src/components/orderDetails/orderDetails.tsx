@@ -6,7 +6,6 @@ import {CheckMarkIcon} from '@ya.praktikum/react-developer-burger-ui-components'
 import { sendOrder } from '../../services/actions/orderDetails';
 import { getAccessTokenOutCookie } from '../../utils/utils';
 import { getUser, updateTokens } from '../../services/actions/user';
-import PropTypes from 'prop-types';
 import { TAllActions } from '../../services/actions/unionOfActions';
 import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
@@ -107,10 +106,6 @@ function OrderDetails({closeModalWithDispatch}: IOrderDetailsProps) {
       </>)
     
   )
-}
-
-OrderDetails.propTypes = {
-  closeModalWithDispatch: PropTypes.func,
 }
 
 export default OrderDetails;

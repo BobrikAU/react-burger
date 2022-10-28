@@ -93,16 +93,12 @@ function Recovery() {
   const form = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    //const form = document.forms.recovery;
     const htmlElements: {[name: string]: HTMLElement | null} = {};
     if (form.current) {
       htmlElements.inputEmail = form.current.querySelector("[name='email']");
       htmlElements.divEmail = form.current.querySelector('.input_type_email');
     }
     const { inputEmail, divEmail } = htmlElements;
-
-    /*const inputEmail = form.current.elements.email;
-    const divEmail = form.current.querySelector('.input_type_email');*/
     if (inputEmail) {
       inputEmail.addEventListener('blur', (() => {isErrorEmailValue(divEmail)}));
       inputEmail.addEventListener('focus', (() => {setErrorEmailValue(false)}));

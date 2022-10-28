@@ -4,13 +4,10 @@ import { useSelector } from "../../utils/hooks";
 import styles from './burgerConstructor.module.css';
 import { CurrencyIcon, Button, ConstructorElement } from 
   '@ya.praktikum/react-developer-burger-ui-components';
-import { DELETE_OTHER_INGREDIENT, 
-         MOVING_INGREDIENT,
-         addIngredientActionCreator,
+import { addIngredientActionCreator,
          movingIngredientActionCreator,
          deleteIngredientActionCreator } from '../../services/actions/burgerConstructor';
-import { COUNT_PRICE_BURGER, 
-         countPriceBurgerActionCreator } from '../../services/actions/orderDetails';
+import { countPriceBurgerActionCreator } from '../../services/actions/orderDetails';
 import { openModalActionCreator } from '../../services/actions/app';
 import { useDrop } from "react-dnd";
 import OtherIngredientConstructor from 
@@ -18,13 +15,6 @@ import OtherIngredientConstructor from
 import { TIgredient, TOtherIgredient } from '../../utils/types';
 
 function BurgerConstructor() {
-
-  /*interface IBurgerConstructorState {
-    ingredients: null| Array<TIgredient>;
-    burgerPrice: number;
-    bunId: string;
-    othersId: [] | Array<{id: string, uuid: string}>;
-  }*/
 
   //получение необходимых данных из Redux
   const {ingredients, burgerPrice, bunId, othersId} = useSelector(state => ({
@@ -97,8 +87,8 @@ function BurgerConstructor() {
   }, [bun, othersIngredients, dispatch]);
 
   //удаление ингредиента из конструктора
-  const removeIngredient = (e: React.MouseEvent<SVGAElement>): void => {
-    const ingredientInConstructor = e.currentTarget.closest('li');
+  const removeIngredient = (e?: React.MouseEvent<SVGAElement>): void => {
+    const ingredientInConstructor = e && e.currentTarget.closest('li');
     const index = ingredientInConstructor && 
       Number(ingredientInConstructor.getAttribute('id'));
     if (index || index === 0) {

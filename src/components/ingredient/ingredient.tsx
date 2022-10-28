@@ -2,7 +2,6 @@ import React from "react";
 import { useSelector } from "../../utils/hooks";
 import styles from './ingridient.module.css';
 import {Counter, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
-//import {ingredientType} from '../../utils/types';
 import { useDrag } from "react-dnd";
 import { Link, useLocation } from 'react-router-dom';
 import { TIgredient } from '../../utils/types';
@@ -60,9 +59,5 @@ function Ingredient({ingredient}: {ingredient: TIgredient} ) {
     </Link>
   )
 }
-
-/*Ingredient.propTypes = {
-  ingreient: ingredientType
-}*/
 
 export default Ingredient;

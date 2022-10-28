@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import { Link } from 'react-router-dom';
 import styles from './linkHeader.module.css';
-import PropTypes from 'prop-types';
 import { IAppHeaderState } from '../appHeader/appHeader';
 
 interface ILinkHeader {

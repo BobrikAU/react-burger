@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-//import { useSelector/*, useDispatch*/ } from 'react-redux';
 import { useSelector, useDispatch } from '../../utils/hooks';
 import styles from './app.module.css';
 import { Route, Switch, useLocation } from 'react-router-dom';

@@ -8,8 +8,6 @@ export const ingredientDetailsReducer = (state: TIngredientDetailsState = null,
   switch (action.type) {
     case DELETE_INGREDIENT_DETAILS:
       return null;
-    /*case ADD_INGREDIENT_DETAILS:
-      return action.ingredient;*/
     default:
       return state;
   }

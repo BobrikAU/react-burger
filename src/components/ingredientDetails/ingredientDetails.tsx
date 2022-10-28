@@ -1,9 +1,7 @@
 import React from "react";
-import { useSelector } from "../../utils/hooks";
 import styles from './ingredientDetails.module.css';
 import { useLocation } from 'react-router-dom';
 import { TIgredient } from '../../utils/types';
-import PropTypes from 'prop-types';
 
 interface IIngredientDetailsProps {
   ingredient: TIgredient;

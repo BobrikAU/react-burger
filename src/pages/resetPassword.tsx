@@ -101,7 +101,6 @@ function ResetPassword() {
 
   const form = useRef<HTMLFormElement>(null);
   useLayoutEffect(() => {
-    //const form = document.forms.registration;
     const htmlElements: {[name: string]: HTMLElement | null} = {};
     if (form.current) {
       htmlElements.inputPassword = form.current.querySelector("[name='password']");
@@ -110,12 +109,6 @@ function ResetPassword() {
         htmlElements.divPassword.querySelector('.input__placeholder');
     }
     const { inputPassword, divPassword, labelPassword } = htmlElements;
-
-
-
-    /*const inputPassword = form.current.elements.password;
-    const divPassword = form.current.querySelector('.input_type_password');
-    const labelPassword = divPassword.querySelector('.input__placeholder');*/
     if (inputPassword && labelPassword) {
       labelPassword.textContent = 'Введите новый пароль';
       inputPassword.addEventListener('blur', (() => {isErrorPasswordValue(divPassword)}));

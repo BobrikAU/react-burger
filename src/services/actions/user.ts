@@ -3,10 +3,6 @@ import { TAppThunk, TAppDispatch } from '../../utils/types';
 import { Dispatch } from 'redux';
 import { TAllActions } from './unionOfActions';
 
-
-
-
-
 export const SAVE_USER: 'SAVE_USER' = 'SAVE_USER';
 
 export interface ISaveOrEraseUserAction {
@@ -115,27 +111,3 @@ export const getUser = (dispatch: Dispatch<TAllActions> | TAppThunk<void>, token
   });
   return request;
 };
-
-/*export const requestWithAccessToken = ( 
-  dispatch: (arg0: TAppThunk) => void, 
-  request: (arg0: (arg0: TAppThunk) => void, arg1: string) => Promise<unknown>, 
-  accessToken: string, 
-  refreshToken: string, 
-  options: {
-    resolve: () => void, 
-    reject: () => void
-  }) => {
-  request(dispatch, accessToken)
-    .then(() => options.resolve())
-    .catch( () => {
-      updateTokens(dispatch, refreshToken)
-        .then((newAccessToken) => {
-          if (newAccessToken) {
-            request(dispatch, newAccessToken);
-          }
-          options.resolve();
-        }
-        )
-        .catch(() => options.reject());
-    })
-};*/

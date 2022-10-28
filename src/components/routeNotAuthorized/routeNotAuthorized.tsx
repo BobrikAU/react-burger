@@ -2,8 +2,7 @@ import { Route, useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from '../../utils/hooks';
 import { useLayoutEffect, useState, FC } from 'react';
 import { getAccessTokenOutCookie } from '../../utils/utils';
-import { /*requestWithAccessToken,*/
-         getUser, updateTokens } from '../../services/actions/user';
+import { getUser, updateTokens } from '../../services/actions/user';
 import Loader from '../../images/loader.gif';
 import { IRoute } from '../../utils/types';
 

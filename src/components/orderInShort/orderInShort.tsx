@@ -1,5 +1,4 @@
 import styles from './orderInShort.module.css';
-import PropTypes from 'prop-types';
 import { useSelector } from '../../utils/hooks';
 import { useMemo, FC } from 'react';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';

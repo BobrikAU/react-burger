@@ -2,14 +2,13 @@ import styles from './otherIngredientConstructor.module.css';
 import { DragIcon, ConstructorElement } from 
   '@ya.praktikum/react-developer-burger-ui-components';
 import { useDrag, useDrop } from 'react-dnd';
-import PropTypes from 'prop-types';
-import { /*ingredientType,*/ TIgredient, TOtherIgredient } from '../../utils/types';
+import { TOtherIgredient } from '../../utils/types';
 import { FC } from 'react';
 
 interface IOtherIngredientConstructor {
   item: TOtherIgredient;
   index: number;
-  removeIngredient: (e: React.MouseEvent<SVGAElement>) => void;
+  removeIngredient: (e?: React.MouseEvent<SVGAElement>) => void;
   moveIngredient: (indexOfMoved: number, indexOfRecipient: number) => void;
 };
 

@@ -112,12 +112,6 @@ function Authorization() {
       htmlElements.divPassword = form.current.querySelector('.input_type_password');
     }
     const { inputEmail, inputPassword, divEmail, divPassword} = htmlElements
-
-
-    /*const inputEmail = form.current.elements.email;
-    const inputPassword = form.current.elements.password;
-    const divEmail = form.current && form.current.querySelector('.input_type_email');
-    const divPassword = form.current.querySelector('.input_type_password');*/
     if (inputEmail && inputPassword) {
       inputEmail.addEventListener('blur', (() => {isErrorEmailValue(divEmail)}));
       inputEmail.addEventListener('focus', (() => {setErrorEmailValue(false)}));
