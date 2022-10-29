@@ -4,4 +4,4 @@ import { TypedUseSelectorHook,
 import { TRootState, TAppDispatch, TAppThunk } from './types';
 
 export const useSelector: TypedUseSelectorHook<TRootState> = selectorHook;
-export const useDispatch = () => dispatchHook<TAppDispatch | TAppThunk>();
+export const useDispatch: () => TAppDispatch | TAppThunk = dispatchHook;
