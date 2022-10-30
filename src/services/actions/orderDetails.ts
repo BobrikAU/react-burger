@@ -2,8 +2,8 @@ import { baseUrl, checkResponse } from '../../utils/utils';
 import { closeModal, openModalActionCreator } from './app';
 import { TIgredient, TAppThunk, TAppDispatch } from '../../utils/types';
 
-export const COUNT_PRICE_BURGER: 'COUNT_PRICE_BURGER' = 'COUNT_PRICE_BURGER';
-export const SAVE_ORDER_DATA: 'SAVE_ORDER_DATA' = 'SAVE_ORDER_DATA';
+export const COUNT_PRICE_BURGER = 'COUNT_PRICE_BURGER';
+export const SAVE_ORDER_DATA = 'SAVE_ORDER_DATA';
 
 export interface ICountPriceBurgerAction {
   type: 'COUNT_PRICE_BURGER';

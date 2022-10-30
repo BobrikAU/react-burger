@@ -3,7 +3,7 @@ import { openModalActionCreator } from './app';
 import { v4 as uuidv4 } from 'uuid';
 import { TIgredient, TAppThunk, TAppDispatch } from '../../utils/types';
 
-export const UPDATE_INGREDIENTS: 'UPDATE_INGREDIENTS' = 'UPDATE_INGREDIENTS';
+export const UPDATE_INGREDIENTS = 'UPDATE_INGREDIENTS';
 
 export interface IUpdateIngredientsAction {
   readonly type: 'UPDATE_INGREDIENTS';

@@ -6,7 +6,7 @@ import { TAllActions } from '../actions/unionOfActions';
 import { Middleware } from 'redux';
 import { TRootState } from '../reducers/index';
 
-type TWsActions = {
+export type TWsActions = {
   start: "WS_CONNECTION_START";
   success: "WS_CONNECTION_SUCCESS";
   closed: "WS_CONNECTION_CLOSED";

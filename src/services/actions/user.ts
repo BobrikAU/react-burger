@@ -3,7 +3,7 @@ import { TAppThunk, TAppDispatch } from '../../utils/types';
 import { Dispatch } from 'redux';
 import { TAllActions } from './unionOfActions';
 
-export const SAVE_USER: 'SAVE_USER' = 'SAVE_USER';
+export const SAVE_USER = 'SAVE_USER';
 
 export interface ISaveOrEraseUserAction {
   readonly type: 'SAVE_USER';
