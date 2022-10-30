@@ -1,5 +1,11 @@
 export const baseUrl = 'https://norma.nomoreparties.space/api/';
 export const wsBaseUrl = 'wss://norma.nomoreparties.space/orders';
+const orderStatusOptions: {[name: string]: string} = {
+  'created': 'Создан',
+  'pending': 'Готовится',
+  'done': 'Выполнен',
+  'cancell': 'Отменён',
+};
 
 export async function checkResponse (res: Response) {
     if (!res.ok) {
@@ -102,16 +108,5 @@ export function countingPrice(type: string,
 }
 
 export const getOrderStatus = (status: string | undefined) => {
-  switch (status) {
-    case 'created':
-      return 'Создан';
-    case 'pending':
-      return 'Готовится';
-    case 'done':
-      return 'Выполнен';
-    case 'cancell':
-      return 'Отменён'
-    default:
-      return;
-  }
+  if (status) return orderStatusOptions[status];
 }
