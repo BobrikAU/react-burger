@@ -10,6 +10,7 @@ import Modal from '../components/modal/modal';
 import { closeModal, openModalActionCreator } from '../services/actions/app';
 import ErrorMessage from '../components/errorMassege/errorMassege';
 import { requestAboutUser } from '../services/actions/user';
+import { IIsRequestSuccessful } from '../utils/types';
 
 function Authorization() {
   const dispatch = useDispatch();
@@ -23,8 +24,8 @@ function Authorization() {
   const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
 
   //функциональность поля email
-  const [ emailValue, setEmailValue ] = useState('');
-  const [ errorEmailValue, setErrorEmailValue ] = useState(false);
+  const [ emailValue, setEmailValue ] = useState<string>('');
+  const [ errorEmailValue, setErrorEmailValue ] = useState<boolean>(false);
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmailValue(e.currentTarget.value);
   };
@@ -39,8 +40,8 @@ function Authorization() {
   }
 
   //функциональность поля password
-  const [ passwordValue, setPasswordValue ] = useState('');
-  const [ errorPasswordValue, setErrorPasswordValue ] = useState(false);
+  const [ passwordValue, setPasswordValue ] = useState<string>('');
+  const [ errorPasswordValue, setErrorPasswordValue ] = useState<boolean>(false);
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordValue(e.currentTarget.value);
   };
@@ -65,7 +66,7 @@ function Authorization() {
   }, [emailValue, errorEmailValue, passwordValue, errorPasswordValue]);
   
   //отправка формы
-  const [ isRequestSuccessful, setIsRequestSuccessful ] = useState({
+  const [ isRequestSuccessful, setIsRequestSuccessful ] = useState<IIsRequestSuccessful>({
                                                                       value: undefined,
                                                                       message: '',
                                                                     });

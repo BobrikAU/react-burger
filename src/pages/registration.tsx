@@ -11,6 +11,7 @@ import { requestAboutUser } from '../services/actions/user';
 import Modal from '../components/modal/modal';
 import { openModalActionCreator, closeModal } from '../services/actions/app';
 import ErrorMessage from '../components/errorMassege/errorMassege';
+import { IIsRequestSuccessful } from '../utils/types';
 
 function Registration() {
   const dispatch = useDispatch();
@@ -24,8 +25,8 @@ function Registration() {
   const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
 
   //функциональность поля name
-  const [ nameValue, setNameValue ] = useState('');
-  const [ errorName, setErrorName ] = useState(false);
+  const [ nameValue, setNameValue ] = useState<string>('');
+  const [ errorName, setErrorName ] = useState<boolean>(false);
   const refName = useRef(null);
   const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value;
@@ -43,8 +44,8 @@ function Registration() {
   }
 
   //функциональность поля email
-  const [ emailValue, setEmailValue ] = useState('');
-  const [ errorEmailValue, setErrorEmailValue ] = useState(false);
+  const [ emailValue, setEmailValue ] = useState<string>('');
+  const [ errorEmailValue, setErrorEmailValue ] = useState<boolean>(false);
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmailValue(e.target.value);
   };
@@ -59,8 +60,8 @@ function Registration() {
   }
 
   //функциональность поля password
-  const [ passwordValue, setPasswordValue ] = useState('');
-  const [ errorPasswordValue, setErrorPasswordValue ] = useState(false);
+  const [ passwordValue, setPasswordValue ] = useState<string>('');
+  const [ errorPasswordValue, setErrorPasswordValue ] = useState<boolean>(false);
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordValue(e.target.value);
   };
@@ -89,7 +90,7 @@ function Registration() {
   );
 
   //отправка формы
-  const [ isRequestSuccessful, setIsRequestSuccessful ] = useState({
+  const [ isRequestSuccessful, setIsRequestSuccessful ] = useState<IIsRequestSuccessful>({
                                                                       value: undefined,
                                                                       message: '',
                                                                     });

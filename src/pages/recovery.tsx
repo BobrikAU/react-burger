@@ -9,6 +9,7 @@ import { closeModal, openModalActionCreator } from '../services/actions/app';
 import Modal from '../components/modal/modal';
 import ErrorMessage from '../components/errorMassege/errorMassege';
 import { requestAboutUser } from '../services/actions/user';
+import { IIsRequestSuccessful } from '../utils/types';
 
 function Recovery() {
   const dispatch = useDispatch();
@@ -22,8 +23,8 @@ function Recovery() {
   const closeModalWithDispatch = () => dispatch(closeModal(isModalActive));
 
   //функциональность поля email
-  const [ emailValue, setEmailValue ] = useState('');
-  const [ errorEmailValue, setErrorEmailValue ] = useState(false);
+  const [ emailValue, setEmailValue ] = useState<string>('');
+  const [ errorEmailValue, setErrorEmailValue ] = useState<boolean>(false);
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmailValue(e.target.value);
   };
@@ -48,7 +49,7 @@ function Recovery() {
   }, [emailValue, errorEmailValue])
 
   //отправка формы
-  const [ isRequestSuccessful, setIsRequestSuccessful ] = useState({
+  const [ isRequestSuccessful, setIsRequestSuccessful ] = useState<IIsRequestSuccessful>({
                                                                       value: undefined,
                                                                       message: '',
                                                                     });

@@ -15,7 +15,7 @@ const RouteNotAuthorized: FC<IRoute> = ({children, ...optionsRoute}) => {
   const history = useHistory();
   const location = useLocation();
 
-  const [isRequest, setIsRequest] = useState(false);
+  const [isRequest, setIsRequest] = useState<boolean>(false);
 
   useLayoutEffect(() => {
     if (!location.state) {

@@ -8,6 +8,7 @@ import styles from './resetPassword.module.css';
 import './globalSelectorsForms.css';
 import { closeModal, openModalActionCreator } from '../services/actions/app';
 import { requestAboutUser } from '../services/actions/user';
+import { IIsRequestSuccessful } from '../utils/types';
 
 function ResetPassword() {
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ function ResetPassword() {
   }, []);
 
   //функциональность поля code
-  const [ codeValue, setCodeValue ] = useState('');
+  const [ codeValue, setCodeValue ] = useState<string>('');
   const refCode = useRef(null);
   const onChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value;
@@ -35,8 +36,8 @@ function ResetPassword() {
   };
 
   //функциональность поля password
-  const [ passwordValue, setPasswordValue ] = useState('');
-  const [ errorPasswordValue, setErrorPasswordValue ] = useState(false);
+  const [ passwordValue, setPasswordValue ] = useState<string>('');
+  const [ errorPasswordValue, setErrorPasswordValue ] = useState<boolean>(false);
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordValue(e.target.value);
   };
@@ -62,7 +63,7 @@ function ResetPassword() {
   );
 
   //отправка формы
-  const [ isRequestSuccessful, setIsRequestSuccessful ] = useState({
+  const [ isRequestSuccessful, setIsRequestSuccessful ] = useState<IIsRequestSuccessful>({
                                                                       value: undefined,
                                                                       message: '',
                                                                     });

@@ -13,7 +13,7 @@ const ProtectedRoute: FC<IRoute> = ({children, ...optionsRoute}) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
-  const [isRequestUser, setIsRequestUser] = useState(false);
+  const [isRequestUser, setIsRequestUser] = useState<boolean>(false);
 
   useLayoutEffect(() => {
     if (userName === '' || userEmail === '') {

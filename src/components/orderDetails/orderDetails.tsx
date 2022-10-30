@@ -15,6 +15,10 @@ interface IOrderDetailsProps {
   closeModalWithDispatch: (saveBurger?: boolean) => 
     TAllActions | ThunkAction<void, Action<any>, TRootState, TAllActions>
 }
+interface IRequest {
+  isActive: boolean;
+  message: string;
+}
 
 function OrderDetails({closeModalWithDispatch}: IOrderDetailsProps) {
 
@@ -29,7 +33,7 @@ function OrderDetails({closeModalWithDispatch}: IOrderDetailsProps) {
           }));
   const dispatch = useDispatch();
   const history = useHistory();
-  const [request, setRequest] = useState({
+  const [request, setRequest] = useState<IRequest>({
                                             isActive: true,
                                             message: ''
                                           });

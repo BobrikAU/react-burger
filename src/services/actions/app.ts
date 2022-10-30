@@ -2,9 +2,9 @@ import { deleteIngrdientDetails } from './ingredientDetails';
 import { resetConstructorActionCreator } from './burgerConstructor';
 import { TAppThunk, TAppDispatch } from '../../utils/types';
 
-export const OPEN_MODAL: 'OPEN_MODAL' = 'OPEN_MODAL';
-export const CLOSE_MODAL: 'CLOSE_MODAL' = 'CLOSE_MODAL';
-export const CHANGE_ACTIVE_PAGE: 'CHANGE_ACTIVE_PAGE' = 'CHANGE_ACTIVE_PAGE';
+export const OPEN_MODAL = 'OPEN_MODAL';
+export const CLOSE_MODAL = 'CLOSE_MODAL';
+export const CHANGE_ACTIVE_PAGE = 'CHANGE_ACTIVE_PAGE';
 
 export interface IChangeActivePageAction {
   readonly type: 'CHANGE_ACTIVE_PAGE';

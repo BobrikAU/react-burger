@@ -76,3 +76,9 @@ export type TIsRequestSuccessful = {
   value: undefined | boolean;
   message: string;
 };
+
+
+export interface IIsRequestSuccessful {
+  value: undefined | boolean;
+  message: string;
+}
