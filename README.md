@@ -1,46 +1,35 @@
-# Getting Started with Create React App
+# Stellar Burger
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Проект одностраничного React-приложения космической бургерной выполнялся во время прохождения обучения на курсе Яндекс.Практикума.\
+Приложение позволяет пользователю регистрироваться на сайте бургерной и заказывать бургеры. Клиент может самостоятельно
+определить состав бургера, а также расположение ингредиентов в нем. Дополнительно клиент может посмотреть очередь выполняемых заказов,
+зайти в свой профиль и редактировать его, проверить истроию своих заказов.
 
-## Available Scripts
+## Цели учебного проекта
 
-In the project directory, you can run:
+Как учебный, проект имел своей целью знакомство с фреймворком React, его окружением и с Typescript, а также с особенностями
+ингредиентов космической кухни.
+
+## Используемые технологии
+
+HTML, CSS, Typescript, React, Redux, React Router, React DND, Redux Thunk. При переходе на страницы "Лента заказов"
+и в раздел "История заказов" профиля пользоателя общение клиента и сервера осуществляется по протоколу WebSocket.
+
+## Доступные скрипты
+
+Находясь в дирректории проекта, можно выполнить следующие команды:
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Запуск проекта в режиме разработки, опкрывающийся по адресу [http://localhost:3000](http://localhost:3000).
+Страница перезагружается после сохранения изменений в коде.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Производится сборка рабочего варианта проекта. Итог сборки помещается в папку `build`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### `npm run deploy`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Производится сбора проекта и его размещение на GitHub Pages.\
+\
+С работающей клиентской частью приложения можно ознапомиться по адресу: [https://bobrikau.github.io/react-burger/](https://bobrikau.github.io/react-burger/).

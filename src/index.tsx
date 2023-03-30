@@ -39,7 +39,7 @@ export const store = createStore(rootReducer, enhancer);
 
 root.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <BrowserRouter basename='/react-burger'>
       <App />
     </BrowserRouter>
   </Provider>
