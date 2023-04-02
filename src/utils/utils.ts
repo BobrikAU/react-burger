@@ -65,8 +65,8 @@ export function getAccessTokenOutCookie() {
 }
 
 export const timeString = (orderTime: string, currentDate: Date) => {
-  const [orderDay, other] = orderTime.split('T');
-  const orderDate =  new Date(new Date(orderDay).toDateString());
+  const localOrderTime = new Date(orderTime);
+  const orderDate =  new Date(localOrderTime.toDateString());
   const pastDays = (currentDate.getTime() - orderDate.getTime()) / 86400000;
   let days: string;
   switch (pastDays) {
@@ -89,22 +89,18 @@ export const timeString = (orderTime: string, currentDate: Date) => {
         days = `${pastDays} дней назад,`;
       }
   }
-  const time = other.slice(0, 5);
+  const time = localOrderTime.toTimeString().slice(0, 5);
   const gmt = new Date(orderTime).getTimezoneOffset() / -60
   const timeZone = `i-GMT${gmt >=0 && '+'}${gmt}`;
   return `${days} ${time} ${timeZone}`;
 };
 
-export function countingPrice(type: string, 
+export function countingPrice(volume: number,
                               price: number, 
                               previousValue: {  burgerPrice: any; 
                                                 burgerIngredients?: JSX.Element[]; 
                                                 liste?: JSX.Element[]; }) {
-  if (type === "bun") {
-    previousValue.burgerPrice += price * 2;
-  } else {
-    previousValue.burgerPrice += price;
-  }
+  previousValue.burgerPrice += price * volume;
 }
 
 export const getOrderStatus = (status: string | undefined) => {

@@ -71,7 +71,7 @@ const OrderInShort: FC<IOrderInShort> = ({  status,
         return item === i._id
       })
       if (ingredient) {
-        countingPrice(ingredient.type, ingredient.price, previousValue);
+        countingPrice(1, ingredient.price, previousValue);
         makeIngredientIcon( index, 
                             ingredient.image, 
                             ingredient.name,

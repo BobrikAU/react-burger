@@ -7,6 +7,9 @@ import Loader from '../images/loader.gif';
 import  { socketStartHistoryActionCreator, 
           breakWsConnectionActionCreator } from '../services/actions/socketMiddleware';
 
+
+import { TOrder } from '../utils/types';
+
 function OrdersHistory() {
   const dispatch = useDispatch();
   const { userOrders, ingredients } = useSelector(state => ({
@@ -23,6 +26,12 @@ function OrdersHistory() {
     }
   }, [dispatch, ingredients]);
 
+  // сортировка списка ордеров (новые сверху)
+  function compareOrderDate(firstOrder: TOrder, secondOrder: TOrder) {
+    return new Date (secondOrder.createdAt).getTime() - new Date (firstOrder.createdAt).getTime();
+  }
+  userOrders.sort(compareOrderDate);
+  
   const currentDate = new Date(new Date().toDateString());
   const cardsUserOrders = userOrders.length !== 0 && userOrders.map((item) => {
     const { number, createdAt, name, ingredients, status, _id } = item;

@@ -53,7 +53,7 @@ const OrderInfo: FC<IOrderInfo> = ({ orders, modal }) => {
     }, []);
     return value;
   }, [ingredients]);
-  
+
   const { liste, burgerPrice }: {burgerPrice?: number, liste?: JSX.Element[]} = 
     {...useMemo(() => {
     const value = burgerIngredients ? listIngredients && listIngredients.reduce(
@@ -61,11 +61,8 @@ const OrderInfo: FC<IOrderInfo> = ({ orders, modal }) => {
       const ingredientInfo = burgerIngredients.find(i => {
         return i._id === item.id;
       });
-      if (ingredientInfo && ingredientInfo.type === 'bun') {
-        item.volume = 2;
-      }
       if (ingredientInfo) {
-        countingPrice(ingredientInfo.type, ingredientInfo.price, previousValue);
+        countingPrice(item.volume, ingredientInfo.price, previousValue);
         previousValue.liste.push(
           <li key={ingredientInfo.uuid} className={`mb-4 ${styles.ingredient}`}>
             <div className={styles.container}>
