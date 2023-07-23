@@ -26,19 +26,19 @@ function Ingredient({ingredient}: {ingredient: TIgredient} ) {
   }, [ingredient._id, ingredient.type]);
   
   return (
-    <Link to={{
-                pathname: `/ingredients/${ingredient._id}`,
-                state: {
-                          background: location,
-                          ingredient
-                        }
-              }}
-          className={styles.link}>
-      <li 
-        className={styles.ingreient} 
-        id={ingredient._id} 
-        ref={dragRef}
-      >
+    <li 
+      className={styles.ingreient} 
+      id={ingredient._id} 
+      ref={dragRef}
+    >
+      <Link to={{
+                  pathname: `/ingredients/${ingredient._id}`,
+                  state: {
+                            background: location,
+                            ingredient
+                          }
+                }}
+            className={styles.link}>
         <img 
           src={ingredient.image} 
           alt={`Иконка ${ingredient.name}`} 
@@ -55,8 +55,8 @@ function Ingredient({ingredient}: {ingredient: TIgredient} ) {
         <p className={`text text_type_main-default ${styles.description}`}>
           {ingredient.name}
         </p>
-      </li>
-    </Link>
+      </Link>
+    </li>
   )
 }
 

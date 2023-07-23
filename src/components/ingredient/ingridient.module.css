@@ -1,9 +1,4 @@
 .ingreient{
-  width: 272px;
-  min-height: 208px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   position: relative;
   cursor: pointer;
 }
@@ -31,4 +26,9 @@
 
 .link{
   text-decoration: none;
+  width: 272px;
+  min-height: 208px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
